@@ -43,7 +43,7 @@ content work depends on. Ends with the repo presentable and every gate instrumen
 | # | Brief | Size | Depends on | Done |
 |---|-------|------|-----------|------|
 | EP-0 | [Baseline floor: ignore/hooks/licenses](EP-0-baseline-floor.md) | S | — | ☑ e537b11 |
-| EP-1 | [GitHub security settings & baseline doc](EP-1-security-settings.md) | S | EP-0 | ☐ |
+| EP-1 | [GitHub security settings & baseline doc](EP-1-security-settings.md) | S | EP-0 | ☑ 5ba112f |
 | EP-2 | [Community & governance pack](EP-2-community-pack.md) | M | EP-0 | ☐ |
 | EP-3 | [Name & identity screening spike](EP-3-name-screen.md) | S | — | ☐ |
 | EP-4 | [Threat model, procedures & MIMIC gate](EP-4-threat-model.md) | M | EP-1 | ☐ |
