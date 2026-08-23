@@ -20,19 +20,19 @@ repo-admin API access; see "How to complete" below) · ⛔ blocked (reason noted
 
 | # | Item | Prescribed state (D-SEC-001) | Status | Verified on | Method |
 |---|------|------------------------------|--------|-------------|--------|
-| A1 | Secret scanning | Enabled | ⏳ | — | admin API/UI (default-on for public repos is expected but not yet confirmed for this repo) |
-| A2 | Push protection | Enabled | ⏳ | — | admin API/UI |
-| A3 | Private vulnerability reporting | Enabled | ⏳ (public API showed `enabled: false` on 2026-08-23) | — | `GET /repos/{o}/{r}/private-vulnerability-reporting` (public) |
-| A4 | Dependabot alerts | Enabled (`dependabot.yml` config file itself is EP-2) | ⏳ | — | admin API/UI |
-| A5 | CodeQL default setup | Configured; first scan completes without configuration errors | ⏳ | — | admin API/UI. Expected blocker: repo contains no CodeQL-supported language until EP-8 — if enablement is refused, record that here and retry at EP-8. |
-| A6 | Ruleset on `main` | Two active rulesets matching [rulesets/main-history-protection.json](rulesets/main-history-protection.json) (block force-push + deletion, no bypass) and [rulesets/main-pr-gate.json](rulesets/main-pr-gate.json) (require PRs; repo-admin bypass) | ⏳ (public API showed zero rulesets on 2026-08-23) | — | `GET /repos/{o}/{r}/rulesets` (public) |
+| A1 | Secret scanning | Enabled | ✅ | 2026-08-23 | `gh api` PATCH + read-back: `secret_scanning: enabled` |
+| A2 | Push protection | Enabled | ✅ | 2026-08-23 | `gh api` PATCH + read-back: `secret_scanning_push_protection: enabled` |
+| A3 | Private vulnerability reporting | Enabled | ✅ | 2026-08-23 | `gh api` PUT + read-back: `enabled: true` (was `false` pre-EP-1) |
+| A4 | Dependabot alerts | Enabled (`dependabot.yml` config file itself is EP-2) | ✅ | 2026-08-23 | `gh api` PUT + read-back: `GET /vulnerability-alerts` → 204 |
+| A5 | CodeQL default setup | Configured; first scan completes without configuration errors | ✅ configured / ⏳ first scan | 2026-08-23 | `gh api` PATCH + read-back: `state: configured`, `query_suite: default`. `languages: []` — the repo has no CodeQL-supported language yet, so no scan has run; **verify the first completed scan at EP-8** when code lands. |
+| A6 | Ruleset on `main` | Two active rulesets: [rulesets/main-history-protection.json](rulesets/main-history-protection.json) (block force-push + deletion, no bypass) and [rulesets/main-pr-gate.json](rulesets/main-pr-gate.json) (require PRs; repo-admin bypass) | ✅ | 2026-08-23 | `gh api` POST; read-back: ids 21252019 / 21252020, both `enforcement: active`. Committed JSON = live export (volatile fields stripped, see Drift rule). |
 | A7 | Required status checks on `main` | **EP-8 placeholder** — check names are added to the PR-gate ruleset once CI exists | ⛔ deferred to EP-8 by design | — | — |
-| A8 | Actions: default workflow permissions | Read-only | ⏳ | — | admin API/UI |
-| A9 | Actions: "can create or approve pull requests" | OFF | ⏳ | — | admin API/UI |
-| A10 | Fork PRs | Require approval for **all** outside collaborators. Standing policy: never combine `pull_request_target` with a checkout of fork code (enforced in workflow reviews from EP-8). | ⏳ | — | admin API/UI |
-| A11 | Wiki | Disabled | ⏳ (public API showed `has_wiki: true` on 2026-08-23) | — | `GET /repos/{o}/{r}` (public) |
-| A12 | Projects | Disabled | ⏳ (public API showed `has_projects: true` on 2026-08-23) | — | `GET /repos/{o}/{r}` (public) |
-| A13 | Owner-account 2FA | Active | ⏳ owner-only (account settings are not repo-readable) | — | UI: Settings → Password and authentication |
+| A8 | Actions: default workflow permissions | Read-only | ✅ | 2026-08-23 | `gh api` PUT + read-back: `default_workflow_permissions: read` |
+| A9 | Actions: "can create or approve pull requests" | OFF | ✅ | 2026-08-23 | `gh api` PUT + read-back: `can_approve_pull_request_reviews: false` |
+| A10 | Fork PRs | Require approval for **all** outside collaborators. Standing policy: never combine `pull_request_target` with a checkout of fork code (enforced in workflow reviews from EP-8). | ✅ | 2026-08-23 | `gh api` PUT + read-back: `approval_policy: all_external_contributors` |
+| A11 | Wiki | Disabled | ✅ | 2026-08-23 | `gh api` PATCH + read-back: `has_wiki: false` |
+| A12 | Projects | Disabled | ✅ | 2026-08-23 | `gh api` PATCH + read-back: `has_projects: false` |
+| A13 | Owner-account 2FA | Active | ⏳ owner-only (the CLI token has no account scope; `two_factor_authentication` unreadable) | — | UI: Settings → Password and authentication |
 | A14 | No PATs or secrets anywhere in tree or history | Clean | ✅ | 2026-08-23 | `gitleaks dir .` (working tree) and `gitleaks git .` (all 4 commits): no leaks found |
 | A15 | Push-protection live demo | Dummy-secret push blocked server-side on a scratch branch, branch deleted, no secret value retained | ⏳ owner-run (procedure below) | — | — |
 
@@ -49,10 +49,11 @@ repo-admin API access; see "How to complete" below) · ⛔ blocked (reason noted
 
 ## How to complete the pending rows
 
-Repo-admin access is required; agent sessions on this machine cannot authenticate the GitHub
-CLI themselves. Either (a) run `gh auth login` once in any terminal and hand the session back
-to finish and verify, or (b) click through the UI paths below. After either path, fill in the
-Status/Verified-on columns above.
+Repo-admin access is required. `gh` was authenticated on the owner's machine on 2026-08-23
+(keyring) and the command block below was executed then; it is kept for the remaining rows
+(A13, A15), for re-verification at each trigger, and for reconfiguring after any drift. The
+UI paths are the clickable equivalent. After either path, update the Status/Verified-on
+columns above.
 
 ### Terminal path (GitHub CLI, after `gh auth login`)
 
@@ -138,8 +139,10 @@ gh api "repos/willtfarrington/medrecsim/rulesets" --jq '.[].id'   # list ids
 gh api "repos/willtfarrington/medrecsim/rulesets/<id>"            # export; reconcile into docs/rulesets/
 ```
 
-Note the API export adds server-assigned fields (`id`, `created_at`, …) — reconcile the
-meaningful fields (`name`, `target`, `enforcement`, `conditions`, `rules`, `bypass_actors`).
+The committed files are the live export with the volatile server fields stripped
+(`_links`, `node_id`, `created_at`, `updated_at`, `current_user_can_bypass`), pretty-printed;
+strip the same fields when re-exporting so diffs stay meaningful. Stable fields (`id`,
+`source`, `source_type`) are kept.
 
 ## Design notes (reversible technical decisions, logged per D-EXEC-003)
 

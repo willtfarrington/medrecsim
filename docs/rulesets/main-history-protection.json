@@ -1,16 +1,25 @@
 {
-  "name": "main-history-protection",
-  "target": "branch",
-  "enforcement": "active",
-  "conditions": {
-    "ref_name": {
-      "include": ["~DEFAULT_BRANCH"],
-      "exclude": []
-    }
-  },
-  "rules": [
-    { "type": "deletion" },
-    { "type": "non_fast_forward" }
-  ],
-  "bypass_actors": []
+    "bypass_actors": [],
+    "conditions": {
+        "ref_name": {
+            "exclude": [],
+            "include": [
+                "~DEFAULT_BRANCH"
+            ]
+        }
+    },
+    "enforcement": "active",
+    "id": 21252019,
+    "name": "main-history-protection",
+    "rules": [
+        {
+            "type": "deletion"
+        },
+        {
+            "type": "non_fast_forward"
+        }
+    ],
+    "source": "willtfarrington/medrecsim",
+    "source_type": "Repository",
+    "target": "branch"
 }
