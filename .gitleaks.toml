@@ -1,0 +1,19 @@
+# medrecsim gitleaks configuration (EP-0, D-SEC-001)
+#
+# Pinned tool: gitleaks v8.30.1 (single Windows binary via winget).
+# REVERIFY NOTE: gitleaks is feature-complete with an announced successor;
+# reverify the pinned tool/version at each R-phase boundary (next: EP-8).
+#
+# Extends the built-in default ruleset. The ONLY allowlist is the
+# synthetic-fixtures convention: files under a `synthetic-fixtures/`
+# directory may contain realistic-looking fake identifiers for tests and
+# must begin with a `# SYNTHETIC` header line. Nothing else is exempted.
+
+title = "medrecsim"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Synthetic test fixtures (D-SEC-001 allowlist convention; files carry a '# SYNTHETIC' header)"
+paths = ['''(^|/)synthetic-fixtures/''']

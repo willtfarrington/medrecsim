@@ -1,13 +1,80 @@
-# Private planning/working zone — never tracked (D-ROAD-002)
 .local/
+# ^ line 1 by decision: private planning/working zone, never tracked (D-ROAD-002).
+# ============================================================================
+# Layered .gitignore (EP-0, D-SEC-001). Layer order is deliberate:
+# private zone first, then secrets, data, deps/build, OS/editor, logs.
+# The synthetic-fixtures allowlist convention is at the bottom.
+# ============================================================================
 
-# EP-0 expands this file per the layered leak-prevention decision (D-SEC-001):
-# credentials, .env, databases, exports, uploads, logs, notebook outputs,
-# caches, local volumes, models, embeddings, build outputs.
+# --- 2. Secrets & credentials ----------------------------------------------
 .env
 .env.*
-*.log
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+*credentials*
+*secret*
+*token*
+id_rsa*
+id_ed25519*
+*.gpg
+*.asc
+.netrc
+.npmrc.local
+
+# --- 3. Data that must never land in a public repo -------------------------
+# (synthetic-only rule enforcement floor; real datasets are forbidden outright)
+*.db
+*.sqlite
+*.sqlite3
+*.parquet
+*.csv.gz
+*.dump
+*.bak
+exports/
+uploads/
+*.ipynb_checkpoints/
+.ipynb_checkpoints/
+
+# --- 4. Dependencies & build outputs ---------------------------------------
 node_modules/
 dist/
+build/
+out/
 coverage/
 .cache/
+.vite/
+.turbo/
+*.tsbuildinfo
+
+# --- 5. OS & editor files ---------------------------------------------------
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+.DS_Store
+._*
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+*.swp
+*.swo
+*~
+
+# --- 6. Logs & temp ---------------------------------------------------------
+*.log
+logs/
+npm-debug.log*
+*.tmp
+*.temp
+
+# --- 7. Synthetic-fixtures allowlist convention (D-SEC-001) -----------------
+# Files under a synthetic-fixtures/ directory MAY contain realistic-looking
+# fake identifiers for tests. Every such file must begin with a `# SYNTHETIC`
+# header line. .gitleaks.toml allowlists ONLY these paths; nothing here is
+# un-ignored by this convention — it governs the secret scanner, not tracking.
