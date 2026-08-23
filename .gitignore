@@ -1,0 +1,13 @@
+# Private planning/working zone — never tracked (D-ROAD-002)
+.local/
+
+# EP-0 expands this file per the layered leak-prevention decision (D-SEC-001):
+# credentials, .env, databases, exports, uploads, logs, notebook outputs,
+# caches, local volumes, models, embeddings, build outputs.
+.env
+.env.*
+*.log
+node_modules/
+dist/
+coverage/
+.cache/
