@@ -56,7 +56,8 @@ feature-complete with an announced successor; reverify the pinned tool/version a
   any push** and its file deleted. Lesson: the default ruleset ignores obviously-fake
   tokens; the layered tripwire and server-side push protection (EP-1) remain necessary.
 - README contains the status blockquote verbatim and no "v1.0.0" text. ✔
-- License badge on GitHub after push: see the badge note appended in the follow-up commit.
+- License badge on GitHub after push (commit `e537b11`): the repos API reports
+  `"spdx_id": "MIT"` — detection succeeded, badge renders. ✔
 
 ## Decisions logged (reversible technical, D-EXEC-003)
 
