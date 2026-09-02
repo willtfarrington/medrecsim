@@ -44,6 +44,12 @@ or clinical content has been written.
   transition rule, clinical self-review checklist, stigma-safety checklist, and the public
   review-record template with pre-brief badge fields. Pointer rows for the verified sources
   added to the data/asset registry.
+- Discrepancy taxonomy v1.0 (`docs/clinical/TAXONOMY.md`): the five metadata axes every
+  authored discrepancy will carry (type, causal mechanism, detectability, urgency, harm class
+  with severity read as potential worst-credible outcome), the phenotype predicates the
+  coverage tool will evaluate, divergence notes against the cited sources, the enum export the
+  content schema imports verbatim, and a cited register of its sources. Twenty pointer rows
+  added to the citation policy and the data/asset registry.
 
 ### Content
 
