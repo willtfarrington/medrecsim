@@ -1,0 +1,56 @@
+name: Accessibility issue
+description: A barrier affecting keyboard use, screen readers, zoom or reflow, motion, contrast, or plain language.
+title: "[A11y]: "
+labels: ["accessibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        WCAG 2.2 AA is a release gate for this project, and accessibility fixes are one of the few categories of pull request accepted. Reports of barriers are valued; please be as specific as you can about what you used.
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before you continue
+      options:
+        - label: This report contains no real patient information or institutional material.
+          required: true
+  - type: textarea
+    id: barrier
+    attributes:
+      label: The barrier
+      description: What you were trying to do, what got in the way, and what you expected instead.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: Screen, control, case ID, or page.
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Keyboard operability or focus
+        - Screen reader (name it below)
+        - Zoom, reflow, or text spacing
+        - Color, contrast, or color-only information
+        - Motion or animation
+        - Timing
+        - Plain language or comprehension
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: at
+    attributes:
+      label: Assistive technology and browser
+      description: Screen reader or other assistive technology with version, plus browser and operating system.
+      placeholder: "Example: NVDA 2025.x with Firefox 140 on Windows 11"
+    validations:
+      required: true
+  - type: input
+    id: wcag
+    attributes:
+      label: WCAG success criterion (optional)
+      description: If you know it, the criterion number, for example 2.1.1 or 1.4.3.

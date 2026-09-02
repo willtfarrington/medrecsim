@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use or reference this software, please cite it as below."
+type: software
+title: "medrecsim"
+abstract: >-
+  A fully synthetic, client-only medication-reconciliation simulation for junior residents and
+  senior medical students. Pre-release; under active construction; not validated for learning
+  outcomes. Educational use only; not medical advice. All content is fictional and synthetic.
+authors:
+  - family-names: Farrington
+    given-names: W. Taylor
+version: "0.0.0"
+repository-code: "https://github.com/willtfarrington/medrecsim"
+license:
+  - MIT
+  - CC-BY-4.0
+keywords:
+  - medication reconciliation
+  - medical education
+  - simulation
+  - synthetic data
+  - patient safety

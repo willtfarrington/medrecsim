@@ -1,0 +1,43 @@
+name: Bug report
+description: Something in the application, engine, content tooling, or documentation does not work as described.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Everything in this project is synthetic and fictional; please keep it that way in your report.
+        **Security vulnerabilities go through the private reporting flow, never an issue** (see SECURITY.md).
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before you continue
+      options:
+        - label: This report contains no real patient information, institutional screenshots, or material from restricted datasets.
+          required: true
+        - label: This is not a security vulnerability (those go through private vulnerability reporting).
+          required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what actually happened.
+      placeholder: Steps to reproduce, expected result, actual result.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: Case ID, screen, or file path if applicable (for example C01, the debrief view, or a validator command).
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser and version, operating system, zoom level, and assistive technology if relevant.
+      placeholder: "Example: Firefox 140 on Windows 11, 100% zoom"
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Console output, screenshots of the simulation (screen for personal paths and usernames first), or links to related issues.

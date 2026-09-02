@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability (private)
+    url: https://github.com/willtfarrington/medrecsim/security/advisories/new
+    about: Never report vulnerabilities in a public issue. Use GitHub's private vulnerability reporting.
+  - name: Support expectations
+    url: https://github.com/willtfarrington/medrecsim/blob/main/SUPPORT.md
+    about: Best-effort, single-maintainer project. Issues only; no Discussions.

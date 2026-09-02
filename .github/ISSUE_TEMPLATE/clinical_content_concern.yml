@@ -1,0 +1,62 @@
+name: Clinical content concern
+description: Challenge a discrepancy classification, an accepted or unsafe action set, a teaching note, or a citation in a case.
+title: "[Clinical content]: "
+labels: ["clinical-content"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the on-ramp to the project's **contestable-scoring freeze** (decision D-RISK-004).
+
+        **How this is handled.** The owner triages the report for credibility against documented criteria. If credible, a content patch marks the contested item **"discussion item — not scored"** and bumps the case bundle version; the case changelog records the dispute. The item is then re-adjudicated through the full content lifecycle (validation, clinical self-review checklist, stigma-safety checklist, public dated review record). A resolution patch restores or changes the item and updates the claims matrix in the same commit. If the concern is safety-relevant, a README notice stands until the patch lands.
+
+        Clinical content is physician-reviewed (single reviewer); challenges are welcome and this process exists precisely because one reviewer can be wrong. Please cite a source: an uncited disagreement is much harder to act on.
+
+        **Do not include real patient information** of any kind, including anecdotes "de-identified from memory."
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before you continue
+      options:
+        - label: This report contains no real patient information, institutional material, or content from restricted datasets.
+          required: true
+        - label: I understand this is an educational simulation, not medical advice, and that resolution follows the documented review lifecycle with no guaranteed timeline.
+          required: true
+  - type: input
+    id: case-id
+    attributes:
+      label: Case ID and content version
+      description: The case identifier shown in the pre-brief (for example C01) and its review-record version or date, if shown.
+      placeholder: "C01, review record v1 (2026-xx-xx)"
+    validations:
+      required: true
+  - type: textarea
+    id: contested-item
+    attributes:
+      label: Contested item
+      description: Exactly which classification, action-set entry, rationale, teaching note, or citation you are challenging. Quote it if you can.
+    validations:
+      required: true
+  - type: textarea
+    id: challenge
+    attributes:
+      label: Your challenge and its cited source
+      description: What you believe is wrong and why. Cite at least one authoritative source (guideline, labeling, ISMP/AHRQ/WHO material, primary literature) with version or date and a link where possible.
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity of the concern
+      description: Your assessment of the plausible consequence if a learner absorbed the current content as taught. Ordinal only; no probabilities.
+      options:
+        - Safety-relevant (could plausibly lead to patient harm if applied in practice)
+        - Teaching-relevant (misleading but not plausibly harmful)
+        - Precision or citation issue (correct in substance; wording, currency, or source needs fixing)
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed resolution (optional)
+      description: What you think the content should say instead. Note that changes to accepted/unsafe sets and scoring are owner-only and go through review; a proposal here is input, not a pull request.

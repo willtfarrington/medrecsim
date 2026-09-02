@@ -1,0 +1,43 @@
+name: Feature request
+description: Suggest an idea, including case ideas or teaching topics. Scope is frozen during construction; ideas are parked, not promised.
+title: "[Idea]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **The parking rule.** v1 scope is frozen (decision D-RISK-002). New ideas, including good ones, go to the roadmap's parked list in `roadmap/final-roadmap.md` rather than into work in progress. Scope changes happen only by a dated owner decision in `DECISIONS.md`. Filing an idea here is how it gets onto that list; it is not a commitment.
+
+        Case ideas and teaching topics are welcome **here**, not as pull requests: new clinical content is not accepted as a pull request because clinical sign-off is owner-only.
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before you continue
+      options:
+        - label: This request contains no real patient information, identifiable anecdotes, institutional material, or content from restricted datasets.
+          required: true
+        - label: I understand the idea will be parked for later consideration, not scheduled.
+          required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What it is and what problem it solves for a learner or maintainer.
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Case or discrepancy pattern worth teaching
+        - Evidence source, escalation channel, or workflow mechanic
+        - Debrief, scoring, or feedback idea
+        - Tooling, authoring, or validation
+        - Documentation
+        - Other
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources (optional)
+      description: For clinical ideas, an authoritative source with version or date helps the idea survive review.

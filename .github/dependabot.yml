@@ -1,0 +1,31 @@
+# Dependabot version updates (DECISIONS.md D-SEC-001, D-SEC-002).
+#
+# Policy: grouped weekly updates, at most 5 open pull requests per ecosystem, and
+# **reviewed, never auto-merged** — there is deliberately no auto-merge workflow in this
+# repository, and "Allow GitHub Actions to create and approve pull requests" is off.
+# Dependabot *alerts* (vulnerability alerts) are enabled separately in repository settings.
+#
+# The npm entry becomes active when the root package manifest lands with the toolchain
+# bootstrap; until then Dependabot reports that no manifest was found, which is expected.
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns:
+          - "*"
