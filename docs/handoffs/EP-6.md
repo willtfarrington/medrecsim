@@ -1,9 +1,8 @@
 # EP-6 handoff — Clinical governance specs: citations & checklists
 
 **Status:** complete — all owner decisions ruled 2026-09-02 (see "Owner decisions") ·
-**Date:** 2026-09-02 · **Brief:** roadmap/EP-6-clinical-governance.md · **Commits:** docs
-commit (hash recorded in the done-hash follow-up commit and in roadmap/README.md), plus the
-follow-up
+**Date:** 2026-09-02 · **Brief:** roadmap/EP-6-clinical-governance.md · **Commits:** `cb6a3dc`
+(instruments, registry rows, CHANGELOG, README pointer, handoff), plus the done-hash follow-up
 
 ## Completed scope IDs
 
