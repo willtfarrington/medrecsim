@@ -1,8 +1,8 @@
 # EP-4 handoff — Threat model, procedures & MIMIC gate
 
 **Status:** complete — all owner decisions ruled 2026-09-02 (see "Owner decisions") ·
-**Date:** 2026-09-02 · **Brief:** roadmap/EP-4-threat-model.md · **Commits:** see the
-roadmap Done column (docs + handoff, then the Done-hash follow-up)
+**Date:** 2026-09-02 · **Brief:** roadmap/EP-4-threat-model.md · **Commits:** `0773abd` (docs +
+handoff), plus the Done-hash follow-up
 
 ## Completed scope IDs
 
