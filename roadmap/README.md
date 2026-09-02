@@ -47,7 +47,7 @@ content work depends on. Ends with the repo presentable and every gate instrumen
 | EP-2 | [Community & governance pack](EP-2-community-pack.md) | M | EP-0 | ☑ 80710ef |
 | EP-3 | [Name & identity screening spike](EP-3-name-screen.md) | S | — | ☑ 9ece0a1 |
 | EP-4 | [Threat model, procedures & MIMIC gate](EP-4-threat-model.md) | M | EP-1 | ☑ 0773abd |
-| EP-5 | [Claims matrix, release criteria, changelog](EP-5-claims-criteria.md) | S | EP-2 | ☐ |
+| EP-5 | [Claims matrix, release criteria, changelog](EP-5-claims-criteria.md) | S | EP-2 | ☑ f3a1e28 |
 | EP-6 | [Clinical governance specs: citations & checklists](EP-6-clinical-governance.md) | S | — | ☐ |
 | EP-7 | [Discrepancy taxonomy v1](EP-7-taxonomy.md) | M | EP-6 | ☐ |
 

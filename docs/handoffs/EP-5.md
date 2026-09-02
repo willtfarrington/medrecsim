@@ -1,7 +1,8 @@
 # EP-5 handoff — Claims matrix, release criteria, changelog
 
 **Status:** complete — all owner decisions ruled 2026-09-02 (see "Owner decisions") · **Date:** 2026-09-02 ·
-**Brief:** roadmap/EP-5-claims-criteria.md · **Commits:** pending
+**Brief:** roadmap/EP-5-claims-criteria.md · **Commits:** `f3a1e28` (docs, README/PR-template
+edits, handoff), plus the Done-hash follow-up
 
 ## Completed scope IDs
 
@@ -29,7 +30,7 @@ an `[Unreleased]` section seeded with the R0 governance work to date; (5) the RE
   per-tag grep in RELEASE-CRITERIA.md can distinguish rule statements from uses mechanically
   (owner decision 2).
 - `docs/handoffs/EP-5.md` — this record. `roadmap/README.md` — EP-5 Done column (follow-up
-  commit, EP-0…EP-4 pattern, once the commit is approved).
+  commit, EP-0…EP-4 pattern).
 
 ## Verification results (2026-09-02)
 
