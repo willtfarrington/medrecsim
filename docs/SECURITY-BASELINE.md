@@ -13,6 +13,13 @@ only — never tokens, account details, or secret values.
 policy — after which the live ruleset JSON must be re-exported into `docs/rulesets/` (see
 "Drift rule" below).
 
+**Related documents (EP-4):** [THREAT-MODEL.md](THREAT-MODEL.md) explains which asset and
+trust boundary each row below protects; [DEPENDENCY-POLICY.md](DEPENDENCY-POLICY.md) governs
+the supply-chain rows (A4, A5, A8–A10 and the EP-8 workflow items);
+[INCIDENT-PROCEDURE.md](INCIDENT-PROCEDURE.md) is the response when a row fails and names the
+ruleset ids in A6 for its temporary-bypass step; [MIMIC-GATE.md](MIMIC-GATE.md) relies on the
+tripwire in row B4.
+
 Status legend: ✅ verified · ⏳ pending owner action (this repo's agent sessions have no
 repo-admin API access; see "How to complete" below) · ⛔ blocked (reason noted).
 

@@ -49,4 +49,7 @@ Once tagged releases exist, only the latest release is supported.
 The repository's security settings (secret scanning, push protection, private vulnerability
 reporting, Dependabot alerts, code scanning, branch rulesets, workflow-permission defaults) are
 recorded with verification dates in [docs/SECURITY-BASELINE.md](docs/SECURITY-BASELINE.md).
-The threat model and incident procedures are documented under `docs/` as they land.
+The written threat model is [docs/THREAT-MODEL.md](docs/THREAT-MODEL.md); the dependency
+policy is [docs/DEPENDENCY-POLICY.md](docs/DEPENDENCY-POLICY.md); what happens when a control
+fails, including the sensitive-commit runbook and the clinical correction path, is
+[docs/INCIDENT-PROCEDURE.md](docs/INCIDENT-PROCEDURE.md).
