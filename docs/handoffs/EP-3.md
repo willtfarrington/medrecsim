@@ -1,8 +1,8 @@
 # EP-3 handoff — Name & identity screening spike
 
 **Status:** complete — all owner decisions ruled 2026-09-02 (see "Owner decisions") ·
-**Date:** 2026-09-02 · **Brief:** roadmap/EP-3-name-screen.md · **Commits:** see the roadmap
-Done column (docs commit, then the Done-hash follow-up)
+**Date:** 2026-09-02 · **Brief:** roadmap/EP-3-name-screen.md · **Commits:** `9ece0a1` (record +
+handoff), plus the Done-hash follow-up
 
 ## Completed scope IDs
 
