@@ -1,7 +1,7 @@
 # EP-7 handoff — Discrepancy taxonomy v1
 
 **Status:** complete — all owner decisions ruled 2026-09-02 (see "Owner decisions") ·
-**Date:** 2026-09-02 · **Brief:** roadmap/EP-7-taxonomy.md · **Commits:** `COMMIT1`
+**Date:** 2026-09-02 · **Brief:** roadmap/EP-7-taxonomy.md · **Commits:** `7fa5940`
 (taxonomy, policy and registry rows, index, changelog, handoff), plus the done-hash follow-up
 
 ## Completed scope IDs

@@ -49,7 +49,7 @@ content work depends on. Ends with the repo presentable and every gate instrumen
 | EP-4 | [Threat model, procedures & MIMIC gate](EP-4-threat-model.md) | M | EP-1 | ☑ 0773abd |
 | EP-5 | [Claims matrix, release criteria, changelog](EP-5-claims-criteria.md) | S | EP-2 | ☑ f3a1e28 |
 | EP-6 | [Clinical governance specs: citations & checklists](EP-6-clinical-governance.md) | S | — | ☑ cb6a3dc |
-| EP-7 | [Discrepancy taxonomy v1](EP-7-taxonomy.md) | M | EP-6 | ☐ |
+| EP-7 | [Discrepancy taxonomy v1](EP-7-taxonomy.md) | M | EP-6 | ☑ 7fa5940 |
 
 ## R1 — Vertical slice → v0.1
 
