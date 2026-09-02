@@ -39,6 +39,11 @@ or clinical content has been written.
   gate document under `docs/`.
 - Claim–evidence matrix (`docs/CLAIMS.md`) with the standing-disclaimer canonical block,
   release criteria (`docs/RELEASE-CRITERIA.md`), and this changelog.
+- Clinical governance instruments under `docs/clinical/` (each versioned 1.0): citation
+  policy with approved-source tiers and the Joint Commission NPSG.03.06.01 → NPG.14.05.01
+  transition rule, clinical self-review checklist, stigma-safety checklist, and the public
+  review-record template with pre-brief badge fields. Pointer rows for the verified sources
+  added to the data/asset registry.
 
 ### Content
 
