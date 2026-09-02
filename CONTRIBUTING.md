@@ -124,10 +124,6 @@ maintainer has time; there is no guaranteed response time. See [SUPPORT.md](SUPP
 
 ## How AI-assisted authoring is used in this repository
 
-> **Proposed wording, awaiting owner approval (roadmap ruling OQ-12).** The owner reviews and
-> approves the paragraph below before it stands as the project's statement; until this notice
-> is removed, treat it as a draft.
-
 The owner uses AI coding assistants (large language models operated through agent tooling) to
 draft code, documentation, tests, and planning material in this repository, working from
 written briefs and a binding decision ledger. Every clinical statement, case reference state,

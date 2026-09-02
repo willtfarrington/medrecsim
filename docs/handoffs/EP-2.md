@@ -1,7 +1,8 @@
 # EP-2 handoff — Community & governance pack
 
-**Status:** complete (one owner checkpoint open — OQ-12 wording; see below) · **Date:**
-2026-09-02 · **Brief:** roadmap/EP-2-community-pack.md · **Commit:** `80710ef`
+**Status:** complete — all owner checkpoints closed 2026-09-02 · **Date:** 2026-09-02 ·
+**Brief:** roadmap/EP-2-community-pack.md · **Commits:** `80710ef` (pack), `07f46a4`
+(handoff), plus the approval follow-up recorded below
 
 ## Completed scope IDs
 
@@ -87,9 +88,11 @@ disabled via `gh repo view` (all `false`).
   visible "proposed wording, awaiting owner approval" callout. The brief makes the wording an
   owner judgement checkpoint before merge; this session is non-interactive and commits to
   `main` directly, so the paragraph is committed *as a labelled draft* rather than silently
-  presented as approved. **Owner action:** edit as desired and delete the callout blockquote;
-  that removal is the approval record. README only points to CONTRIBUTING for it (no second
-  copy to keep in sync).
+  presented as approved. **Approval record:** on 2026-09-02 the owner read the proposed
+  wording and approved it unchanged; the callout was removed in the follow-up commit and
+  the paragraph now stands as the project's OQ-12 statement (D-EXEC-003 outward-claim
+  sign-off satisfied). README only points to CONTRIBUTING for it (no second copy to keep in
+  sync).
 
 ## Template rendering quirks
 
@@ -97,9 +100,11 @@ disabled via `gh repo view` (all `false`).
   `issueTemplates` list was empty right after the push, even though the five files are on
   `main` and are schema-valid. Anonymous HTTP fetches of `/issues/new/choose` redirect to
   sign-in, so the rendered chooser could not be inspected from the session. The follow-up
-  GraphQL query after an indexing wait is recorded at the end of this section. **Owner
-  action (one minute):** open Issues → New issue and confirm the four forms and two contact
-  links appear and that blank issues are unavailable.
+  GraphQL query after an indexing wait is recorded at the end of this section.
+  **Closed 2026-09-02:** the owner opened the New Issue flow and confirmed all forms are
+  readable and correctly formatted, which is what "render" means here (GitHub turns each
+  YAML file into a structured issue page with its fields and checkboxes). Acceptance
+  criterion met.
 - GraphQL `codeOfConduct` reports `key: other` — GitHub's detector matches the 1.4/2.x texts;
   3.0 with a customised reporting paragraph is not fingerprinted. The community profile still
   counts the file as present.
@@ -148,8 +153,8 @@ the release-criteria checklist.
 
 ## Risks / notes for the next session
 
-- The OQ-12 callout is public until the owner removes it; that is intended honesty, not an
-  oversight, but it should not linger past the next owner session.
+- (Resolved.) The OQ-12 callout was public for one session by design and was removed once the
+  owner approved the wording on 2026-09-02.
 - Direct pushes to `main` continue to succeed via the EP-1 admin bypass (git prints
   "Changes must be made through a pull request" as a bypass notice); CODEOWNERS only bites on
   pull requests and does nothing until outside contributions arrive.
