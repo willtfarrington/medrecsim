@@ -15,7 +15,11 @@ catalogue: [appendices/architecture.md](appendices/architecture.md) §3 (schema 
 registry/citation CI invariants land here. Integrator resolutions applied: I-6 (hint text lives
 in the reference layer), I-9 (fictional-universe registry = shared content package beside the
 formulary). Assumes OQ-3 (escalation channel enum uses the "outpatient prescriber/program
-office" relabel — a one-enum rename if the owner rules otherwise).
+office" relabel — a one-enum rename if the owner rules otherwise). If the session runs long, the
+pre-declared split point is after item 3 (schema package, tensions T-1..T-6 logged, and the
+layer-separation compile-error fixture) lands: the validate CLI, negative fixtures, exemplar
+scaffold, compile step, and CI wiring may complete in a continuation sitting under this same
+brief.
 
 ## Safety & policy preconditions
 
