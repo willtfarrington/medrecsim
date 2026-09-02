@@ -77,9 +77,9 @@ Node LTS toolchain; no containers or virtualization required).
 Clinical content is **physician-reviewed (single reviewer)**. Independent pharmacist or
 medication-safety dual review is a named future upgrade, not something that has happened.
 The complete list of outward claims and the evidence or softening behind each one lives in
-[docs/CLAIMS.md](docs/CLAIMS.md) (arrives with the next governance step; the link is
-intentionally forward). The standing disclaimer, reproduced unmodified everywhere the project
-speaks:
+[docs/CLAIMS.md](docs/CLAIMS.md); the release criteria every tag is checked against live in
+[docs/RELEASE-CRITERIA.md](docs/RELEASE-CRITERIA.md). The standing disclaimer, reproduced
+unmodified everywhere the project speaks:
 
 > Educational use only. All patients, clinicians, institutions, and records are synthetic and
 > fictional; no real data of any kind. Not validated for learning outcomes; not a certification

@@ -40,8 +40,8 @@ Closes #
 - [ ] This pull request adds **no new outward claim** about what the project is, does, or has
       been shown to do. If it does, it adds a matching row to `docs/CLAIMS.md` with the evidence
       or softening for that claim.
-- [ ] Wording follows the copy rule: "physician-reviewed (single reviewer)", never
-      "expert-reviewed".
+- [ ] Wording follows the copy rule: "physician-reviewed (single reviewer)" and
+      never "expert-reviewed".
 
 ## Golden snapshots (owner review required if checked)
 
