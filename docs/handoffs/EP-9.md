@@ -1,9 +1,9 @@
 # EP-9 handoff — Content schema v0 + validator core
 
-**Status:** in progress — implementation complete and verified locally; owner decisions pending
-(see "Owner decisions") · **Date:** 2026-09-04 · **Brief:** roadmap/EP-9-schema.md ·
-**Commits:** none yet (commit and push are owner decisions; the done-hash is recorded in
-roadmap/README.md and here once made).
+**Status:** complete — all five owner decisions ruled 2026-09-04 (see "Owner decisions");
+hosted CI read-back recorded below · **Date:** 2026-09-04 · **Brief:** roadmap/EP-9-schema.md ·
+**Commits:** `19a8471` (schema, validator, fixtures, scaffold, docs, CI wiring, handoff draft),
+plus the done-hash commit (roadmap Done column, this header, CI read-back).
 
 ## Completed scope IDs
 
@@ -154,8 +154,13 @@ current).
 | Pre-commit tripwire patterns (SSN/MRN/DOB-like; mimic/physionet in data-like files) over new files | 0 hits; every file under `synthetic-fixtures/` starts with `# SYNTHETIC` ✔ |
 | EOL / BOM | no CRLF, no BOM in new files ✔ |
 
-CI on the hosted runners has not run yet (no push); the stages added are the same commands run
-locally in the same order.
+### Post-push (2026-09-04, hosted runners; `gh` read-backs)
+
+| Item | Evidence |
+|---|---|
+| **CI green on both OSes on `main`** for `19a8471` | Pages run **33921781430**: `ci / build-test (ubuntu-latest)` success · `ci / build-test (windows-latest)` success · `deploy` success (`dco` and `dependency-review` skipped by design on push events) ✔ |
+| **Content stage ran on both lanes** | Steps "Content validate (schema + core invariants, D-DATA-003)", "Content negative fixtures (each invariant rejects by name)", "JSON Schema export is current (ADR-2 drift check)", "Content compile (YAML → JSON chunks, ADR-3)" and "Layer separation (evidence types cannot reach the reference layer, D-MED-005)" all `success` on ubuntu and windows (job step read-back) ✔ |
+| **Pages** | Redeployed the unchanged hello-world; no compiled content is imported by the app yet (EP-15/16) ✔ |
 
 ## Owner decisions (presented interactively 2026-09-04; outcomes recorded)
 
