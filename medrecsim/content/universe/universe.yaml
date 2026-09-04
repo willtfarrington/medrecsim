@@ -1,24 +1,157 @@
 # SPDX-License-Identifier: CC-BY-4.0
-# Fictional-universe registry (integrator resolution I-9): institutions, pharmacies, programs
-# and recurring people that cases reference by id. Names here are PLACEHOLDERS until EP-10's
-# visual-identity and originality pack coins the real fictional names.
+# Fictional-universe registry (integrator resolution I-9). Every institution, program and
+# recurring person that cases reference by id lives here, with the screening record that
+# proves the name was checked against real organisations and notable persons before use
+# (docs/NAME-SCREEN.md, fictional in-sim rule; docs/ORIGINALITY-CHECKLIST.md §3). All
+# identifiers are visibly fictional (§4 of the checklist): phone/fax 555-01XX, NPIs start with 0
+# and fail the check digit, postal codes 000NN, chart ids SYN-…, barcodes encode SYNTHETIC.
+# Coined and screened at EP-10 (2026-09-04). Patients are named per case, never here.
 schemaVersion: '0.1'
 id: medrecsim-universe
-universeVersion: 0.0.1
+universeVersion: 0.1.0
+
+locality:
+  cityName: Corrowell
+  regionText: 'no state or county is ever named; artifacts print "Corrowell 000NN"'
+  screening:
+    date: '2026-09-04'
+    venues: [web, rdap, uspto-mirror]
+    grade: L0
+    note: >-
+      Web search for "Corrowell" alone and with "hospital" found no place, organisation or
+      person of that name (nearest hits: Corry Memorial Hospital PA, Corvallis OR, Corowa
+      NSW). corrowell.com, corrowellgeneral.com and corrowellgeneralhospital.com unregistered
+      (RDAP 404). USPTO mirror: 0 marks. The first candidate, "Halvern", was rejected because
+      it is a real populated place inside Hayward, California.
+
 institutions:
-  - id: inst-placeholder-hospital
-    name: PLACEHOLDER hospital name (EP-10)
+  - id: inst-corrowell-general
+    name: Corrowell General Hospital
+    shortName: Corrowell General
     kind: hospital
-    descriptionText: PLACEHOLDER — the fictional US admitting hospital (D-PROD-004).
-    placeholder: true
-  - id: inst-placeholder-pharmacy
-    name: PLACEHOLDER community pharmacy name (EP-10)
+    descriptionText: >-
+      The fictional US general hospital whose emergency department admits every case
+      (D-PROD-004). The learner's chart, the imported medication list, prior discharge
+      summaries and the inpatient pharmacist all belong to it.
+    identifiers:
+      phone: 555-0100
+      fax: 555-0101
+      npi: '0100000001'
+      streetText: 1 Hospital Way
+      postalCode: '00010'
+    screening:
+      date: '2026-09-04'
+      venues: [web, rdap, uspto-mirror]
+      grade: L0
+      note: >-
+        Web search for "Corrowell General Hospital" and "Corrowell Hospital": no hits. Domains
+        unregistered (RDAP 404). USPTO mirror "corrowell general": 0 marks.
+
+  - id: inst-quillbrook-pharmacy
+    name: Quillbrook Pharmacy
+    shortName: Quillbrook
     kind: community-pharmacy
-    descriptionText: PLACEHOLDER — the fictional community pharmacy that holds dispensing history.
-    placeholder: true
-  - id: inst-placeholder-pcp-office
-    name: PLACEHOLDER primary-care office name (EP-10)
+    descriptionText: >-
+      The independent community pharmacy that holds most patients' dispensing history and
+      answers the community-pharmacy escalation channel (D-CLIN-002).
+    identifiers:
+      phone: 555-0142
+      fax: 555-0143
+      npi: '0100000002'
+      streetText: 48 Quillbrook Lane
+      postalCode: '00012'
+    screening:
+      date: '2026-09-04'
+      venues: [web, rdap, uspto-mirror]
+      grade: L1
+      note: >-
+        Web search for "Quillbrook Pharmacy": no pharmacy of that name (hits were Millbrook and
+        Willowbrook pharmacies). quillbrookpharmacy.com unregistered (RDAP 404); the bare
+        quillbrook.com is registered (2020, GoDaddy) and serves a 404 page — not a healthcare
+        organisation (L1 adjacency). USPTO mirror "quillbrook": 0 marks.
+
+  - id: inst-tessary-family-medicine
+    name: Tessary Family Medicine
+    shortName: Tessary FM
     kind: clinic
-    descriptionText: PLACEHOLDER — the fictional outpatient prescriber office (OQ-3 channel).
-    placeholder: true
-people: []
+    descriptionText: >-
+      The outpatient primary-care practice most patients see; the outpatient prescriber /
+      program office escalation channel (OQ-3) and the source of the single outpatient note
+      (D-WF-001).
+    identifiers:
+      phone: 555-0187
+      fax: 555-0188
+      npi: '0100000003'
+      streetText: 210 Tessary Road, Suite 3
+      postalCode: '00014'
+    screening:
+      date: '2026-09-04'
+      venues: [web, rdap, uspto-mirror]
+      grade: L1
+      note: >-
+        Web search for "Tessary Family Medicine", "Tessary clinic", "Tessary medical": no hits
+        (nearest: a Dr. James Tess, Orland Park IL — different name). tessaryfamilymedicine.com
+        unregistered (RDAP 404); the bare tessary.com is a drop-caught parked domain (2025),
+        not a healthcare organisation (L1 adjacency). USPTO mirror "tessary": 0 marks.
+
+people:
+  - id: person-okafor-md
+    displayName: Anneliese Okafor, MD
+    role: primary-care physician (family medicine)
+    institutionId: inst-tessary-family-medicine
+    identifiers: { npi: '0200000001', phone: 555-0187 }
+    screening:
+      date: '2026-09-04'
+      venues: [web, stigma-safety]
+      grade: L0
+      note: >-
+        Web search for the exact full name: no notable person; the surname alone returns
+        unrelated public figures (different given names). Name pairing is respectful and
+        explains nothing about the character.
+
+  - id: person-ibarra-quan-pharmd
+    displayName: Rafael Ibarra-Quan, PharmD
+    role: community pharmacist
+    institutionId: inst-quillbrook-pharmacy
+    identifiers: { npi: '0200000002', phone: 555-0142 }
+    screening:
+      date: '2026-09-04'
+      venues: [web, stigma-safety]
+      grade: L0
+      note: >-
+        Web search for the exact hyphenated full name: no hits; "Rafael Ibarra" alone matches
+        several unrelated people (an actor, an athlete, a scholar) — the hyphenated surname
+        keeps the character distinct.
+
+  - id: person-marchetti-pharmd
+    displayName: Devika Marchetti, PharmD
+    role: inpatient clinical pharmacist
+    institutionId: inst-corrowell-general
+    identifiers: { npi: '0300000001', phone: 555-0100 }
+    screening:
+      date: '2026-09-04'
+      venues: [web, stigma-safety]
+      grade: L0
+      note: Web search for the exact full name found no person of that name.
+
+  - id: person-adebayo-kessler-md
+    displayName: Simone Adebayo-Kessler, MD
+    role: senior / attending physician, general medicine
+    institutionId: inst-corrowell-general
+    identifiers: { npi: '0300000002', phone: 555-0100 }
+    screening:
+      date: '2026-09-04'
+      venues: [web, stigma-safety]
+      grade: L0
+      note: Web search for the exact full name (with and without "MD") found no person of that name.
+
+  - id: person-lindqvist-rn
+    displayName: Marcus Lindqvist, RN
+    role: admitting nurse, general medicine
+    institutionId: inst-corrowell-general
+    identifiers: { phone: 555-0100 }
+    screening:
+      date: '2026-09-04'
+      venues: [web, stigma-safety]
+      grade: L0
+      note: Web search for the exact full name (with "RN" and "nurse") found no notable person of that name.

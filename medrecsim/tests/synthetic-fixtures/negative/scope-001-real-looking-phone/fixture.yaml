@@ -1,0 +1,9 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+name: scope-001-real-looking-phone
+expect: { invariant: INV-SCOPE-001 }
+mutations:
+  - file: evidence.yaml
+    op: set
+    path: sources[5].descriptionText
+    value: PLACEHOLDER — fill history; call the pharmacy at (312) 555-9876 (not in the fictional 555-01XX range).

@@ -6,6 +6,7 @@
 <!--
   Persistent synthetic / no-affiliation banner (D-UX-006). Always rendered, never dismissible.
   Landmark + label so screen-reader users can jump to or past it; nothing here is colour-only.
+  Colours come from the notice tokens (docs/design/COMPONENT-SPECS.md §1).
 -->
 <section class="banner" aria-labelledby="banner-heading">
   <h2 id="banner-heading" class="banner__lead">{BANNER_LEAD}</h2>
@@ -14,26 +15,20 @@
 
 <style>
   .banner {
-    border-bottom: 3px solid #7a5c00;
-    background: #fff4d6;
-    color: #2b2100;
-    padding: 0.75rem 1rem;
-    line-height: 1.4;
+    border-bottom: var(--border-width-strong) solid var(--color-notice-border);
+    background: var(--color-notice-bg);
+    color: var(--color-notice-ink);
+    padding: var(--space-3) var(--space-4);
+    line-height: var(--leading-base);
   }
   .banner__lead {
-    margin: 0 0 0.25rem;
-    font-size: 1rem;
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
   }
   .banner__text {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     max-width: 80ch;
-  }
-  @media (prefers-color-scheme: dark) {
-    .banner {
-      background: #3a2e00;
-      color: #fff4d6;
-      border-bottom-color: #e0b400;
-    }
   }
 </style>

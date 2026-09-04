@@ -97,6 +97,8 @@ jobs:
         run: pnpm run check:no-network
       - name: SPDX headers
         run: pnpm run check:spdx
+      - name: Asset hygiene (no EXIF / editor metadata in images or SVGs, D-UX-006)
+        run: pnpm run check:assets
       - name: Claims hygiene (copy rule + disclaimer block)
         run: pnpm run check:claims
       - name: Action pins

@@ -24,7 +24,7 @@
     "check:action-pins": "node scripts/check-action-pins.mjs",
     "check:dco": "node scripts/check-dco.mjs",
     "check:layers": "node scripts/check-layer-separation.mjs",
-    "checks": "pnpm run check:budget && pnpm run check:no-network && pnpm run check:spdx && pnpm run check:claims && pnpm run check:action-pins && pnpm run check:layers",
+    "checks": "pnpm run check:budget && pnpm run check:no-network && pnpm run check:spdx && pnpm run check:assets && pnpm run check:claims && pnpm run check:action-pins && pnpm run check:layers",
     "notices": "node scripts/gen-third-party.mjs",
     "content": "node packages/content-tools/src/cli.ts",
     "content:validate": "node packages/content-tools/src/cli.ts validate --all",
@@ -33,7 +33,8 @@
     "schema:export": "node packages/content-tools/src/cli.ts schema-export",
     "schema:check": "node packages/content-tools/src/cli.ts schema-export --check",
     "content:ci": "pnpm run content:validate --format github && pnpm run content:fixtures --format github && pnpm run schema:check && pnpm run content:compile",
-    "verify": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run test && pnpm run content:ci && pnpm run build && pnpm run checks"
+    "verify": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run test && pnpm run content:ci && pnpm run build && pnpm run checks",
+    "check:assets": "node scripts/strip-asset-metadata.mjs --check"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -19,7 +19,8 @@ Every release entry also records the outcome of the claim–evidence check
 
 Pre-release; under active construction; nothing here is validated. No tag exists yet. The
 repository holds the R0 foundation and governance pack and the R1 toolchain bootstrap (a
-hello-world application); the content schema (v0.1) and its validator exist; no engine and no clinical content have been written.
+hello-world application); the content schema (v0.1) and its validator exist; the visual
+identity is defined as tokens and fonts; no engine and no clinical content have been written.
 
 ### Added
 
@@ -70,6 +71,17 @@ hello-world application); the content schema (v0.1) and its validator exist; no 
   a negative-fixture suite rejected by invariant name in CI; a structure-complete exemplar
   scaffold with placeholder text; build-time YAML-to-JSON compilation; an authoring guide; a
   seventh architecture decision record for the schema tensions.
+- Visual identity and originality pack: original design tokens (palette in light and dark
+  themes with a contrast test as the contract, type scale, spacing, focus and motion tokens);
+  two self-hosted SIL Open Font License typefaces (Atkinson Hyperlegible Next for documents,
+  Caveat for authored handwriting) subset to Latin with provenance, registry and notice rows;
+  the trade-dress originality checklist (`docs/ORIGINALITY-CHECKLIST.md`) with a recorded
+  composition-level desk review and seven documented divergences; the fictional-universe
+  registry seeded with screened names (one fictional city, a hospital, a community pharmacy, a
+  primary-care practice, five recurring clinicians) and visibly fictional identifier rules
+  enforced by the validator; banner and review-badge component specs with a pure badge-text
+  helper; an asset-hygiene check (EXIF, XMP, IPTC and SVG editor metadata) in CI and the
+  pre-commit hook; an eighth architecture decision record.
 
 ### Content
 

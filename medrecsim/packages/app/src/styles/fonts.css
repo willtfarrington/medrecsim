@@ -1,0 +1,30 @@
+/* SPDX-License-Identifier: MIT */
+/*
+ * Self-hosted @font-face declarations (EP-10, SP-8). Both faces are OFL 1.1 variable fonts,
+ * Latin subset, vendored under src/assets/fonts/ (provenance and licences there). Vite emits
+ * them as hashed same-origin assets; the CSP's font-src 'self' forbids anything else
+ * (D-ARCH-001). font-display: swap — text is never invisible while a face loads, and every
+ * token in tokens.css names a system fallback.
+ */
+@font-face {
+  font-family: 'Atkinson Hyperlegible Next';
+  src: url('../assets/fonts/atkinson-hyperlegible-next/atkinson-hyperlegible-next-latin-wght.woff2')
+    format('woff2');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  src: url('../assets/fonts/caveat/caveat-latin-wght.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

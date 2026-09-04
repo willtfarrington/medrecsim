@@ -19,6 +19,75 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "description": "Content version (semver)"
     },
+    "locality": {
+      "description": "Absent only in a placeholder scaffold",
+      "type": "object",
+      "properties": {
+        "cityName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Fictional city every institution sits in (D-PROD-004: fictional US)"
+        },
+        "regionText": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How the region is written on artifacts, e.g. \"no state named\"; never a real state"
+        },
+        "screening": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Date the screen was run"
+            },
+            "venues": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "web",
+                  "rdap",
+                  "uspto-mirror",
+                  "stigma-safety"
+                ]
+              },
+              "description": "Venues actually queried (NAME-SCREEN.md fictional in-sim rule)"
+            },
+            "grade": {
+              "type": "string",
+              "enum": [
+                "L0",
+                "L1",
+                "L2",
+                "L3"
+              ],
+              "description": "Highest collision grade found; L2+ means rename"
+            },
+            "note": {
+              "type": "string",
+              "minLength": 1,
+              "description": "What was searched and what was found, in one or two sentences"
+            }
+          },
+          "required": [
+            "date",
+            "venues",
+            "grade",
+            "note"
+          ],
+          "additionalProperties": false,
+          "description": "Name-screening record (docs/NAME-SCREEN.md, fictional in-sim rule)"
+        }
+      },
+      "required": [
+        "cityName",
+        "regionText",
+        "screening"
+      ],
+      "additionalProperties": false
+    },
     "institutions": {
       "minItems": 1,
       "type": "array",
@@ -34,6 +103,11 @@
             "type": "string",
             "minLength": 1,
             "description": "Original fictional name (trade-dress originality checklist, D-UX-001)"
+          },
+          "shortName": {
+            "description": "Short form for chart tabs and labels",
+            "type": "string",
+            "minLength": 1
           },
           "kind": {
             "type": "string",
@@ -53,6 +127,85 @@
             "minLength": 1,
             "description": "Non-empty text"
           },
+          "identifiers": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "pattern": "^555-01\\d{2}$",
+                "description": "Visibly fictional phone/fax number: 555-01XX"
+              },
+              "fax": {
+                "type": "string",
+                "pattern": "^555-01\\d{2}$",
+                "description": "Visibly fictional phone/fax number: 555-01XX"
+              },
+              "npi": {
+                "type": "string",
+                "pattern": "^0\\d{9}$",
+                "description": "Synthetic NPI: ten digits, leading 0, invalid check digit (INV-SCOPE-001)"
+              },
+              "streetText": {
+                "description": "Fictional street address line",
+                "type": "string",
+                "minLength": 1
+              },
+              "postalCode": {
+                "type": "string",
+                "pattern": "^000\\d{2}$",
+                "description": "Synthetic postal code: 000NN"
+              }
+            },
+            "additionalProperties": false,
+            "description": "Visibly fictional identifiers rendered on artifacts and channel headers"
+          },
+          "screening": {
+            "description": "Required unless placeholder: true (INV-SCOPE-001)",
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "description": "Date the screen was run"
+              },
+              "venues": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "web",
+                    "rdap",
+                    "uspto-mirror",
+                    "stigma-safety"
+                  ]
+                },
+                "description": "Venues actually queried (NAME-SCREEN.md fictional in-sim rule)"
+              },
+              "grade": {
+                "type": "string",
+                "enum": [
+                  "L0",
+                  "L1",
+                  "L2",
+                  "L3"
+                ],
+                "description": "Highest collision grade found; L2+ means rename"
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "description": "What was searched and what was found, in one or two sentences"
+              }
+            },
+            "required": [
+              "date",
+              "venues",
+              "grade",
+              "note"
+            ],
+            "additionalProperties": false
+          },
           "placeholder": {
             "type": "boolean",
             "const": true
@@ -64,7 +217,8 @@
           "kind",
           "descriptionText"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Fictional institution"
       }
     },
     "people": {
@@ -81,12 +235,81 @@
           "displayName": {
             "type": "string",
             "minLength": 1,
-            "description": "Non-empty text"
+            "description": "Fictional name as shown, e.g. \"Anneliese Okafor, MD\""
           },
           "role": {
             "type": "string",
             "minLength": 1,
-            "description": "e.g. community pharmacist, PCP, OTP nurse"
+            "description": "e.g. community pharmacist, primary-care physician, admitting nurse"
+          },
+          "institutionId": {
+            "description": "Where this person works, if fixed",
+            "type": "string",
+            "pattern": "^inst-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "identifiers": {
+            "type": "object",
+            "properties": {
+              "npi": {
+                "type": "string",
+                "pattern": "^0\\d{9}$",
+                "description": "Synthetic NPI: ten digits, leading 0, invalid check digit (INV-SCOPE-001)"
+              },
+              "phone": {
+                "type": "string",
+                "pattern": "^555-01\\d{2}$",
+                "description": "Visibly fictional phone/fax number: 555-01XX"
+              }
+            },
+            "additionalProperties": false,
+            "description": "Visibly fictional identifiers for a person"
+          },
+          "screening": {
+            "description": "Required unless placeholder: true (INV-SCOPE-001)",
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "description": "Date the screen was run"
+              },
+              "venues": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "web",
+                    "rdap",
+                    "uspto-mirror",
+                    "stigma-safety"
+                  ]
+                },
+                "description": "Venues actually queried (NAME-SCREEN.md fictional in-sim rule)"
+              },
+              "grade": {
+                "type": "string",
+                "enum": [
+                  "L0",
+                  "L1",
+                  "L2",
+                  "L3"
+                ],
+                "description": "Highest collision grade found; L2+ means rename"
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "description": "What was searched and what was found, in one or two sentences"
+              }
+            },
+            "required": [
+              "date",
+              "venues",
+              "grade",
+              "note"
+            ],
+            "additionalProperties": false
           },
           "placeholder": {
             "type": "boolean",
@@ -98,7 +321,8 @@
           "displayName",
           "role"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Recurring fictional person (NPCs and escalation targets, D-WF-003)"
       }
     }
   },

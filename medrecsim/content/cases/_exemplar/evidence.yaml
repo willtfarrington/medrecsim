@@ -42,7 +42,7 @@ sources:
     type: imported-ehr-list
     label: Imported medication list
     descriptionText: PLACEHOLDER — a stale imported list in the chart.
-    institutionId: inst-placeholder-hospital
+    institutionId: inst-corrowell-general
     availability: immediate
     accessCostMinutes: 1
     reliabilityNoteText: PLACEHOLDER — last reconciled two years before this admission.
@@ -50,14 +50,14 @@ sources:
     type: prior-discharge-summary
     label: Prior discharge summary
     descriptionText: PLACEHOLDER — the most recent discharge summary.
-    institutionId: inst-placeholder-hospital
+    institutionId: inst-corrowell-general
     availability: immediate
     accessCostMinutes: 3
   - id: src-pharmacy
     type: pharmacy-dispensing-history
     label: Pharmacy fill history
     descriptionText: PLACEHOLDER — dispensing history requested from the community pharmacy.
-    institutionId: inst-placeholder-pharmacy
+    institutionId: inst-quillbrook-pharmacy
     availability: time-gated
     availableFrom: T0+45m
     accessCostMinutes: 5
@@ -65,7 +65,7 @@ sources:
     type: outpatient-note
     label: Outpatient note
     descriptionText: PLACEHOLDER — one outpatient note from the prescriber office.
-    institutionId: inst-placeholder-pcp-office
+    institutionId: inst-tessary-family-medicine
     availability: immediate
     accessCostMinutes: 3
 
@@ -176,7 +176,7 @@ escalationChannels:
   - id: esc-pharmacy
     channel: community-pharmacy
     label: PLACEHOLDER community pharmacy
-    institutionId: inst-placeholder-pharmacy
+    institutionId: inst-quillbrook-pharmacy
     availabilityWindow: { kind: hours, opens: '09:00', closes: '18:00' }
     latencyMinutes: 20
     responseContent:
@@ -185,7 +185,7 @@ escalationChannels:
   - id: esc-pcp-office
     channel: outpatient-prescriber-program-office
     label: PLACEHOLDER prescriber office
-    institutionId: inst-placeholder-pcp-office
+    institutionId: inst-tessary-family-medicine
     availabilityWindow:
       { kind: hours, opens: '08:00', closes: '17:00', days: [mon, tue, wed, thu, fri] }
     latencyMinutes: 45

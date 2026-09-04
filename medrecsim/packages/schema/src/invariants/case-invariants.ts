@@ -7,6 +7,7 @@ import type { z } from 'zod';
 import { REVIEW_MODEL } from '../vocab/model.ts';
 import type { AcceptedEntry } from '../reference/action-sets.ts';
 import { findRealBrandName } from '../vocab/brand-denylist.ts';
+import { findRealLookingIdentifiers } from '../vocab/synthetic-identifiers.ts';
 import { REFERENCE_ID_PREFIXES } from '../common/ids.ts';
 import { parseEvidenceRef } from '../common/refs.ts';
 import { resolveSimTime } from '../common/sim-time.ts';
@@ -1475,13 +1476,44 @@ export function brandDenylistChecks(invariant: string, file: string, data: unkno
   return out;
 }
 
+/**
+ * Visibly fictional identifiers (EP-10; ORIGINALITY-CHECKLIST.md §4): no ten-digit phone number
+ * outside 555-01XX and no NPI-labelled number that passes the real check-digit test, anywhere
+ * in authored text.
+ */
+export function realLookingIdentifierChecks(
+  invariant: string,
+  file: string,
+  data: unknown,
+): Finding[] {
+  const out: Finding[] = [];
+  walkStrings(data, (value, path) => {
+    for (const hit of findRealLookingIdentifiers(value))
+      out.push(
+        finding(
+          invariant,
+          'error',
+          file,
+          path,
+          hit.kind === 'phone'
+            ? `phone number "${hit.value}" is not in the fictional 555-01XX range`
+            : `NPI ${hit.value} could pass as real (synthetic NPIs start with 0 and fail the check digit)`,
+        ),
+      );
+  });
+  return out;
+}
+
 export const INV_SCOPE_001: CaseInvariant = {
   id: 'INV-SCOPE-001',
   run(_bundle, input) {
     const out: Finding[] = [];
     for (const name of [CASE, EVIDENCE, REFERENCE]) {
       const f = input.files.get(name);
-      if (f) out.push(...brandDenylistChecks(this.id, name, f.data));
+      if (f) {
+        out.push(...brandDenylistChecks(this.id, name, f.data));
+        out.push(...realLookingIdentifierChecks(this.id, name, f.data));
+      }
     }
     return out;
   },

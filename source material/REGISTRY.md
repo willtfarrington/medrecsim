@@ -61,11 +61,14 @@ added when an asset is first used and are kept current at every release, alongsi
 | SCHNIPPER-MARQUIS-2018 | Schnipper et al. — Final results of the MARQUIS study | reference | https://doi.org/10.1136/bmjqs-2018-008233 | BMJ Qual Saf 2018;27(12):954–964 | 2026-09-02 (PubMed record + abstract) | © BMJ; cited, not copied | yes (citation) | pointer-only | none (historical) | Tier C. Added at EP-7. |
 | SCHNIPPER-MARQUIS2-2022 | Schnipper et al. — Results of the MARQUIS2 study | reference | https://doi.org/10.1136/bmjqs-2020-012709 | BMJ Qual Saf 2022;31(4):278–286 | 2026-09-02 | © BMJ (PMC open access); cited, not copied | yes (citation) | pointer-only | none (historical) | Tier C. Added at EP-7. |
 | MUELLER-REVIEW-2012 | Mueller et al. — Hospital-based medication reconciliation practices: a systematic review | reference | https://doi.org/10.1001/archinternmed.2012.2246 | Arch Intern Med 2012;172(14):1057–1069 | 2026-09-02 | © AMA (PMC open access); cited, not copied | yes (citation) | pointer-only | none (historical) | Tier C. Added at EP-7. |
+| FONT-ATKINSON-HYPERLEGIBLE-NEXT | Atkinson Hyperlegible Next (variable, wght 200–800), v2.001 — Braille Institute / Applied Design Works et al. | font | https://github.com/googlefonts/atkinson-hyperlegible-next (commit 7925f50f649b3813257faf2f4c0b381011f434f1, via https://github.com/google/fonts/tree/main/ofl/atkinsonhyperlegiblenext) | 2.001 | 2026-09-04 | SIL OFL 1.1 (no Reserved Font Name) | yes (copyright + licence notice retained in the font name table and `OFL.txt` beside it; THIRD-PARTY.md) | yes — Latin-subset WOFF2 at `medrecsim/packages/app/src/assets/fonts/atkinson-hyperlegible-next/` | on upstream version change; annual review | Document face (`--font-document`). Provenance, hashes and the subset command: `medrecsim/packages/app/src/assets/fonts/README.md`. Added at EP-10 (SP-8). |
+| FONT-CAVEAT | Caveat (variable, wght 400–700), v2.000 — Impallari Type | font | https://github.com/googlefonts/caveat (commit 59745e818ef7973e11e70cb1358d0e902b56c5fc, via https://github.com/google/fonts/tree/main/ofl/caveat) | 2.000 | 2026-09-04 | SIL OFL 1.1 (no Reserved Font Name) | yes (as above) | yes — Latin-subset WOFF2 at `medrecsim/packages/app/src/assets/fonts/caveat/` | on upstream version change; annual review | Handwriting face for authored artifacts (`--font-handwriting`), ≥ 22 px, weight 600, 7:1 floor. Added at EP-10 (SP-8). |
 
 Column key: **Type** = reference / dataset / terminology / font / icon / image / other ·
 **Attribution?** = yes / no (whether the license requires attribution and where it is given) ·
 **Redistributable** = yes / no / pointer-only.
 
-All rows above are pointer-only reference sources from the approved-source list in
+The reference rows are pointer-only sources from the approved-source list in
 [docs/clinical/CITATION-POLICY.md](../docs/clinical/CITATION-POLICY.md) §7 (16 rows at EP-6, 20 more
-at EP-7, both 2026-09-02). No asset is redistributed yet; `THIRD-PARTY.md` is unaffected.
+at EP-7, both 2026-09-02). The two `font` rows (EP-10, 2026-09-04) are the only redistributed
+assets; they are listed with their licence text in `THIRD-PARTY.md`.

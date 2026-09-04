@@ -9,11 +9,13 @@
  *   fixtures [--format pretty|json|github]                             EP-9 (negative suite)
  *   compile [--out <dir>] [--include-drafts]                           EP-9 (ADR-3)
  *   schema-export [--check]                                            EP-9 (ADR-2 drift check)
+ *   assets [--fix] [<file-or-dir>...]                                  EP-10 (asset hygiene)
  *   coverage [--format table|json|md] [--gate]                         EP-20
  *   migrate <codemod-id> [--dry-run]                                   EP-34
  *
  * Exit codes: 0 ok · 1 validation failure · 2 usage error.
  */
+import { runAssets } from './commands/assets.ts';
 import { runCompile } from './commands/compile.ts';
 import { runFixtures } from './commands/fixtures.ts';
 import { runSchemaExport } from './commands/schema-export.ts';
@@ -32,6 +34,7 @@ function usage(): string {
     '  fixtures [--format pretty|json|github]',
     '  compile [--out <dir>] [--include-drafts] [--format pretty|json|github]',
     '  schema-export [--check]',
+    '  assets [--fix] [<file-or-dir>...] [--format pretty|json|github]',
     '  coverage    (arrives with EP-20)',
     '  migrate     (arrives with EP-34)',
     '',
@@ -110,6 +113,15 @@ function main(argv: readonly string[]): number {
     }
     case 'schema-export': {
       const r = runSchemaExport(paths, flags.get('check') === true);
+      console.log(r.output);
+      return r.ok ? 0 : 1;
+    }
+    case 'assets': {
+      const r = runAssets(paths, {
+        fix: flags.get('fix') === true,
+        targets: positional,
+        format: parseFormat(str('format')),
+      });
       console.log(r.output);
       return r.ok ? 0 : 1;
     }

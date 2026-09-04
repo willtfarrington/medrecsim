@@ -1,0 +1,9 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+name: scope-001-npi-passes-check-digit
+expect: { invariant: INV-SCOPE-001 }
+mutations:
+  - file: evidence.yaml
+    op: set
+    path: sources[6].descriptionText
+    value: PLACEHOLDER — outpatient note signed by the prescriber, NPI 1234567893 (passes the real check-digit test).

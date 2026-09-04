@@ -1,6 +1,7 @@
 # Dependency policy (D-SEC-002)
 
-**Status:** policy current as of 2026-09-04 (EP-9: `zod` and `yaml` added to §4 as dev/build
+**Status:** policy current as of 2026-09-04 (EP-10: §3a added — two vendored OFL fonts, no
+new package; `@medrecsim/schema` linked into the app as a workspace devDependency. EP-9: `zod` and `yaml` added to §4 as dev/build
 dependencies of the private schema and content-tools packages; the §3 runtime allowlist is
 unchanged and ESLint now refuses `zod` and `yaml` imports from the app and engine. EP-8: §3 and §4 seeded from the toolchain
 bootstrap, §5 and §8 updated to pnpm/Corepack and Node 24.14.1, gitleaks decision recorded) ·
@@ -65,6 +66,19 @@ Rules specific to this table:
 - No runtime dependency may perform network I/O. Boundary B7 (no network at runtime) is
   enforced by CSP and a CI invariant regardless, but a dependency whose *purpose* is network
   I/O fails this policy before it reaches that test.
+
+### 3a. Vendored runtime assets (fonts)
+
+Fonts ship with the application but are files, not packages: they enter through the §6
+checklist (licence, identity, size, registry, notices) rather than the lockfile, and a new face
+is an owner checkpoint like a runtime package (EP-10 brief). Rule: SIL OFL 1.1 only; self-hosted;
+licence file vendored beside the font; provenance (upstream commit, hash, subset command) in a
+README beside it; rows in `source material/REGISTRY.md` and `THIRD-PARTY.md`.
+
+| Asset | Version | Purpose | Licence | Gzipped contribution | Rows | Approved (date) |
+|---|---|---|---|---|---|---|
+| Atkinson Hyperlegible Next (Latin subset, variable wght 200–800) | 2.001 | Document face (`--font-document`, ADR-8); legibility-designed (I/l/1, 0/O) for drug names and dose strings | OFL 1.1 | 34,080 B WOFF2 (already compressed; not JS, outside the D-ARCH-007 JS budget) | REGISTRY `FONT-ATKINSON-HYPERLEGIBLE-NEXT`; THIRD-PARTY "Fonts" | 2026-09-04 — EP-10 owner checkpoint (handoff) |
+| Caveat (Latin subset, variable wght 400–700) | 2.000 | Handwriting face for authored artifacts (`--font-handwriting`, ADR-8); loaded only when an artifact uses it | OFL 1.1 | 77,480 B WOFF2 (lazy) | REGISTRY `FONT-CAVEAT`; THIRD-PARTY "Fonts" | 2026-09-04 — EP-10 owner checkpoint (handoff) |
 
 ## 4. Build and development dependency register
 

@@ -7,3 +7,4 @@ export * from './taxonomy.ts';
 export * from './claim-status.ts';
 export * from './model.ts';
 export * from './brand-denylist.ts';
+export * from './synthetic-identifiers.ts';

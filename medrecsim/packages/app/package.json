@@ -17,6 +17,7 @@
     "svelte": "5.57.0"
   },
   "devDependencies": {
+    "@medrecsim/schema": "workspace:*",
     "@sveltejs/vite-plugin-svelte": "7.3.0",
     "jsdom": "30.0.1",
     "svelte-check": "4.7.6",

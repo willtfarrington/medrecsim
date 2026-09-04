@@ -1,17 +1,24 @@
 /* SPDX-License-Identifier: MIT */
-/* Base styles (EP-8 hello-world). Design tokens and identity arrive with EP-10. */
-:root {
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
-  color-scheme: light dark;
+/* Base styles: design tokens and self-hosted fonts (EP-10); surfaces arrive with EP-15+. */
+@import './styles/tokens.css';
+@import './styles/fonts.css';
+
+html {
+  font-family: var(--font-document);
+  font-size: 100%; /* respects the user's browser default; the scale is rem-based */
+  background: var(--color-canvas);
+  color: var(--color-ink);
 }
 body {
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--leading-base);
+}
+a {
+  color: var(--color-link);
+}
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
 }
 @media (prefers-reduced-motion: reduce) {
   *,

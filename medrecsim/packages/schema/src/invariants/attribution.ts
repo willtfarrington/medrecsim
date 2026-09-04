@@ -84,6 +84,17 @@ export function attributeIssue(file: string, issue: z.core.$ZodIssue): string {
   if (file === 'review-record.yaml') return 'INV-META-001';
   if (file === 'citations.yaml') return 'INV-CIT-001';
 
+  if (file === 'universe.yaml') {
+    // Visibly fictional identifiers and screening records (EP-10, ORIGINALITY-CHECKLIST.md).
+    if (
+      typeof last === 'string' &&
+      ['phone', 'fax', 'npi', 'postalCode', 'grade', 'venues', 'screening'].includes(last)
+    )
+      return 'INV-SCOPE-001';
+    if (path.includes('screening')) return 'INV-SCOPE-001';
+    return 'SCHEMA';
+  }
+
   if (file.startsWith('entries/') || file === 'formulary.yaml') {
     if (last === 'pillAppearanceText') return 'INV-A11Y-001';
     if (first === 'brandNamesFictional') return 'INV-SCOPE-001';

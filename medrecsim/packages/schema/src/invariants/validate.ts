@@ -13,12 +13,14 @@ import { EvidenceDocument } from '../evidence/document.ts';
 import { ReferenceDocument } from '../reference/document.ts';
 import { SCHEMA_VERSION } from '../version.ts';
 import { findingsFromZodError } from './attribution.ts';
+import { isSyntheticNpi } from '../vocab/synthetic-identifiers.ts';
 import {
   CASE_INVARIANTS,
   brandDenylistChecks,
   checkMedicationRef,
   citationChecks,
   lintScopes,
+  realLookingIdentifierChecks,
   registryChecks,
   type CitationUse,
 } from './case-invariants.ts';
@@ -284,15 +286,93 @@ export function validateUniverse(
     ...checkUniqueIds('INV-SHAPE-001', input.file.name, ['people'], doc.people, 'person'),
   );
   findings.push(...brandDenylistChecks('INV-SCOPE-001', input.file.name, input.file.data));
-  doc.institutions.forEach((inst, i) => {
-    if (inst.placeholder)
+  findings.push(...realLookingIdentifierChecks('INV-SCOPE-001', input.file.name, input.file.data));
+  const name = input.file.name;
+  const screened = (
+    entry: { placeholder?: true | undefined; screening?: unknown },
+    path: readonly (string | number)[],
+    label: string,
+  ) => {
+    if (entry.placeholder) {
       findings.push(
         finding(
           'INV-META-001',
           'warning',
-          input.file.name,
-          ['institutions', i],
-          'placeholder institution — replace at EP-10',
+          name,
+          path,
+          `placeholder ${label} — not screened, excluded from compile unless --include-drafts`,
+        ),
+      );
+      return;
+    }
+    if (!entry.screening)
+      findings.push(
+        finding(
+          'INV-SCOPE-001',
+          'error',
+          name,
+          [...path, 'screening'],
+          `${label} has no screening record (docs/NAME-SCREEN.md fictional in-sim rule; ORIGINALITY-CHECKLIST.md §3)`,
+        ),
+      );
+    else if (entry.screening && (entry.screening as { grade: string }).grade >= 'L2')
+      findings.push(
+        finding(
+          'INV-SCOPE-001',
+          'error',
+          name,
+          [...path, 'screening', 'grade'],
+          `${label} screened ${(entry.screening as { grade: string }).grade}: a fictional name graded L2 or higher is renamed, not published`,
+        ),
+      );
+  };
+  const npiChecks = (npi: string | undefined, path: readonly (string | number)[]) => {
+    if (npi !== undefined && !isSyntheticNpi(npi))
+      findings.push(
+        finding(
+          'INV-SCOPE-001',
+          'error',
+          name,
+          path,
+          `NPI ${npi} passes the real check-digit test; synthetic NPIs must start with 0 and fail it`,
+        ),
+      );
+  };
+  if (!doc.locality && !doc.institutions.every((i) => i.placeholder))
+    findings.push(
+      finding(
+        'INV-SCOPE-001',
+        'error',
+        name,
+        ['locality'],
+        'a non-placeholder registry must declare its screened fictional locality',
+      ),
+    );
+  if (doc.locality && doc.locality.screening.grade >= 'L2')
+    findings.push(
+      finding(
+        'INV-SCOPE-001',
+        'error',
+        name,
+        ['locality', 'screening', 'grade'],
+        `locality screened ${doc.locality.screening.grade}: rename`,
+      ),
+    );
+  doc.institutions.forEach((inst, i) => {
+    screened(inst, ['institutions', i], `institution ${inst.id}`);
+    npiChecks(inst.identifiers?.npi, ['institutions', i, 'identifiers', 'npi']);
+  });
+  doc.people.forEach((p, i) => {
+    screened(p, ['people', i], `person ${p.id}`);
+    npiChecks(p.identifiers?.npi, ['people', i, 'identifiers', 'npi']);
+    if (p.institutionId !== undefined && !doc.institutions.some((x) => x.id === p.institutionId))
+      findings.push(
+        finding(
+          'INV-SHAPE-001',
+          'error',
+          name,
+          ['people', i, 'institutionId'],
+          `institution "${p.institutionId}" is not in this registry`,
         ),
       );
   });

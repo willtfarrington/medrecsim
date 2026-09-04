@@ -178,8 +178,16 @@ Where citations are required and where they live: policy §4.
 `placeholder: true` for scaffold entries only. The manifest `formulary.yaml` carries
 `formularyVersion`.
 
-`universe/universe.yaml` (I-9): `institutions[]` `{id: inst-…, name, kind, descriptionText}`
-and `people[]` `{id: person-…, displayName, role}`; `universeVersion`.
+`universe/universe.yaml` (I-9): `locality` `{cityName, regionText, screening}`,
+`institutions[]` `{id: inst-…, name, shortName?, kind, descriptionText, identifiers?,
+screening}` and `people[]` `{id: person-…, displayName, role, institutionId?, identifiers?,
+screening}`; `universeVersion`. Every non-placeholder entry needs a `screening` record
+`{date, venues[web|rdap|uspto-mirror|stigma-safety], grade L0…L3, note}` per the fictional
+in-sim rule in `docs/NAME-SCREEN.md`; L2 or higher is an error (rename). `identifiers` are
+visibly fictional and schema-checked: phone/fax `555-01XX`, NPI ten digits starting with `0`
+**and** failing the check digit, postal code `000NN` (INV-SCOPE-001; `universe/README.md`).
+The same rule scans every content file's prose: a ten-digit phone number outside `555-01XX`,
+or an `NPI`-labelled number that passes the check digit, is an error.
 
 ## 8. Review records and the badge
 
