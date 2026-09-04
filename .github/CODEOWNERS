@@ -3,8 +3,8 @@
 # Single-maintainer project: the owner reviews everything.
 *   @willtfarrington
 
-# /content/ (case bundles, formulary, teaching notes; arrives with the content schema):
-# clinical content sign-off is owner-only and never delegated (DECISIONS.md D-EXEC-003).
+# /medrecsim/content/ (case bundles, formulary, teaching notes; the content schema arrives at
+# EP-9): clinical content sign-off is owner-only and never delegated (DECISIONS.md D-EXEC-003).
 # Changes to accepted/unsafe action sets, scoring semantics, or teaching content are merged
 # only with an explicit owner review recorded in the case's public review record.
-/content/   @willtfarrington
+/medrecsim/content/   @willtfarrington

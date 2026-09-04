@@ -45,9 +45,27 @@ mock-ups stand in for them.
 
 ## Quickstart
 
-*Placeholder.* The toolchain is not bootstrapped yet. When it is, this section will hold the
-Pages URL for learners and the clone / install / run steps for contributors (Windows-native
-Node LTS toolchain; no containers or virtualization required).
+**Learners:** the deployed application is at <https://willtfarrington.github.io/medrecsim/>.
+At this stage it is a hello-world page carrying the persistent synthetic-use banner; the first
+playable case arrives with the v0.1 vertical slice.
+
+**Contributors** (Windows-native Node LTS toolchain; no containers or virtualization required;
+the same commands work on Linux and macOS):
+
+```
+git clone https://github.com/willtfarrington/medrecsim.git
+cd medrecsim
+git config core.hooksPath githooks      # pre-commit secret scan + tripwire (see githooks/README.md)
+corepack enable                         # provisions the pinned pnpm; needs Node 24.14.1 (.nvmrc)
+cd medrecsim                            # the code workspace
+pnpm install --frozen-lockfile
+pnpm verify                             # lint, format, typecheck, test, build, checks — what CI runs
+pnpm dev                                # local development server
+```
+
+The workspace layout and every command are described in
+[medrecsim/README.md](medrecsim/README.md); the toolchain decisions and their measured
+evidence are in [docs/adr/](docs/adr/).
 
 ## Design principles
 

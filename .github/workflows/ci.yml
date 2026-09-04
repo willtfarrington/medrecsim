@@ -1,0 +1,143 @@
+# CI (EP-8; D-QA-001, D-SEC-001; stage order per roadmap/appendices/architecture.md §7).
+#
+# Security posture: no secrets exist in this repository; the token is read-only; forked pull
+# requests are safe because nothing here needs write access and `pull_request_target` is never
+# used. Every third-party step is pinned to a full-length commit SHA (checked by
+# medrecsim/scripts/check-action-pins.mjs). pnpm is provisioned by Corepack from the hash-pinned
+# `packageManager` field; install scripts are disabled by medrecsim/.npmrc.
+#
+# Matrix policy (I-5): stages 1–8 run on ubuntu and windows for every pull request. `main` is
+# verified by pages.yml, which calls this workflow (workflow_call) and deploys only if it succeeds.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main] # main runs through pages.yml → this workflow
+  workflow_call:
+    inputs:
+      upload-pages-artifact:
+        description: Upload packages/app/dist as the GitHub Pages artifact (pages.yml sets this)
+        type: boolean
+        required: false
+        default: false
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+defaults:
+  run:
+    working-directory: medrecsim
+    shell: bash
+
+jobs:
+  build-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: medrecsim/.nvmrc
+
+      - name: Enable Corepack (pnpm version + hash from package.json#packageManager)
+        run: corepack enable
+
+      # ---- stage 1: install (frozen lockfile; lifecycle scripts ignored) ----
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # ---- stage 2: lint / format (includes the engine determinism rule) ----
+      - name: Lint
+        run: pnpm run lint
+      - name: Format check
+        run: pnpm run format:check
+
+      # ---- stage 3: typecheck ----
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      # ---- stage 4: unit + property tests (Vitest, fast-check) ----
+      - name: Test
+        run: pnpm run test
+
+      # ---- stage 5 (slot, EP-9 / EP-20): content validate + coverage ----
+      #   run: pnpm run content validate --all --format github && pnpm run content coverage --gate
+      # ---- stage 6 (slot, EP-12): golden harness ----
+      # ---- stage 7 (slot, EP-15): component tests (currently folded into stage 4) ----
+
+      # ---- stage 8: build + bundle budget (≤ 300 KB gz initial JS, D-ARCH-007) + invariants ----
+      - name: Build
+        run: pnpm run build
+      - name: Bundle budget
+        run: pnpm run check:budget
+      - name: No-network invariant (CSP + static scan; boundary B7)
+        run: pnpm run check:no-network
+      - name: SPDX headers
+        run: pnpm run check:spdx
+      - name: Claims hygiene (copy rule + disclaimer block)
+        run: pnpm run check:claims
+      - name: Action pins
+        run: pnpm run check:action-pins
+
+      # ---- stage 9 (slot, EP-15 / EP-18): Playwright keyboard-only smoke + @axe-core/playwright ----
+      #   ubuntu on every PR; windows nightly job (I-5) to be added beside this one.
+      # ---- stage 10: gitleaks runs pre-commit (EP-0) with server-side push protection (EP-1) ----
+      #   as the backstop; a CI scan step may be added here at EP-19 if drift is observed.
+
+      - name: Upload Pages artifact
+        if: inputs.upload-pages-artifact == true && matrix.os == 'ubuntu-latest'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: medrecsim/packages/app/dist
+
+  # Developer Certificate of Origin: every commit in a pull request carries Signed-off-by
+  # (CONTRIBUTING.md). Small script, no third-party app. Also runnable on a branch via
+  # workflow_dispatch (checks the branch against origin/main).
+  dco:
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check Signed-off-by trailers
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          if [ -n "$BASE_SHA" ]; then
+            range="$BASE_SHA..$HEAD_SHA"
+          else
+            git fetch --no-tags origin main
+            range="origin/main..$HEAD_SHA"
+          fi
+          node scripts/check-dco.mjs "$range"
+
+  # Dependency review on pull requests (D-SEC-001; DEPENDENCY-POLICY.md §6.2 licence list).
+  # MPL-2.0 is allowed only because Vite 8's build-time CSS transformer (lightningcss) carries
+  # it; it is never redistributed (DEPENDENCY-POLICY.md §4 licence notes).
+  dependency-review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: low
+          allow-licenses: MIT, MIT-0, BSD-2-Clause, BSD-3-Clause, ISC, Apache-2.0, 0BSD, Unlicense, CC0-1.0, OFL-1.1, CC-BY-4.0, BlueOak-1.0.0, Python-2.0, MPL-2.0
+          comment-summary-in-pr: never

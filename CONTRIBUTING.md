@@ -43,7 +43,11 @@ the roadmap's parked list rather than added to work in progress.
 
    They run a secret scan and a tripwire grep for patient-record-like patterns. See
    [githooks/README.md](githooks/README.md).
-4. Make sure continuous integration is green (once CI exists; it is being bootstrapped).
+4. Make sure continuous integration is green. `.github/workflows/ci.yml` runs lint, format,
+   typecheck, tests, the build, and the bundle-budget, no-network, SPDX, claims, and
+   action-pin checks on Ubuntu and Windows; a pull request additionally runs the Developer
+   Certificate of Origin check (every commit signed off) and a dependency review. You can run
+   the same steps locally with `pnpm verify` inside `medrecsim/`.
 5. Sign off every commit and complete the pull-request template, including the attestations
    below.
 

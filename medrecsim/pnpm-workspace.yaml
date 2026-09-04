@@ -1,0 +1,13 @@
+# pnpm workspace (ADR-4). Supply-chain settings live here (pnpm ≥ 10 reads them from this file;
+# `.npmrc` beside it carries the npm-compatible ones required by docs/DEPENDENCY-POLICY.md §5).
+packages:
+  - packages/*
+
+# Newly published versions are not installable until they are at least one day old
+# (pnpm 11 default, stated explicitly so the intent survives a default change).
+minimumReleaseAge: 1440
+
+# No dependency may run lifecycle (install/postinstall) scripts. pnpm blocks them by default;
+# an empty allow-list keeps that explicit. A package that genuinely needs a build step is
+# either avoided or approved here by name with the reason recorded in DEPENDENCY-POLICY.md §4.
+allowBuilds: {}

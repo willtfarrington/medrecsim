@@ -18,8 +18,8 @@ Every release entry also records the outcome of the claim–evidence check
 ## [Unreleased]
 
 Pre-release; under active construction; nothing here is validated. No tag exists yet. The
-repository holds the R0 foundation and governance pack; no application code, engine, schema,
-or clinical content has been written.
+repository holds the R0 foundation and governance pack and the R1 toolchain bootstrap (a
+hello-world application); no engine, schema, or clinical content has been written.
 
 ### Added
 
@@ -50,6 +50,15 @@ or clinical content has been written.
   coverage tool will evaluate, divergence notes against the cited sources, the enum export the
   content schema imports verbatim, and a cited register of its sources. Twenty pointer rows
   added to the citation policy and the data/asset registry.
+- Toolchain bootstrap under `medrecsim/`: pnpm workspace with engine, schema, content-tools,
+  and app packages; TypeScript (strict), Vite, Vitest with fast-check, ESLint with an
+  engine-determinism rule, Prettier; six architecture decision records under `docs/adr/`
+  (Svelte 5, Zod 4 with exported JSON Schema, build-time content compile, pnpm, no UI state
+  library, fast-check) each carrying measured spike evidence; continuous integration on Ubuntu
+  and Windows with bundle-budget, no-network (Content-Security-Policy), SPDX-header, claims,
+  action-pin, Developer Certificate of Origin, and dependency-review checks; GitHub Pages
+  deployment from `main` gated on that workflow; a hello-world page rendering the standing
+  disclaimer banner; third-party notices generated from the lockfile.
 
 ### Content
 

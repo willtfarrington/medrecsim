@@ -1,0 +1,17 @@
+{
+  "name": "@medrecsim/schema",
+  "version": "0.0.0",
+  "private": true,
+  "description": "medrecsim content schema: types, validators, invariants (filled at EP-9)",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3"
+  }
+}

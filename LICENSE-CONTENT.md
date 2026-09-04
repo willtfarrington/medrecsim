@@ -7,9 +7,12 @@ This repository uses a split-license model (D-OSS-001). Repo-level SPDX expressi
 
 | Path | Material | License |
 |------|----------|---------|
-| `packages/**` (all application and engine source code) | Code | [MIT](LICENSE) |
-| `content/**` (case bundles, formulary, teaching notes) | Content | CC BY 4.0 |
+| `medrecsim/packages/**`, `medrecsim/scripts/**`, `medrecsim/tests/**` (all application, engine, and tooling source code) | Code | [MIT](LICENSE) |
+| `medrecsim/content/**` (case bundles, formulary, teaching notes) | Content | CC BY 4.0 |
 | Teaching material under `docs/` | Content | CC BY 4.0 |
+
+Every source file under `medrecsim/` carries an `SPDX-License-Identifier` header naming the
+applicable license; continuous integration checks the headers.
 
 Code is licensed under the MIT License in [LICENSE](LICENSE). All simulation **content** —
 case bundles, the synthetic formulary, teaching notes, and educational documentation — is

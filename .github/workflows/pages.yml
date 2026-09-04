@@ -1,0 +1,40 @@
+# GitHub Pages deployment (EP-8; THREAT-MODEL.md boundary B3 — the only privilege path).
+#
+# - Triggers only on push to `main`. Tags never deploy by themselves (RELEASE-CRITERIA.md §2).
+# - The `ci` job *is* the CI workflow (workflow_call): the deploy job cannot start unless every
+#   CI stage passed on both operating systems — "gated on CI green" by construction.
+# - `pages: write` + `id-token: write` are granted to the deploy job only; everything else is
+#   read-only. Official actions only, pinned to full-length commit SHAs.
+# - The `github-pages` environment is restricted to `main` in repository settings
+#   (SECURITY-BASELINE.md row A16).
+name: Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+    with:
+      upload-pages-artifact: true
+
+  deploy:
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

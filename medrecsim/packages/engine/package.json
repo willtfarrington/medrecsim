@@ -1,0 +1,20 @@
+{
+  "name": "@medrecsim/engine",
+  "version": "0.0.0",
+  "private": true,
+  "description": "medrecsim simulation engine: pure, headless, deterministic (D-ARCH-006)",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "fast-check": "4.9.0",
+    "typescript": "6.0.3",
+    "vitest": "4.1.11"
+  }
+}

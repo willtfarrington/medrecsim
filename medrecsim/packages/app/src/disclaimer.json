@@ -1,0 +1,4 @@
+{
+  "$comment": "Verbatim copy of the standing-disclaimer canonical block in docs/CLAIMS.md (D-UX-006, D-QA-002). Any change is an owner decision recorded in DECISIONS.md and propagated to every consumer in the same commit; scripts/check-claims.mjs and disclaimer.test.ts enforce byte-equality.",
+  "text": "Educational use only. All patients, clinicians, institutions, and records are synthetic and fictional; no real data of any kind. Not validated for learning outcomes; not a certification of competence; no claim of safety improvement. Clinical content is physician-reviewed (single reviewer). Personal project with no institutional, employer, or vendor affiliation; not \"HIPAA compliant\" because no real health information is processed. Drug information may become outdated — each case shows its review date; verify against current sources before any clinical use."
+}

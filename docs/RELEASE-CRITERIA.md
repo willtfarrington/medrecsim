@@ -85,19 +85,21 @@ records each item's outcome with a date. Any unchecked item blocks the tag.
      line):
 
      ```
-     git grep -n -i "expert-reviewed" -- README.md CONTRIBUTING.md SECURITY.md SUPPORT.md CODE_OF_CONDUCT.md THIRD-PARTY.md CITATION.cff CHANGELOG.md LICENSE-CONTENT.md ".github" "docs" "source material" ":(exclude)docs/handoffs" | grep -v -i "never"
+     git grep -n -i "expert-reviewed" -- README.md CONTRIBUTING.md SECURITY.md SUPPORT.md CODE_OF_CONDUCT.md THIRD-PARTY.md CITATION.cff CHANGELOG.md LICENSE-CONTENT.md ".github" "docs" "source material" "medrecsim" ":(exclude)docs/handoffs" ":(exclude)medrecsim/pnpm-lock.yaml" | grep -v -i "never"
      ```
 
-     Expected output: nothing. Once `content/` and `packages/` exist, add them to the path
-     list.
+     Expected output: nothing. The same rule runs in CI on every build
+     (`medrecsim/scripts/check-claims.mjs`, EP-8), together with the disclaimer diff below.
    - **Disclaimer block byte-identical** in every consumer. For the README:
 
      ```
      diff <(sed -n '/^> Educational use only\./,/^> clinical use\./p' docs/CLAIMS.md) <(sed -n '/^> Educational use only\./,/^> clinical use\./p' README.md)
      ```
 
-     Expected output: nothing. Once the in-app banner and pre-briefs exist, the same block is
-     compared against the string constant they render (the app's own test asserts it).
+     Expected output: nothing. The in-app banner renders the block from
+     `medrecsim/packages/app/src/disclaimer.json`; the app's own test and the CI claims check
+     assert byte-equality with CLAIMS.md (EP-8). Pre-briefs (EP-19) must consume the same
+     constant.
    - **Case counts (C9):** the README states the live numbers ("N published, M reviewed") and
      they match `content/`.
    - Record "claims: clean at `vX.Y.Z`, date" in the release notes.
@@ -106,8 +108,11 @@ records each item's outcome with a date. Any unchecked item blocks the tag.
 4. **`CHANGELOG.md`:** the `[Unreleased]` entries moved under `## [X.Y.Z] - YYYY-MM-DD`; a fresh
    empty `[Unreleased]` left above; the compare links at the foot updated; every Content entry
    names the bundle/schema versions it refers to.
-5. **`THIRD-PARTY.md` regenerated** (once the notice script exists; until then, re-read the
-   stub and confirm it is still true) and `source material/REGISTRY.md` reviewed for new rows.
+5. **`THIRD-PARTY.md` regenerated** — inside `medrecsim/`: `pnpm build && pnpm notices`
+   (the generated section is derived from the lockfile and the build's bundle manifest;
+   `pnpm notices -- --check` reports drift without writing) — the diff committed with the
+   release, the hand-maintained sections re-read, and `source material/REGISTRY.md` reviewed
+   for new rows.
 6. **Security baseline spot-check:** no open alerts without an accepted-risk entry; committed
    ruleset exports match the live rulesets.
 7. **Name screen:** before `v0.1.0` specifically, NAME-SCREEN.md must carry the owner's

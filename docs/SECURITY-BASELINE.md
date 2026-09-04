@@ -31,9 +31,10 @@ repo-admin API access; see "How to complete" below) · ⛔ blocked (reason noted
 | A2 | Push protection | Enabled | ✅ | 2026-08-23 | `gh api` PATCH + read-back: `secret_scanning_push_protection: enabled` |
 | A3 | Private vulnerability reporting | Enabled | ✅ | 2026-08-23 | `gh api` PUT + read-back: `enabled: true` (was `false` pre-EP-1) |
 | A4 | Dependabot alerts | Enabled (`dependabot.yml` config file itself is EP-2) | ✅ | 2026-08-23 | `gh api` PUT + read-back: `GET /vulnerability-alerts` → 204 |
-| A5 | CodeQL default setup | Configured; first scan completes without configuration errors | ✅ configured / ⏳ first scan | 2026-08-23 | `gh api` PATCH + read-back: `state: configured`, `query_suite: default`. `languages: []` — the repo has no CodeQL-supported language yet, so no scan has run; **verify the first completed scan at EP-8** when code lands. |
+| A5 | CodeQL default setup | Configured; first scan completes without configuration errors | ✅ configured / ⏳ first scan (EP-8, post-push — see row A5′ below) | 2026-08-23 | `gh api` PATCH + read-back: `state: configured`, `query_suite: default`. `languages: []` at EP-1 — no CodeQL-supported language existed; TypeScript landed at EP-8. |
+| A5′ | CodeQL first scan | `languages` includes `javascript-typescript`; one completed analysis on `main` | ⏳ recorded in the EP-8 handoff after the first push | — | `gh api repos/$R/code-scanning/default-setup` and `…/code-scanning/analyses` |
 | A6 | Ruleset on `main` | Two active rulesets: [rulesets/main-history-protection.json](rulesets/main-history-protection.json) (block force-push + deletion, no bypass) and [rulesets/main-pr-gate.json](rulesets/main-pr-gate.json) (require PRs; repo-admin bypass) | ✅ | 2026-08-23 | `gh api` POST; read-back: ids 21252019 / 21252020, both `enforcement: active`. Committed JSON = live export (volatile fields stripped, see Drift rule). |
-| A7 | Required status checks on `main` | **EP-8 placeholder** — check names are added to the PR-gate ruleset once CI exists | ⛔ deferred to EP-8 by design | — | — |
+| A7 | Required status checks on `main` | `main-pr-gate` carries a `required_status_checks` rule naming the EP-8 CI checks: `build-test (ubuntu-latest)`, `build-test (windows-latest)`, `dco`, `dependency-review` (non-strict: a PR need not be up to date with `main`) | ⏳ EP-8 owner decision (registered after the first CI run reports the check names; live export re-committed per the drift rule) | — | `gh api` PUT on ruleset 21252020 + read-back; `docs/rulesets/main-pr-gate.json` |
 | A8 | Actions: default workflow permissions | Read-only | ✅ | 2026-08-23 | `gh api` PUT + read-back: `default_workflow_permissions: read` |
 | A9 | Actions: "can create or approve pull requests" | OFF | ✅ | 2026-08-23 | `gh api` PUT + read-back: `can_approve_pull_request_reviews: false` |
 | A10 | Fork PRs | Require approval for **all** outside collaborators. Standing policy: never combine `pull_request_target` with a checkout of fork code (enforced in workflow reviews from EP-8). | ✅ | 2026-08-23 | `gh api` PUT + read-back: `approval_policy: all_external_contributors` |
@@ -42,6 +43,28 @@ repo-admin API access; see "How to complete" below) · ⛔ blocked (reason noted
 | A13 | Owner-account 2FA | Active | ⏳ owner-only (the CLI token has no account scope; `two_factor_authentication` unreadable) | — | UI: Settings → Password and authentication |
 | A14 | No PATs or secrets anywhere in tree or history | Clean | ✅ | 2026-08-23 | `gitleaks dir .` (working tree) and `gitleaks git .` (all 4 commits): no leaks found |
 | A15 | Push-protection live demo | Dummy-secret push blocked server-side on a scratch branch, branch deleted, no secret value retained | ⏳ owner-run (procedure below) | — | — |
+
+## C. Workflow-level items (EP-8 scope — from [handoffs/EP-8.md](handoffs/EP-8.md))
+
+The workflow files are `.github/workflows/ci.yml` and `.github/workflows/pages.yml`; the
+toolchain checks live in `medrecsim/scripts/`. "File" in the Method column means the control is
+verifiable by reading the committed file; "CI" means a job asserts it on every run.
+
+| # | Item | Prescribed state (D-SEC-001, DEPENDENCY-POLICY §5/§7) | Status | Verified on | Method |
+|---|------|--------------------------------------------------------|--------|-------------|--------|
+| C1 | Every action reference SHA-pinned | Full-length commit SHA + tag comment on every `uses:` (8 references, all official `actions/*`) | ✅ | 2026-09-04 | CI: `check:action-pins` (fails on any tag/branch reference); file |
+| C2 | Install scripts disabled | `medrecsim/.npmrc` `ignore-scripts=true`; `pnpm-workspace.yaml` `allowBuilds: {}`; `minimumReleaseAge: 1440` | ✅ | 2026-09-04 | File; install log shows no scripts run |
+| C3 | Frozen lockfile in CI | `pnpm install --frozen-lockfile` is the only install command | ✅ | 2026-09-04 | File |
+| C4 | Least-privilege workflow tokens | Both workflows declare `permissions: contents: read`; `pages: write` + `id-token: write` only on the `deploy` job | ✅ | 2026-09-04 | File (and A8 repository default) |
+| C5 | Forked-PR safety | `pull_request` only, never `pull_request_target`; no `secrets.*` references anywhere | ✅ | 2026-09-04 | File; `grep -r "pull_request_target\|secrets\." .github/workflows` → nothing |
+| C6 | DCO check | `dco` job on every pull request (and on demand via `workflow_dispatch` against a branch); `scripts/check-dco.mjs`, no third-party app | ✅ file · ⏳ live failure demo (EP-8 handoff) | 2026-09-04 | File; scratch-branch demo |
+| C7 | Dependency review on PRs | `actions/dependency-review-action` with `fail-on-severity: low` and the §6.2 licence allow-list (+ MPL-2.0 for Vite's build-time `lightningcss`) | ✅ | 2026-09-04 | File |
+| C8 | Pages deploys from `main` only, gated on CI | `pages.yml` triggers on `push: branches: [main]`; its `deploy` job `needs` the called CI workflow | ✅ file · ⏳ first deploy (EP-8 handoff) | 2026-09-04 | File; `gh run` read-back |
+| C9 | `github-pages` environment restricted to `main` | Deployment-branch policy = `main` only | ⏳ EP-8 owner decision (repository setting) | — | `gh api repos/$R/environments/github-pages` read-back |
+| C10 | Pages enabled with the Actions build type | `build_type: workflow`; no branch-source build (nothing outside `pages.yml` can publish) | ⏳ EP-8 owner decision (repository setting) | — | `gh api repos/$R/pages` read-back |
+| C11 | No-network runtime boundary (THREAT-MODEL B7) | CSP `<meta>` in the built `index.html`; `check:no-network` fails CI on network APIs / off-origin URLs; module-preload polyfill off | ✅ (static; runtime verification EP-15/EP-19) | 2026-09-04 | CI |
+| C12 | Repository setting "require actions to be pinned to a full-length commit SHA" | ON (server-side backstop for C1) | ⏳ EP-8 owner decision (repository setting; `sha_pinning_required` was `false` on 2026-09-04) | — | `gh api repos/$R/actions/permissions` read-back |
+| C13 | Bundle budget | `check:budget` fails CI above 300 KB gz initial JS (D-ARCH-007) | ✅ · ⏳ live failure demo (EP-8 handoff) | 2026-09-04 | CI; scratch-branch demo |
 
 ## B. Local items (EP-0 scope — from [handoffs/EP-0.md](handoffs/EP-0.md))
 

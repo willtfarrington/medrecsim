@@ -5,13 +5,14 @@
 # repository, and "Allow GitHub Actions to create and approve pull requests" is off.
 # Dependabot *alerts* (vulnerability alerts) are enabled separately in repository settings.
 #
-# The npm entry becomes active when the root package manifest lands with the toolchain
-# bootstrap; until then Dependabot reports that no manifest was found, which is expected.
+# The npm entry points at the pnpm workspace root (`medrecsim/`, ADR-4); Dependabot reads
+# `pnpm-lock.yaml` there. Version updates must also satisfy pnpm's one-day
+# `minimumReleaseAge` guard at install time (docs/DEPENDENCY-POLICY.md §5).
 
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/medrecsim"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5

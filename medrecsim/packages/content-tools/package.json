@@ -1,0 +1,18 @@
+{
+  "name": "@medrecsim/content-tools",
+  "version": "0.0.0",
+  "private": true,
+  "description": "medrecsim dev-only content CLI: validate, coverage, compile, migrate (D-DATA-005)",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "medrecsim-content": "./src/cli.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "typescript": "6.0.3"
+  }
+}
