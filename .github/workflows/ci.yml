@@ -13,7 +13,9 @@ name: CI
 on:
   pull_request:
   push:
-    branches-ignore: [main] # main runs through pages.yml → this workflow
+    # main runs through pages.yml → this workflow; other branches run via their pull request.
+    # scratch/** branches run on push so acceptance demos need no pull request.
+    branches: ['scratch/**']
   workflow_call:
     inputs:
       upload-pages-artifact:

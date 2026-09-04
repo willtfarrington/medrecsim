@@ -145,7 +145,7 @@ This document is revisited, and its status line updated, when any of the followi
    threat model reviewed"), alongside the security-baseline re-verification.
 4. **Any incident** handled under INCIDENT-PROCEDURE.md: its closing step asks whether this
    model missed the scenario.
-5. **EP-8** (toolchain): confirm that B2, B3, B4, and B7's pending controls landed as described
+5. **EP-8** (toolchain): confirm that B2, B3, B4, and B7's pending controls landed as described — **done 2026-09-04** (§4 rows B2/B3/B4/B7 updated; SECURITY-BASELINE.md section C).
    and change the status column.
 
 ## 9. Traceability

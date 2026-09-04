@@ -58,7 +58,7 @@ Toolchain, schema, engine, minimal accessible UI, and **one complete introductor
 
 | # | Brief | Size | Depends on | Done |
 |---|-------|------|-----------|------|
-| EP-8 | [Toolchain bootstrap + ADRs](EP-8-toolchain.md) | L | EP-0, EP-1 | ☐ |
+| EP-8 | [Toolchain bootstrap + ADRs](EP-8-toolchain.md) | L | EP-0, EP-1 | ☑ bee0acb |
 | EP-9 | [Content schema v0 + validator core](EP-9-schema.md) | L | EP-8, EP-7 | ☐ |
 | EP-10 | [Visual identity & originality pack](EP-10-identity.md) | S | EP-3, EP-8 | ☐ |
 | EP-11 | [Engine core](EP-11-engine-core.md) | M | EP-9 | ☐ |
