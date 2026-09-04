@@ -1,0 +1,220 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://medrecsim.invalid/schema/0.1/review-record.schema.json",
+  "title": "medrecsim review-record (content schema 0.1)",
+  "type": "object",
+  "properties": {
+    "recordVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "bundleId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "description": "Matches case.yaml id or the formulary package id"
+    },
+    "contentVersionReviewed": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Content version (semver)"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Content-schema version stamp major.minor (must equal the schema package SCHEMA_VERSION)"
+    },
+    "reviewDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "reviewModel": {
+      "type": "string",
+      "const": "physician-reviewed (single reviewer)",
+      "description": "Fixed string; the only permitted value"
+    },
+    "reviewer": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Non-empty text"
+        },
+        "credential": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Public-safe statement; no institution"
+        }
+      },
+      "required": [
+        "role",
+        "credential"
+      ],
+      "additionalProperties": false
+    },
+    "checklistVersions": {
+      "type": "object",
+      "properties": {
+        "clinicalSelfReview": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$"
+        },
+        "stigmaSafety": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$"
+        },
+        "citationPolicy": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$"
+        }
+      },
+      "required": [
+        "clinicalSelfReview",
+        "stigmaSafety",
+        "citationPolicy"
+      ],
+      "additionalProperties": false
+    },
+    "disposition": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "approved-with-changes",
+        "returned",
+        "frozen-items"
+      ]
+    },
+    "changesMade": {
+      "default": [],
+      "description": "Required when approved-with-changes",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Non-empty text"
+      }
+    },
+    "frozenItems": {
+      "default": [],
+      "description": "Required when frozen-items (D-RISK-004)",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Non-empty text"
+      }
+    },
+    "sourcesVerified": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+        "description": "Citation record id: cit- + short source slug + year"
+      },
+      "description": "Citation ids opened on the review date"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "check": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Checklist item id, e.g. CSR-03.2 or SS-06.1"
+          },
+          "result": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          }
+        },
+        "required": [
+          "check",
+          "result"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reReview": {
+      "type": "object",
+      "properties": {
+        "triggers": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string",
+              "const": "annual"
+            },
+            {
+              "type": "string",
+              "const": "issue-report"
+            },
+            {
+              "type": "string",
+              "const": "clinical-semantics-migration"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "Fixed list from D-GOV-001; do not edit"
+        },
+        "dueBy": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+          "description": "reviewDate + 12 months"
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Previous recordVersion or null"
+        }
+      },
+      "required": [
+        "triggers",
+        "dueBy",
+        "supersedes"
+      ],
+      "additionalProperties": false
+    },
+    "changelogRef": {
+      "type": "string",
+      "pattern": "^CHANGELOG\\.md#\\d+\\.\\d+\\.\\d+$",
+      "description": "Bundle changelog entry that published this version"
+    }
+  },
+  "required": [
+    "recordVersion",
+    "bundleId",
+    "contentVersionReviewed",
+    "schemaVersion",
+    "reviewDate",
+    "reviewModel",
+    "reviewer",
+    "checklistVersions",
+    "disposition",
+    "sourcesVerified",
+    "findings",
+    "reReview",
+    "changelogRef"
+  ],
+  "additionalProperties": false,
+  "description": "review-record.yaml (REVIEW-RECORD-TEMPLATE.md §1)"
+}

@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a reference-layer top-level key inside evidence.yaml. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: truth-001-reference-key-in-evidence
+expect: { invariant: INV-TRUTH-001 }
+mutations:
+  - { file: evidence.yaml, op: set, path: 'discrepancies', value: [] }

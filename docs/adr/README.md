@@ -15,3 +15,4 @@ Decisions listed in `DECISIONS.md` are the owner's and are never changed here.
 | [ADR-4](ADR-4-package-manager.md) | **pnpm workspaces**, provisioned by Corepack, hash-pinned | D-ARCH-002/003, D-SEC-002 |
 | [ADR-5](ADR-5-no-ui-state-library.md) | **No UI state library**; the engine owns state | D-ARCH-006, D-ARCH-005 |
 | [ADR-6](ADR-6-property-test-library.md) | **fast-check** for property tests | D-QA-001 |
+| [ADR-7](ADR-7-content-schema-v0.md) | **Content schema v0.1** — the six schema tensions (T-1 relative time compiled absolute · T-2 sanctioned unresolved-label flag · T-3 claim as reveal atom · T-4 DNF detectability paths · T-5 per-case rationale menus · T-6 hints in the reference layer, all three grades per target) and the D-MED-001 vocabulary adopted verbatim (EP-9, 2026-09-04) | D-MED-001/005, D-DATA-002/003/004, I-6, I-9 |

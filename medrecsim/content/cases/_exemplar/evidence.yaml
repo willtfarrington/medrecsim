@@ -1,0 +1,210 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# Learner-observable evidence layer (D-MED-005). Nothing in this file may name a reference-layer
+# id (disc-, use-, reg-, act-, rat-, exp-, hint-, tn-): INV-TRUTH-001 scans for leaks.
+# All clinical text is PLACEHOLDER — not reviewed.
+schemaVersion: '0.1'
+caseId: c00-exemplar-scaffold
+
+patient:
+  displayName: PLACEHOLDER Patient Name
+  age: 70
+  preferredLanguage: English
+  interpreterNeeded: false
+  chartId: SYN-000001 # visibly synthetic; never an MRN-like number
+  admissionContextText: PLACEHOLDER — not reviewed. Admission context in plain words.
+  capacity: { status: intact }
+
+# Admission anchor. Every relative time below (T0-2y, T0+20m, …) resolves against it at compile
+# time (tension T-1). Quote it so YAML keeps it a string.
+T0: '2026-01-15T14:30:00-05:00'
+
+# The seven D-WF-001 source types, each with availability and clock cost (D-WF-002).
+sources:
+  - id: src-interview
+    type: patient-interview
+    label: Bedside interview
+    descriptionText: PLACEHOLDER — structured interview with the patient (D-SIM-001).
+    availability: immediate
+    accessCostMinutes: 0
+  - id: src-caregiver
+    type: caregiver-informant
+    label: Family informant
+    descriptionText: PLACEHOLDER — a family member who helps with medications.
+    availability: on-request
+    accessCostMinutes: 10
+  - id: src-artifacts
+    type: physical-artifacts
+    label: Bag of bottles
+    descriptionText: PLACEHOLDER — bottles and a pillbox brought from home.
+    availability: immediate
+    accessCostMinutes: 0
+  - id: src-ehr-list
+    type: imported-ehr-list
+    label: Imported medication list
+    descriptionText: PLACEHOLDER — a stale imported list in the chart.
+    institutionId: inst-placeholder-hospital
+    availability: immediate
+    accessCostMinutes: 1
+    reliabilityNoteText: PLACEHOLDER — last reconciled two years before this admission.
+  - id: src-discharge
+    type: prior-discharge-summary
+    label: Prior discharge summary
+    descriptionText: PLACEHOLDER — the most recent discharge summary.
+    institutionId: inst-placeholder-hospital
+    availability: immediate
+    accessCostMinutes: 3
+  - id: src-pharmacy
+    type: pharmacy-dispensing-history
+    label: Pharmacy fill history
+    descriptionText: PLACEHOLDER — dispensing history requested from the community pharmacy.
+    institutionId: inst-placeholder-pharmacy
+    availability: time-gated
+    availableFrom: T0+45m
+    accessCostMinutes: 5
+  - id: src-outpatient-note
+    type: outpatient-note
+    label: Outpatient note
+    descriptionText: PLACEHOLDER — one outpatient note from the prescriber office.
+    institutionId: inst-placeholder-pcp-office
+    availability: immediate
+    accessCostMinutes: 3
+
+# One claim = one source asserting one thing about one medication (tension T-3: claims are the
+# reveal atom). Each names a formulary id OR a sanctioned unresolved label (T-2, INV-REF-001)
+# and carries both timestamps with documentation never before the event (INV-TIME-001).
+claims:
+  - id: clm-ehr-alpha
+    sourceId: src-ehr-list
+    formularyId: rx-placeholder-alpha
+    claimStatus: prescribed
+    dose: PLACEHOLDER dose
+    route: oral
+    frequency: PLACEHOLDER frequency
+    eventTime: T0-2y
+    documentationTime: T0-2y
+    asStatedText: PLACEHOLDER — not reviewed. Listed as active on the imported list.
+  - id: clm-interview-alpha
+    sourceId: src-interview
+    formularyId: rx-placeholder-alpha
+    claimStatus: self-discontinued
+    eventTime: T0-6mo
+    documentationTime: T0+20m # documented when the learner asks, after admission
+    asStatedText: PLACEHOLDER — not reviewed. The patient says they stopped this some months ago.
+    visibility: on-reveal # only visible once a dialogue node reveals it
+  - id: clm-interview-beta
+    sourceId: src-interview
+    formularyId: rx-placeholder-beta
+    claimStatus: taking-as-directed
+    eventTime: T0-1d
+    documentationTime: T0+20m
+    asStatedText: PLACEHOLDER — not reviewed. The patient says they take this every morning.
+    visibility: on-reveal
+  - id: clm-artifact-beta
+    sourceId: src-artifacts
+    formularyId: rx-placeholder-beta
+    claimStatus: dispensed
+    dose: PLACEHOLDER dose
+    route: oral
+    frequency: PLACEHOLDER frequency
+    eventTime: T0-14d
+    documentationTime: T0-14d
+    asStatedText: PLACEHOLDER — not reviewed. Bottle label wording.
+  - id: clm-interview-unresolved
+    sourceId: src-interview
+    unresolvedLabel:
+      text: PLACEHOLDER — a small white tablet the patient cannot name
+      sanctioned: true
+      reason: patient-description-only
+    claimStatus: taking-as-directed
+    eventTime: T0-1d
+    documentationTime: T0+20m
+    asStatedText: PLACEHOLDER — not reviewed. The patient describes a tablet but cannot name it.
+    visibility: on-reveal
+
+# Allergy claims ride the same machinery (D-MED-003); discriminated on claimKind.
+allergyClaims:
+  - claimKind: no-known-allergies
+    id: alg-ehr-nka
+    sourceId: src-ehr-list
+    verificationStatus: documented-unverified
+    eventTime: T0-2y
+    documentationTime: T0-2y
+    asStatedText: PLACEHOLDER — not reviewed. No known allergies recorded.
+  - claimKind: allergy
+    id: alg-interview-class
+    sourceId: src-interview
+    agent: { kind: class-or-text, text: PLACEHOLDER agent class }
+    severity: unknown
+    verificationStatus: patient-reported
+    eventTime: T0-10y
+    documentationTime: T0+20m
+    asStatedText: PLACEHOLDER — not reviewed. The patient recalls a reaction long ago.
+
+# Structured dialogue (D-SIM-001): entry nodes are available at once; others unlock.
+dialogueTrees:
+  - id: dlg-patient
+    sourceId: src-interview
+    interlocutor: patient
+    baselineReliability: reliable
+    nodes:
+      - id: q-open
+        entry: true
+        questionText: PLACEHOLDER — not reviewed. What medicines do you take at home?
+        costMinutes: 5
+        responseText: PLACEHOLDER — not reviewed. The patient names one medicine.
+        revealsClaimIds: [clm-interview-beta]
+        unlocks: [q-stopped]
+      - id: q-stopped
+        questionText: PLACEHOLDER — not reviewed. Anything you used to take but stopped?
+        costMinutes: 3
+        responseText: PLACEHOLDER — not reviewed. The patient mentions a stopped medicine and an unnamed tablet.
+        revealsClaimIds: [clm-interview-alpha, clm-interview-unresolved]
+        revealsAllergyClaimIds: [alg-interview-class]
+
+# Physical artifacts carry a complete textual rendering (nonvisual cues, D-UX-004).
+artifacts:
+  - id: art-bottle-beta
+    sourceId: src-artifacts
+    kind: pill-bottle
+    title: PLACEHOLDER bottle
+    renderText: PLACEHOLDER — not reviewed. Label wording, fill date, quantity, and pill appearance in words.
+    labelClaims: [clm-artifact-beta]
+    examineCostMinutes: 2
+
+# The four scored escalation channels (D-CLIN-002; OQ-3 relabel).
+escalationChannels:
+  - id: esc-pharmacy
+    channel: community-pharmacy
+    label: PLACEHOLDER community pharmacy
+    institutionId: inst-placeholder-pharmacy
+    availabilityWindow: { kind: hours, opens: '09:00', closes: '18:00' }
+    latencyMinutes: 20
+    responseContent:
+      text: PLACEHOLDER — not reviewed. The pharmacist reads back the fill history.
+    unansweredBehavior: { kind: closed-until-window }
+  - id: esc-pcp-office
+    channel: outpatient-prescriber-program-office
+    label: PLACEHOLDER prescriber office
+    institutionId: inst-placeholder-pcp-office
+    availabilityWindow:
+      { kind: hours, opens: '08:00', closes: '17:00', days: [mon, tue, wed, thu, fri] }
+    latencyMinutes: 45
+    responseContent:
+      text: PLACEHOLDER — not reviewed. The office nurse confirms the stopped medicine.
+    unansweredBehavior: { kind: voicemail-callback, callbackLatencyMinutes: 90 }
+  - id: esc-inpatient-pharmacist
+    channel: inpatient-pharmacist
+    label: Inpatient pharmacist
+    availabilityWindow: { kind: always }
+    latencyMinutes: 15
+    responseContent:
+      text: PLACEHOLDER — not reviewed. The pharmacist offers to help identify the tablet.
+    unansweredBehavior: { kind: retry-later, retryAfterMinutes: 30 }
+  - id: esc-senior
+    channel: senior-attending
+    label: Senior resident / attending
+    availabilityWindow: { kind: always }
+    latencyMinutes: 10
+    responseContent:
+      text: PLACEHOLDER — not reviewed. The senior discusses the plan.
+    unansweredBehavior: { kind: retry-later, retryAfterMinutes: 20 }

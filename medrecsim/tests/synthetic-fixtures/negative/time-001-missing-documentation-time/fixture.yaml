@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a claim without its second timestamp. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: time-001-missing-documentation-time
+expect: { invariant: INV-TIME-001 }
+mutations:
+  - { file: evidence.yaml, op: delete, path: 'claims[0].documentationTime' }

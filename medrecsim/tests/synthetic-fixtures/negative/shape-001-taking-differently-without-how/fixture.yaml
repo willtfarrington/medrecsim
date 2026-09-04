@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: taking-differently without howTakingDifferently. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: shape-001-taking-differently-without-how
+expect: { invariant: INV-SHAPE-001 }
+mutations:
+  - { file: evidence.yaml, op: set, path: 'claims[0].claimStatus', value: 'taking-differently' }

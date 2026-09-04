@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: inevitability wording without inevitabilityAuthored: true. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: act-001-inevitability-unflagged
+expect: { invariant: INV-ACT-001 }
+mutations:
+  - {
+      file: reference.yaml,
+      op: set,
+      path: 'actionSets.unsafe[0].mechanismOfHarm.text',
+      value: 'SYNTHETIC — this will cause harm',
+    }

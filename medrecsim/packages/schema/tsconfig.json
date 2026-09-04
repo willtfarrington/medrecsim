@@ -1,8 +1,10 @@
 {
+  "//": "Whole-package project (tests included; Node types are for the tests only — src/ stays platform-free, which tsconfig.evidence.json enforces for the evidence layer).",
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ES2023"],
-    "types": []
+    "types": ["node"],
+    "erasableSyntaxOnly": true
   },
   "include": ["src"]
 }

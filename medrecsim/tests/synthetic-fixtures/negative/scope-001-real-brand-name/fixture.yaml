@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a real brand name in content. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: scope-001-real-brand-name
+expect: { invariant: INV-SCOPE-001 }
+mutations:
+  - {
+      file: evidence.yaml,
+      op: set,
+      path: 'claims[0].asStatedText',
+      value: 'SYNTHETIC — the patient calls it Lipitor',
+    }

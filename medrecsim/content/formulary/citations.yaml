@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# Citation records for the formulary package (CITATION-POLICY.md §4: per-entry flags cite here).
+# Empty at the scaffold stage: placeholder entries carry no flags and therefore no rules.
+schemaVersion: '0.1'
+bundleId: medrecsim-formulary
+citations: []

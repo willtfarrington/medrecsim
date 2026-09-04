@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a scored rule with no citation (warn-level until EP-20). Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: cit-001-uncited-scored-rule
+expect: { invariant: INV-CIT-001, severity: warning }
+mutations:
+  - { file: reference.yaml, op: delete, path: 'discrepancies[0].citations' }

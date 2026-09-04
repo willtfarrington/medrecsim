@@ -2,3 +2,6 @@ node_modules
 dist
 coverage
 pnpm-lock.yaml
+# Generated artifacts: JSON Schema export (ADR-2 drift-checked byte-for-byte) and compiled content chunks (ADR-3).
+packages/schema/json-schema
+packages/app/src/content/generated

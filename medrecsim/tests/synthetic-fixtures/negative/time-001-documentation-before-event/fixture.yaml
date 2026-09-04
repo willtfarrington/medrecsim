@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: documentationTime earlier than eventTime. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: time-001-documentation-before-event
+expect: { invariant: INV-TIME-001 }
+mutations:
+  - { file: evidence.yaml, op: set, path: 'claims[0].documentationTime', value: 'T0-3y' }

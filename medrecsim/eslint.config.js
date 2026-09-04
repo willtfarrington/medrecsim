@@ -47,14 +47,62 @@ const engineDeterminism = {
     ],
     'no-restricted-imports': [
       'error',
-      { paths: ['yaml', 'svelte', 'vite'], patterns: ['svelte/*', 'node:*'] },
+      {
+        paths: [
+          'yaml',
+          'svelte',
+          'vite',
+          {
+            name: 'zod',
+            message:
+              'zod is not on the runtime allowlist (DEPENDENCY-POLICY.md §3; owner-only, D-EXEC-003). Import types or @medrecsim/schema/vocab constants only.',
+          },
+        ],
+        patterns: ['svelte/*', 'node:*'],
+      },
+    ],
+  },
+};
+
+/**
+ * Two-layer truth/action contract (D-MED-005, INV-TRUTH-001; EP-9). The learner-observable
+ * evidence layer and the layer-neutral modules may never import the author-only reference
+ * layer. The hard guarantee is TypeScript's project boundary (packages/schema/tsconfig.evidence.json,
+ * proven by scripts/check-layer-separation.mjs); this rule gives the same message in the editor.
+ */
+const schemaLayerBoundary = {
+  name: 'medrecsim/schema-layer-boundary',
+  files: [
+    'packages/schema/src/evidence/**/*.ts',
+    'packages/schema/src/common/**/*.ts',
+    'packages/schema/src/vocab/**/*.ts',
+  ],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['**/reference/**', '**/documents/**', '**/invariants/**'],
+            message:
+              'Evidence-layer and layer-neutral modules cannot reach the reference layer (D-MED-005, INV-TRUTH-001).',
+          },
+        ],
+      },
     ],
   },
 };
 
 export default tseslint.config(
   {
-    ignores: ['**/dist/**', '**/node_modules/**', '**/.svelte-kit/**', '**/coverage/**'],
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/.svelte-kit/**',
+      '**/coverage/**',
+      // Compile-error fixture for the layer boundary: deliberately violates it (EP-9 item 3).
+      'packages/schema/layer-fixtures/**',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -73,8 +121,20 @@ export default tseslint.config(
     files: ['packages/app/**/*.{ts,svelte}'],
     languageOptions: { globals: { ...globals.browser } },
     rules: {
-      // ADR-3: the runtime never parses YAML.
-      'no-restricted-imports': ['error', { paths: ['yaml'] }],
+      // ADR-3: the runtime never parses YAML. zod is not on the runtime allowlist (policy §3).
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            'yaml',
+            {
+              name: 'zod',
+              message:
+                'zod is not on the runtime allowlist (DEPENDENCY-POLICY.md §3; owner-only, D-EXEC-003). Use compiled JSON and @medrecsim/schema types/vocab only.',
+            },
+          ],
+        },
+      ],
     },
   },
   {
@@ -86,5 +146,6 @@ export default tseslint.config(
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
   engineDeterminism,
+  schemaLayerBoundary,
   prettier,
 );

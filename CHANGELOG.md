@@ -19,7 +19,7 @@ Every release entry also records the outcome of the claim–evidence check
 
 Pre-release; under active construction; nothing here is validated. No tag exists yet. The
 repository holds the R0 foundation and governance pack and the R1 toolchain bootstrap (a
-hello-world application); no engine, schema, or clinical content has been written.
+hello-world application); the content schema (v0.1) and its validator exist; no engine and no clinical content have been written.
 
 ### Added
 
@@ -59,10 +59,22 @@ hello-world application); no engine, schema, or clinical content has been writte
   action-pin, Developer Certificate of Origin, and dependency-review checks; GitHub Pages
   deployment from `main` gated on that workflow; a hello-world page rendering the standing
   disclaimer banner; third-party notices generated from the lockfile.
+- Content schema v0.1 (`@medrecsim/schema`): Zod 4 schemas for case bundles (metadata, the
+  learner-observable evidence layer, the author-only reference layer, citation records, review
+  records), the formulary package, and the fictional-universe registry, with the taxonomy enums
+  imported verbatim; the two-layer contract enforced at the TypeScript project level with a
+  compile-error fixture; a content CLI (`validate`, `fixtures`, `compile`, `schema-export`)
+  running the core invariant subset (timestamps, formulary references, layer separation,
+  five-axis discrepancy metadata, action sets with the harm-language lint, metadata and review
+  linkage, schema-version stamps) plus citation-presence, SPDX-header, and registry-row checks;
+  a negative-fixture suite rejected by invariant name in CI; a structure-complete exemplar
+  scaffold with placeholder text; build-time YAML-to-JSON compilation; an authoring guide; a
+  seventh architecture decision record for the schema tensions.
 
 ### Content
 
-- None. No case bundle, formulary entry, or teaching note exists yet; the content schema has
-  not been defined.
+- None reviewed. The content schema is defined (v0.1); the only bundle is the placeholder
+  exemplar scaffold (`draft-unreviewed`, not compiled), and the formulary holds two placeholder
+  entries. No clinical content exists yet.
 
 [Unreleased]: https://github.com/willtfarrington/medrecsim/commits/main

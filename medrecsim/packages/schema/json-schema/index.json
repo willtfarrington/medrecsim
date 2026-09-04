@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "0.1",
+  "generatedBy": "pnpm schema:export (packages/content-tools; ADR-2)",
+  "schemas": [
+    {
+      "name": "case",
+      "file": "case.schema.json",
+      "fileMatch": [
+        "content/cases/*/case.yaml"
+      ]
+    },
+    {
+      "name": "evidence",
+      "file": "evidence.schema.json",
+      "fileMatch": [
+        "content/cases/*/evidence.yaml"
+      ]
+    },
+    {
+      "name": "reference",
+      "file": "reference.schema.json",
+      "fileMatch": [
+        "content/cases/*/reference.yaml"
+      ]
+    },
+    {
+      "name": "citations",
+      "file": "citations.schema.json",
+      "fileMatch": [
+        "content/cases/*/citations.yaml",
+        "content/formulary/citations.yaml"
+      ]
+    },
+    {
+      "name": "review-record",
+      "file": "review-record.schema.json",
+      "fileMatch": [
+        "content/cases/*/review-record.yaml"
+      ]
+    },
+    {
+      "name": "formulary-manifest",
+      "file": "formulary-manifest.schema.json",
+      "fileMatch": [
+        "content/formulary/formulary.yaml"
+      ]
+    },
+    {
+      "name": "formulary-entry",
+      "file": "formulary-entry.schema.json",
+      "fileMatch": [
+        "content/formulary/entries/*.yaml"
+      ]
+    },
+    {
+      "name": "universe",
+      "file": "universe.schema.json",
+      "fileMatch": [
+        "content/universe/universe.yaml"
+      ]
+    }
+  ]
+}

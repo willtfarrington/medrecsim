@@ -1,0 +1,13 @@
+{
+  "//": "Two-layer contract at the type level (D-MED-005, INV-TRUTH-001). This is a *composite* project whose file list is the learner-observable evidence layer plus the layer-neutral common/vocab/version modules only. TypeScript refuses (TS6307) any import that reaches a file outside this list, so an evidence module that imported anything from src/reference/ would fail `pnpm typecheck`. It also compiles with no Node types: the evidence layer is platform-free. scripts/check-layer-separation.mjs proves the mechanism bites by compiling layer-fixtures/ against tsconfig.layer-fixture.json and expecting exactly that error.",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ES2023"],
+    "types": [],
+    "erasableSyntaxOnly": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/schema-evidence.tsbuildinfo"
+  },
+  "include": ["src/evidence/**/*.ts", "src/common/**/*.ts", "src/vocab/**/*.ts", "src/version.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

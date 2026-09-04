@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a formulary version outside the declared range. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: vers-001-formulary-out-of-range
+expect: { invariant: INV-VERS-001 }
+mutations:
+  - { file: case.yaml, op: set, path: 'formularyVersionRange', value: { 'min': '9.0.0' } }

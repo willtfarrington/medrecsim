@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# medrecsim exemplar case scaffold (EP-9). Structure is complete; every clinical string is a
+# PLACEHOLDER — not reviewed. The real annotated exemplar (C01 "Three Lists") is EP-14.
+# Field-by-field guidance: content/AUTHORING.md.
+schemaVersion: '0.1' # must equal @medrecsim/schema SCHEMA_VERSION (INV-VERS-001)
+id: c00-exemplar-scaffold # cNN-<slug>; c00 is reserved for this scaffold
+slug: exemplar-scaffold
+title: PLACEHOLDER — exemplar scaffold (not reviewed)
+contentVersion: 0.0.1 # per-bundle stream (D-DATA-002)
+tier: introductory # introductory | core | advanced (D-TAX-004)
+recommendedSequenceIndex: 99 # scaffold sorts last
+
+# Coverage declarations are checked against reference.yaml (INV-META-001): the type and
+# mechanism sets must equal what the discrepancies actually carry; phenotypes are the D-TAX-002
+# predicates (TAXONOMY.md §6) that EP-20's coverage tool re-derives mechanically.
+coverage:
+  types: [omission, commission]
+  mechanisms: [data-fragmentation, stale-record-propagation]
+  phenotypes: [P1, P2]
+  highAlert: false
+  recordIsWrong: true
+  allergySubTask: false
+
+# draft-unreviewed: no review record, no badge, validates with a warning, not compiled unless
+# --include-drafts. A reviewed bundle sets reviewStatus: reviewed, reviewRecordRef, and
+# preBriefBadge copied from review-record.yaml (REVIEW-RECORD-TEMPLATE.md §2).
+reviewStatus: draft-unreviewed
+
+preBrief:
+  objectives: # quote any string that contains ": " — YAML would read it as a mapping
+    - 'PLACEHOLDER — not reviewed: objective one'
+    - 'PLACEHOLDER — not reviewed: objective two'
+  roleFramingText: PLACEHOLDER — not reviewed. You are the admitting clinician on the general-medicine service (D-WF-003).
+  syntheticNotice: true # the synthetic banner is always shown (INV-SCOPE-001)
+
+estimatedMinutes: 30
+formularyVersionRange: { min: 0.0.1, maxExclusive: 1.0.0 }
+universeVersionRange: { min: 0.0.1 }

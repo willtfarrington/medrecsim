@@ -8,17 +8,21 @@ Layout per `roadmap/appendices/architecture.md` §1 and the ADRs in [`../docs/ad
 medrecsim/
 ├── packages/
 │   ├── engine/          @medrecsim/engine — pure, headless simulation engine (no DOM, no clock)
-│   ├── schema/          @medrecsim/schema — content types + validators (filled at EP-9)
-│   ├── content-tools/   dev-only CLI: validate · coverage · compile · migrate (EP-9/20/34)
+│   ├── schema/          @medrecsim/schema — Zod 4 content schema v0.1, types, invariant suite,
+│   │                    exported JSON Schema (EP-9)
+│   ├── content-tools/   dev-only CLI: validate · fixtures · compile · schema-export (EP-9);
+│   │                    coverage (EP-20) · migrate (EP-34)
 │   └── app/             the Svelte 5 + Vite application deployed to GitHub Pages
-├── content/
-│   ├── formulary/       versioned synthetic formulary (EP-13)
-│   └── cases/           hand-authored YAML case bundles (EP-14 onward)
+├── content/             CC BY 4.0; field guide in content/AUTHORING.md
+│   ├── formulary/       versioned synthetic formulary package (scaffold; wave 1 at EP-13)
+│   ├── universe/        fictional-universe registry (I-9; names coined at EP-10)
+│   └── cases/           hand-authored YAML case bundles (_exemplar scaffold; C01 at EP-14)
 ├── tests/
+│   ├── synthetic-fixtures/  negative fixtures for the content validator (EP-9)
 │   ├── golden/          golden-case regression snapshots (EP-12)
 │   └── e2e/             Playwright keyboard-only smoke + axe (EP-15/EP-18)
-└── scripts/             CI checks: bundle budget, no-network, SPDX, claims, action pins, DCO,
-                         third-party notices
+└── scripts/             CI checks: bundle budget, no-network, SPDX, claims, action pins, layer
+                         separation, DCO, third-party notices
 ```
 
 ## Prerequisites
@@ -30,18 +34,23 @@ medrecsim/
 
 ## Commands (run inside `medrecsim/`)
 
-| Command                          | What it does                                                            |
-| -------------------------------- | ----------------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile` | Install exactly the lockfile (install scripts are disabled)             |
-| `pnpm dev`                       | Vite dev server for the app                                             |
-| `pnpm build`                     | Production build → `packages/app/dist`                                  |
-| `pnpm lint` / `pnpm format`      | ESLint / Prettier                                                       |
-| `pnpm typecheck`                 | `tsc` per package, `svelte-check` for the app                           |
-| `pnpm test`                      | Vitest (unit + property tests, component tests)                         |
-| `pnpm checks`                    | Post-build checks: bundle budget, no-network, SPDX, claims, action pins |
-| `pnpm verify`                    | Everything CI runs, in CI order                                         |
-| `pnpm notices`                   | Regenerate `../THIRD-PARTY.md` from the lockfile                        |
-| `pnpm content <command>`         | Content CLI (placeholders until EP-9)                                   |
+| Command                               | What it does                                                                                   |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile`      | Install exactly the lockfile (install scripts are disabled)                                    |
+| `pnpm dev`                            | Vite dev server for the app                                                                    |
+| `pnpm build`                          | Production build → `packages/app/dist`                                                         |
+| `pnpm lint` / `pnpm format`           | ESLint / Prettier                                                                              |
+| `pnpm typecheck`                      | `tsc` per package, `svelte-check` for the app                                                  |
+| `pnpm test`                           | Vitest (unit + property tests, component tests)                                                |
+| `pnpm checks`                         | Post-build checks: bundle budget, no-network, SPDX, claims, action pins, layer separation      |
+| `pnpm content:ci`                     | Content stage: validate --all · negative fixtures · schema drift · compile                     |
+| `pnpm content:validate`               | Validate every bundle + formulary + universe (`--format pretty\|json\|github`)                 |
+| `pnpm content:fixtures`               | Run the negative-fixture suite (each invariant must reject by name)                            |
+| `pnpm content:compile`                | YAML → JSON chunks into `packages/app/src/content/generated/` (gitignored; `--include-drafts`) |
+| `pnpm schema:export` / `schema:check` | Regenerate / drift-check `packages/schema/json-schema/` from the Zod source                    |
+| `pnpm verify`                         | Everything CI runs, in CI order                                                                |
+| `pnpm notices`                        | Regenerate `../THIRD-PARTY.md` from the lockfile                                               |
+| `pnpm content <command>`              | Content CLI (`coverage` at EP-20, `migrate` at EP-34)                                          |
 
 CI (`.github/workflows/ci.yml`) runs the same steps on Ubuntu and Windows; `pages.yml` deploys
 `main` to GitHub Pages only after that workflow succeeds.

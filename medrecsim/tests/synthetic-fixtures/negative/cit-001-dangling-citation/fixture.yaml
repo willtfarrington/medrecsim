@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a citation id that does not resolve. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: cit-001-dangling-citation
+expect: { invariant: INV-CIT-001 }
+mutations:
+  - {
+      file: reference.yaml,
+      op: set,
+      path: 'discrepancies[0].citations',
+      value: ['cit-missing-2026'],
+    }

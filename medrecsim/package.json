@@ -23,10 +23,17 @@
     "check:claims": "node scripts/check-claims.mjs",
     "check:action-pins": "node scripts/check-action-pins.mjs",
     "check:dco": "node scripts/check-dco.mjs",
-    "checks": "pnpm run check:budget && pnpm run check:no-network && pnpm run check:spdx && pnpm run check:claims && pnpm run check:action-pins",
+    "check:layers": "node scripts/check-layer-separation.mjs",
+    "checks": "pnpm run check:budget && pnpm run check:no-network && pnpm run check:spdx && pnpm run check:claims && pnpm run check:action-pins && pnpm run check:layers",
     "notices": "node scripts/gen-third-party.mjs",
     "content": "node packages/content-tools/src/cli.ts",
-    "verify": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run checks"
+    "content:validate": "node packages/content-tools/src/cli.ts validate --all",
+    "content:fixtures": "node packages/content-tools/src/cli.ts fixtures",
+    "content:compile": "node packages/content-tools/src/cli.ts compile",
+    "schema:export": "node packages/content-tools/src/cli.ts schema-export",
+    "schema:check": "node packages/content-tools/src/cli.ts schema-export --check",
+    "content:ci": "pnpm run content:validate --format github && pnpm run content:fixtures --format github && pnpm run schema:check && pnpm run content:compile",
+    "verify": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run test && pnpm run content:ci && pnpm run build && pnpm run checks"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

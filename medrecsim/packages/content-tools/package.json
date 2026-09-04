@@ -2,17 +2,23 @@
   "name": "@medrecsim/content-tools",
   "version": "0.0.0",
   "private": true,
-  "description": "medrecsim dev-only content CLI: validate, coverage, compile, migrate (D-DATA-005)",
+  "description": "medrecsim dev-only content CLI: validate, compile, fixtures, schema-export (EP-9); coverage (EP-20); migrate (EP-34) (D-DATA-005)",
   "license": "MIT",
   "type": "module",
   "bin": {
     "medrecsim-content": "./src/cli.ts"
   },
   "scripts": {
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@medrecsim/schema": "workspace:*",
+    "yaml": "2.9.0"
   },
   "devDependencies": {
     "@types/node": "24.13.3",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vitest": "4.1.11"
   }
 }

@@ -1,0 +1,18 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: unresolved label without the sanctioned flag. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: ref-001-unsanctioned-label
+expect: { invariant: INV-REF-001 }
+mutations:
+  - { file: evidence.yaml, op: delete, path: 'claims[0].formularyId' }
+  - {
+      file: evidence.yaml,
+      op: set,
+      path: 'claims[0].unresolvedLabel',
+      value:
+        {
+          'text': 'SYNTHETIC unnamed tablet',
+          'sanctioned': false,
+          'reason': 'patient-description-only',
+        },
+    }

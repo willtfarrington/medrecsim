@@ -1,0 +1,55 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: badge recordVersion differs from the review record. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: meta-001-badge-mismatch
+expect: { invariant: INV-META-001 }
+mutations:
+  - { file: case.yaml, op: set, path: 'reviewStatus', value: 'reviewed' }
+  - { file: case.yaml, op: set, path: 'reviewRecordRef', value: 'review-record.yaml' }
+  - {
+      file: case.yaml,
+      op: set,
+      path: 'preBriefBadge',
+      value:
+        {
+          'label': 'physician-reviewed (single reviewer)',
+          'recordVersion': 2,
+          'reviewDate': '2026-09-04',
+          'staleAfter': '2027-09-04',
+        },
+    }
+  - {
+      file: review-record.yaml,
+      op: set-file,
+      data:
+        {
+          'recordVersion': 1,
+          'bundleId': 'c00-exemplar-scaffold',
+          'contentVersionReviewed': '0.0.1',
+          'schemaVersion': '0.1',
+          'reviewDate': '2026-09-04',
+          'reviewModel': 'physician-reviewed (single reviewer)',
+          'reviewer': { 'role': 'project owner', 'credential': 'physician' },
+          'checklistVersions':
+            { 'clinicalSelfReview': '1.0', 'stigmaSafety': '1.0', 'citationPolicy': '1.0' },
+          'disposition': 'approved',
+          'changesMade': [],
+          'frozenItems': [],
+          'sourcesVerified': ['cit-placeholder-tjc-npg-2026'],
+          'findings':
+            [
+              {
+                'check': 'SS-06.1',
+                'result': 'recorded',
+                'note': 'SYNTHETIC fixture; no demographic line',
+              },
+            ],
+          'reReview':
+            {
+              'triggers': ['annual', 'issue-report', 'clinical-semantics-migration'],
+              'dueBy': '2027-09-04',
+              'supersedes': null,
+            },
+          'changelogRef': 'CHANGELOG.md#0.0.1',
+        },
+    }

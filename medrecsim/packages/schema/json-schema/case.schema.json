@@ -1,0 +1,291 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://medrecsim.invalid/schema/0.1/case.schema.json",
+  "title": "medrecsim case (content schema 0.1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Content-schema version stamp major.minor (must equal the schema package SCHEMA_VERSION)"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^c\\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Case bundle id: c + two digits + kebab slug, e.g. c01-three-lists"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "description": "URL slug; normally the id without its cNN- prefix"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Non-empty text"
+    },
+    "contentVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Per-bundle version (D-DATA-002)"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "introductory",
+        "core",
+        "advanced"
+      ]
+    },
+    "recommendedSequenceIndex": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "types": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "omission",
+              "commission",
+              "wrong-dose",
+              "wrong-frequency-schedule",
+              "wrong-route",
+              "wrong-formulation",
+              "wrong-strength-concentration",
+              "therapeutic-duplication",
+              "brand-generic-duplication",
+              "wrong-drug-lasa",
+              "restart-gap",
+              "status-discrepancy",
+              "allergy-record-discrepancy"
+            ]
+          },
+          "description": "Must equal the set of discrepancy types in reference.yaml"
+        },
+        "mechanisms": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "stale-record-propagation",
+              "transcription-error",
+              "lasa-confusion",
+              "transition-communication-gap",
+              "data-fragmentation",
+              "auto-population-default-error",
+              "prescriber-change-undocumented",
+              "hold-not-documented",
+              "cost-access-barrier",
+              "supply-interruption",
+              "regimen-complexity-misunderstanding",
+              "informed-self-adjustment",
+              "language-access-barrier",
+              "informant-knowledge-limit"
+            ]
+          },
+          "description": "Must equal the set of primary mechanisms in reference.yaml"
+        },
+        "phenotypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "P1",
+              "P2",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "P10"
+            ]
+          },
+          "description": "D-TAX-002 predicates P1–P10 this case covers (EP-20 verifies)"
+        },
+        "highAlert": {
+          "type": "boolean",
+          "description": "Any referenced formulary entry is high-alert"
+        },
+        "recordIsWrong": {
+          "type": "boolean",
+          "description": "An electronic/dispensing source is wrong and the patient or caregiver is right (D-CASE-002)"
+        },
+        "allergySubTask": {
+          "type": "boolean",
+          "description": "Contains an allergy-record-discrepancy (D-MED-003)"
+        },
+        "sensitiveContent": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "opioid-use-disorder-therapy",
+              "psychiatric-medication",
+              "hiv-antiretroviral-therapy",
+              "impaired-capacity-surrogate",
+              "non-english-preferring"
+            ]
+          }
+        }
+      },
+      "required": [
+        "types",
+        "mechanisms",
+        "phenotypes",
+        "highAlert",
+        "recordIsWrong",
+        "allergySubTask"
+      ],
+      "additionalProperties": false,
+      "description": "Coverage declarations"
+    },
+    "reviewStatus": {
+      "type": "string",
+      "enum": [
+        "draft-unreviewed",
+        "reviewed"
+      ],
+      "description": "draft-unreviewed bundles validate with a warning and are not publishable"
+    },
+    "reviewRecordRef": {
+      "description": "Path relative to the bundle root; required when reviewStatus is reviewed",
+      "type": "string",
+      "pattern": "^review-record\\.yaml$"
+    },
+    "preBriefBadge": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "const": "physician-reviewed (single reviewer)",
+          "description": "Fixed string, rendered verbatim"
+        },
+        "recordVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "reviewDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "staleAfter": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+          "description": "= review-record reReview.dueBy; amber rule after this date"
+        }
+      },
+      "required": [
+        "label",
+        "recordVersion",
+        "reviewDate",
+        "staleAfter"
+      ],
+      "additionalProperties": false,
+      "description": "Pre-brief badge fields copied from review-record.yaml (REVIEW-RECORD-TEMPLATE §2)"
+    },
+    "preBrief": {
+      "type": "object",
+      "properties": {
+        "objectives": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          }
+        },
+        "roleFramingText": {
+          "type": "string",
+          "minLength": 1,
+          "description": "\"You are the admitting clinician…\" (D-WF-003)"
+        },
+        "syntheticNotice": {
+          "type": "boolean",
+          "const": true,
+          "description": "The synthetic banner is always shown (INV-SCOPE-001)"
+        }
+      },
+      "required": [
+        "objectives",
+        "roleFramingText",
+        "syntheticNotice"
+      ],
+      "additionalProperties": false,
+      "description": "Pre-brief (D-PED-001)"
+    },
+    "estimatedMinutes": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "formularyVersionRange": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Lowest acceptable version (inclusive)"
+        },
+        "maxExclusive": {
+          "description": "First unacceptable version (exclusive)",
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      },
+      "required": [
+        "min"
+      ],
+      "additionalProperties": false,
+      "description": "Content version range: min inclusive, maxExclusive optional"
+    },
+    "universeVersionRange": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Lowest acceptable version (inclusive)"
+        },
+        "maxExclusive": {
+          "description": "First unacceptable version (exclusive)",
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      },
+      "required": [
+        "min"
+      ],
+      "additionalProperties": false,
+      "description": "Content version range: min inclusive, maxExclusive optional"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "slug",
+    "title",
+    "contentVersion",
+    "tier",
+    "recommendedSequenceIndex",
+    "coverage",
+    "reviewStatus",
+    "preBrief",
+    "estimatedMinutes",
+    "formularyVersionRange"
+  ],
+  "additionalProperties": false,
+  "description": "case.yaml — bundle metadata"
+}

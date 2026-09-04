@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://medrecsim.invalid/schema/0.1/formulary-manifest.schema.json",
+  "title": "medrecsim formulary-manifest (content schema 0.1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Content-schema version stamp major.minor (must equal the schema package SCHEMA_VERSION)"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "description": "Package id, e.g. medrecsim-formulary"
+    },
+    "formularyVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Content version (semver)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Non-empty text"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "formularyVersion",
+    "title"
+  ],
+  "additionalProperties": false,
+  "description": "formulary.yaml — package manifest"
+}

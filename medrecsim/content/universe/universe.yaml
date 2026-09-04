@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# Fictional-universe registry (integrator resolution I-9): institutions, pharmacies, programs
+# and recurring people that cases reference by id. Names here are PLACEHOLDERS until EP-10's
+# visual-identity and originality pack coins the real fictional names.
+schemaVersion: '0.1'
+id: medrecsim-universe
+universeVersion: 0.0.1
+institutions:
+  - id: inst-placeholder-hospital
+    name: PLACEHOLDER hospital name (EP-10)
+    kind: hospital
+    descriptionText: PLACEHOLDER — the fictional US admitting hospital (D-PROD-004).
+    placeholder: true
+  - id: inst-placeholder-pharmacy
+    name: PLACEHOLDER community pharmacy name (EP-10)
+    kind: community-pharmacy
+    descriptionText: PLACEHOLDER — the fictional community pharmacy that holds dispensing history.
+    placeholder: true
+  - id: inst-placeholder-pcp-office
+    name: PLACEHOLDER primary-care office name (EP-10)
+    kind: clinic
+    descriptionText: PLACEHOLDER — the fictional outpatient prescriber office (OQ-3 channel).
+    placeholder: true
+people: []

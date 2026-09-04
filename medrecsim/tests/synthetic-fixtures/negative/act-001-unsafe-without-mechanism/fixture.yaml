@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: an unsafe entry without mechanismOfHarm. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: act-001-unsafe-without-mechanism
+expect: { invariant: INV-ACT-001 }
+mutations:
+  - { file: reference.yaml, op: delete, path: 'actionSets.unsafe[0].mechanismOfHarm' }

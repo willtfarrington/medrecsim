@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# PLACEHOLDER — not reviewed. Second scaffold entry (see rx-placeholder-alpha.yaml).
+schemaVersion: '0.1'
+id: rx-placeholder-beta
+genericName: PLACEHOLDER-BETA (not a medication)
+class: PLACEHOLDER class — not reviewed
+forms:
+  - form: capsule
+    strengths:
+      - PLACEHOLDER strength
+lasaPartners: []
+highAlert: false
+timeCritical: false
+narrowTherapeuticIndex: false
+monitoringNotes: []
+pillAppearanceText: PLACEHOLDER — not reviewed. Real entries describe shape, colour, and imprint in words (D-UX-004).
+brandNamesFictional: []
+placeholder: true

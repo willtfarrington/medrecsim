@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a bundle file without its SPDX header. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: spdx-001-missing-header
+expect: { invariant: INV-SPDX-001 }
+mutations:
+  - { file: reference.yaml, op: strip-header-lines, lines: 1 }

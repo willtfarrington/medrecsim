@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a rationaleKey missing from the menu. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: act-001-unknown-rationale-key
+expect: { invariant: INV-ACT-001 }
+mutations:
+  - {
+      file: reference.yaml,
+      op: set,
+      path: 'actionSets.accepted[0].rationaleKey',
+      value: 'rat-nope',
+    }

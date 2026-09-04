@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://medrecsim.invalid/schema/0.1/citations.schema.json",
+  "title": "medrecsim citations (content schema 0.1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Content-schema version stamp major.minor (must equal the schema package SCHEMA_VERSION)"
+    },
+    "bundleId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "description": "case.yaml id or formulary package id"
+    },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+            "description": "Citation record id: cit- + short source slug + year"
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The single clinical statement this citation supports"
+          },
+          "source": {
+            "type": "string",
+            "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$",
+            "description": "Short canonical source key from CITATION-POLICY.md §7 (mirrored in the registry)"
+          },
+          "publisher": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Issuing body as it names itself"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Document title as published"
+          },
+          "version-or-date": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Edition, effective/revision date, or \"undated (accessed <date>)\""
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL of the document or its bibliographic landing page"
+          },
+          "accessed": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+            "description": "ISO date the citing session actually opened the source"
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "description": "Approved-source tier (policy §2)"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Page pointers, quoted wording, transition/archive notes; may be empty"
+          }
+        },
+        "required": [
+          "id",
+          "claim",
+          "source",
+          "publisher",
+          "title",
+          "version-or-date",
+          "url",
+          "accessed",
+          "tier",
+          "notes"
+        ],
+        "additionalProperties": false,
+        "description": "Citation record (CITATION-POLICY.md §1, ten keys)"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "bundleId",
+    "citations"
+  ],
+  "additionalProperties": false,
+  "description": "citations.yaml — citation records for one bundle"
+}

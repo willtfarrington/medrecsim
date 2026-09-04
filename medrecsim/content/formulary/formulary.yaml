@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# medrecsim formulary package manifest (D-DATA-001, D-DATA-004). Entries live one per file under
+# entries/. Version 0.0.x = scaffold with placeholder entries only; wave 1 (EP-13) starts 0.1.0.
+schemaVersion: '0.1'
+id: medrecsim-formulary
+formularyVersion: 0.0.1
+title: medrecsim synthetic formulary (scaffold — placeholder entries only, not reviewed)

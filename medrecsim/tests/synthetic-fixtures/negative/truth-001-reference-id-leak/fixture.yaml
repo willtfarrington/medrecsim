@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a discrepancy id quoted in evidence text. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: truth-001-reference-id-leak
+expect: { invariant: INV-TRUTH-001 }
+mutations:
+  - {
+      file: evidence.yaml,
+      op: set,
+      path: 'claims[0].asStatedText',
+      value: 'SYNTHETIC — see disc-alpha-commission',
+    }

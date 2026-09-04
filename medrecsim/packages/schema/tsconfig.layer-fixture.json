@@ -1,0 +1,19 @@
+{
+  "//": "Compile-error fixture for INV-TRUTH-001 (EP-9 item 3). Same file list as tsconfig.evidence.json plus layer-fixtures/, which contains an evidence-side module that imports a reference-layer type. This project MUST fail with TS6307; scripts/check-layer-separation.mjs asserts that it does. It is never part of `pnpm typecheck`.",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ES2023"],
+    "types": [],
+    "erasableSyntaxOnly": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/schema-layer-fixture.tsbuildinfo"
+  },
+  "include": [
+    "src/evidence/**/*.ts",
+    "src/common/**/*.ts",
+    "src/vocab/**/*.ts",
+    "src/version.ts",
+    "layer-fixtures/**/*.ts"
+  ],
+  "exclude": ["src/**/*.test.ts"]
+}

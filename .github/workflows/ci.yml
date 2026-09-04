@@ -74,8 +74,17 @@ jobs:
       - name: Test
         run: pnpm run test
 
-      # ---- stage 5 (slot, EP-9 / EP-20): content validate + coverage ----
-      #   run: pnpm run content validate --all --format github && pnpm run content coverage --gate
+      # ---- stage 5: content validate + negative fixtures + schema drift + compile (EP-9) ----
+      #   `coverage --gate` joins this stage at EP-20 / EP-34.
+      - name: Content validate (schema + core invariants, D-DATA-003)
+        run: pnpm run content:validate --format github
+      - name: Content negative fixtures (each invariant rejects by name)
+        run: pnpm run content:fixtures --format github
+      - name: JSON Schema export is current (ADR-2 drift check)
+        run: pnpm run schema:check
+      - name: Content compile (YAML → JSON chunks, ADR-3)
+        run: pnpm run content:compile
+
       # ---- stage 6 (slot, EP-12): golden harness ----
       # ---- stage 7 (slot, EP-15): component tests (currently folded into stage 4) ----
 
@@ -92,6 +101,8 @@ jobs:
         run: pnpm run check:claims
       - name: Action pins
         run: pnpm run check:action-pins
+      - name: Layer separation (evidence types cannot reach the reference layer, D-MED-005)
+        run: pnpm run check:layers
 
       # ---- stage 9 (slot, EP-15 / EP-18): Playwright keyboard-only smoke + @axe-core/playwright ----
       #   ubuntu on every PR; windows nightly job (I-5) to be added beside this one.

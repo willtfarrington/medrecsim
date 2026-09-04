@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a schemaVersion stamp lagging the schema package. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: vers-001-stale-stamp
+expect: { invariant: INV-VERS-001 }
+mutations:
+  - { file: evidence.yaml, op: set, path: 'schemaVersion', value: '0.0' }

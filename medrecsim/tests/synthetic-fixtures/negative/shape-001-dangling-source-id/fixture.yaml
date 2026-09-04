@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a claim pointing at a source that does not exist. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: shape-001-dangling-source-id
+expect: { invariant: INV-SHAPE-001 }
+mutations:
+  - { file: evidence.yaml, op: set, path: 'claims[0].sourceId', value: 'src-nope' }

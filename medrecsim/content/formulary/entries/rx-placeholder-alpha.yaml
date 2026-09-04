@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# PLACEHOLDER — not reviewed. Scaffold entry so the exemplar bundle has ids to resolve against
+# (INV-REF-001). Not a medication; never compiled into the app without --include-drafts.
+schemaVersion: '0.1'
+id: rx-placeholder-alpha
+genericName: PLACEHOLDER-ALPHA (not a medication)
+class: PLACEHOLDER class — not reviewed
+forms:
+  - form: tablet
+    strengths:
+      - PLACEHOLDER strength
+lasaPartners: []
+highAlert: false
+timeCritical: false
+narrowTherapeuticIndex: false
+monitoringNotes: []
+pillAppearanceText: PLACEHOLDER — not reviewed. Real entries describe shape, colour, and imprint in words (D-UX-004).
+brandNamesFictional: []
+placeholder: true

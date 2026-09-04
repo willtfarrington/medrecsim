@@ -1,0 +1,191 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# Author-only reference layer (D-MED-005). Public by design (no answer obfuscation), but the
+# engine's pre-signature views never reach it. Every scored rule cites (D-GOV-002; INV-CIT-001,
+# warn-level until EP-20). All clinical text is PLACEHOLDER — not reviewed (D-EXEC-003: accepted
+# and unsafe sets are owner-authored at EP-14, never here).
+schemaVersion: '0.1'
+caseId: c00-exemplar-scaffold
+
+# What was prescribed / intended before admission.
+referenceRegimen:
+  - id: reg-beta
+    formularyId: rx-placeholder-beta
+    dose: PLACEHOLDER dose
+    route: oral
+    frequencyText: PLACEHOLDER frequency
+    indicationText: PLACEHOLDER indication
+
+# What the patient was really doing, with knowability marks (D-MED-005). Irreducibly uncertain
+# facts carry no knowableVia; everything else says through which evidence units it is knowable.
+actualUseState:
+  - id: use-alpha
+    formularyId: rx-placeholder-alpha
+    status: self-discontinued
+    detailText: PLACEHOLDER — not reviewed. Stopped some months before admission; the imported list never caught up.
+    knowability:
+      mark: conditionally-discoverable
+      knowableVia: [dialogue-node:q-stopped, escalation-channel:esc-pcp-office]
+  - id: use-beta
+    formularyId: rx-placeholder-beta
+    regimenId: reg-beta
+    status: taking-as-directed
+    detailText: PLACEHOLDER — not reviewed. Taken as labelled.
+    knowability:
+      mark: initially-known
+      knowableVia: [artifact:art-bottle-beta, dialogue-node:q-open]
+    lastTakenTime: T0-6h
+  - id: use-unresolved
+    unresolvedLabel:
+      text: PLACEHOLDER — a small white tablet the patient cannot name
+      sanctioned: true
+      reason: patient-description-only
+    status: taking-as-directed
+    detailText: PLACEHOLDER — not reviewed. Cannot be identified from any v1 source; unable-to-verify is the correct terminal state (D-WF-004).
+    knowability:
+      mark: irreducibly-uncertain
+
+# Yield tags feed subscore 1 (clinical-model §4.1).
+evidenceYield:
+  - { ref: dialogue-node:q-stopped, yield: critical }
+  - { ref: artifact:art-bottle-beta, yield: critical }
+  - { ref: source:src-pharmacy, yield: corroborating }
+  - { ref: source:src-discharge, yield: low-yield }
+
+# Five axes (TAXONOMY.md §8 tokens), detectability paths in DNF (T-4: AND inside a path, OR
+# across paths), three harm ordinals, resolution expectation, per-item scoring state
+# (D-RISK-004), citations.
+discrepancies:
+  - id: disc-alpha-commission
+    title: PLACEHOLDER — stale list carries a stopped medicine
+    type: commission
+    mechanism: stale-record-propagation
+    detectabilityPaths:
+      - detectability: cross-source-conflict
+        requires: [claim:clm-ehr-alpha, dialogue-node:q-stopped]
+      - detectability: escalation-dependent
+        requires: [claim:clm-ehr-alpha, escalation-channel:esc-pcp-office]
+    urgency: U2
+    severity: S1
+    reversibility: self-limiting
+    timeToHarm: days
+    involves:
+      formularyId: rx-placeholder-alpha
+      claimIds: [clm-ehr-alpha, clm-interview-alpha]
+      actualUseId: use-alpha
+    resolutionExpectation:
+      kind: resolve-with-rationale
+      detailText: PLACEHOLDER — not reviewed. Mark as not taking, with the rationale that the patient stopped it.
+    citations: [cit-placeholder-tjc-npg-2026]
+    teachingNoteId: tn-placeholder
+  - id: disc-beta-omission
+    title: PLACEHOLDER — a taken medicine is missing from the chart
+    type: omission
+    mechanism: data-fragmentation
+    detectabilityPaths:
+      - detectability: artifact-dependent
+        requires: [artifact:art-bottle-beta]
+      - detectability: interview-elicited
+        requires: [dialogue-node:q-open]
+    urgency: U2
+    severity: S1
+    reversibility: reversible-with-treatment
+    timeToHarm: days
+    involves:
+      formularyId: rx-placeholder-beta
+      claimIds: [clm-artifact-beta, clm-interview-beta]
+      regimenId: reg-beta
+      actualUseId: use-beta
+    resolutionExpectation:
+      kind: resolve-with-rationale
+      detailText: PLACEHOLDER — not reviewed. Add to the working history and continue.
+    citations: [cit-placeholder-tjc-npg-2026]
+
+# Accepted / partially-accepted / unsafe (D-SCOR-002) with a per-case rationale menu (T-5).
+# INV-ACT-001 lints every text here for probability tokens, uncited numbers, and unflagged
+# inevitability wording (D-SCOR-003).
+actionSets:
+  defaultBandForUnlisted: partially-accepted
+  rationaleMenu:
+    - key: rat-verified-two-sources
+      text: PLACEHOLDER — not reviewed. Verified with the patient and a second source.
+    - key: rat-patient-stopped
+      text: PLACEHOLDER — not reviewed. The patient stopped this medicine before admission.
+    - key: rat-unable-to-verify
+      text: PLACEHOLDER — not reviewed. Could not be verified from any available source.
+  accepted:
+    - id: act-continue-beta
+      target: { formularyId: rx-placeholder-beta, discrepancyId: disc-beta-omission }
+      action: continue
+      rationaleKey: rat-verified-two-sources
+      citations: [cit-placeholder-tjc-npg-2026]
+    - id: act-hold-alpha
+      target: { formularyId: rx-placeholder-alpha, discrepancyId: disc-alpha-commission }
+      action: hold
+      rationaleKey: rat-patient-stopped
+      citations: [cit-placeholder-tjc-npg-2026]
+    - id: act-unable-unresolved
+      target:
+        unresolvedLabel:
+          text: PLACEHOLDER — a small white tablet the patient cannot name
+          sanctioned: true
+          reason: patient-description-only
+      action: unable-to-verify
+      rationaleKey: rat-unable-to-verify
+      citations: [cit-placeholder-tjc-npg-2026]
+  partiallyAccepted:
+    - id: act-defer-unresolved
+      target:
+        unresolvedLabel:
+          text: PLACEHOLDER — a small white tablet the patient cannot name
+          sanctioned: true
+          reason: patient-description-only
+      action: defer-with-plan
+      rationaleKey: rat-unable-to-verify
+      shortfallText: PLACEHOLDER — not reviewed. The plan names no follow-up source.
+      citations: [cit-placeholder-tjc-npg-2026]
+  unsafe:
+    - id: act-continue-alpha
+      target: { formularyId: rx-placeholder-alpha, discrepancyId: disc-alpha-commission }
+      action: continue
+      rationaleText: PLACEHOLDER — not reviewed. Continued from the imported list without verification.
+      citations: [cit-placeholder-tjc-npg-2026]
+      # Plausible-consequence phrasing with ordinal severity (D-SCOR-003). The lint rejects
+      # probability words, uncited numbers, and "will cause"/"always" unless inevitabilityAuthored.
+      mechanismOfHarm:
+        text: PLACEHOLDER — not reviewed. Continuing a medicine the patient had stopped may cause an avoidable adverse effect.
+        inevitabilityAuthored: false
+        citations: [cit-placeholder-ismp-high-alert-2024]
+
+# Scored escalations (D-CLIN-002).
+expectedEscalations:
+  - id: exp-pharmacy-fill-history
+    channelId: esc-pharmacy
+    required: false
+    whyText: PLACEHOLDER — not reviewed. The fill history corroborates when the medicine was last dispensed.
+    discrepancyIds: [disc-alpha-commission]
+    citations: [cit-placeholder-tjc-npg-2026]
+
+# Graduated hints live here (I-6 / T-6); all three grades per target (INV-HINT-001 at EP-20).
+hints:
+  - id: hint-alpha
+    targetDiscrepancyId: disc-alpha-commission
+    nudge: { text: PLACEHOLDER — one of your lists is much older than the others. }
+    directed: { text: PLACEHOLDER — ask the patient what they used to take but stopped. }
+    revealSource:
+      text: PLACEHOLDER — the interview question about stopped medicines.
+      sourceRef: dialogue-node:q-stopped
+  - id: hint-beta
+    targetDiscrepancyId: disc-beta-omission
+    nudge: { text: PLACEHOLDER — something the patient brought from home is not in the chart. }
+    directed: { text: PLACEHOLDER — examine the bottles the patient brought. }
+    revealSource:
+      text: PLACEHOLDER — the bottle in the bag.
+      sourceRef: artifact:art-bottle-beta
+
+# Teaching notes live in teaching-notes.md; the reference layer keeps a cited summary per note.
+teachingNoteRefs:
+  - id: tn-placeholder
+    anchor: placeholder-note
+    title: PLACEHOLDER — not reviewed
+    summaryText: PLACEHOLDER — not reviewed. One-paragraph summary rendered on the reveal card.
+    citations: [cit-placeholder-tjc-npg-2026]

@@ -1,0 +1,1323 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://medrecsim.invalid/schema/0.1/evidence.schema.json",
+  "title": "medrecsim evidence (content schema 0.1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Content-schema version stamp major.minor (must equal the schema package SCHEMA_VERSION)"
+    },
+    "caseId": {
+      "type": "string",
+      "pattern": "^c\\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Case bundle id: c + two digits + kebab slug, e.g. c01-three-lists"
+    },
+    "patient": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Fictional name (fictional-universe registry, EP-10/I-9)"
+        },
+        "age": {
+          "type": "integer",
+          "minimum": 18,
+          "maximum": 120,
+          "description": "Age in years (adult general medicine)"
+        },
+        "sexRecorded": {
+          "type": "string",
+          "enum": [
+            "female",
+            "male",
+            "other",
+            "unknown"
+          ]
+        },
+        "pronouns": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Non-empty text"
+        },
+        "preferredLanguage": {
+          "type": "string",
+          "minLength": 1,
+          "description": "e.g. English, Spanish"
+        },
+        "interpreterNeeded": {
+          "type": "boolean",
+          "description": "Professional interpreter is the modeled-correct action when true (D-CONS-002)"
+        },
+        "chartId": {
+          "type": "string",
+          "pattern": "^SYN-\\d{4,6}$",
+          "description": "Visibly synthetic chart identifier (never MRN-like)"
+        },
+        "admissionContextText": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Presenting problem and setting in plain words"
+        },
+        "capacity": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "const": "intact"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "const": "impaired"
+                },
+                "assessmentText": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Capacity assessment is authored fact, not a learner task"
+                },
+                "surrogate": {
+                  "type": "object",
+                  "properties": {
+                    "displayName": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Non-empty text"
+                    },
+                    "relationship": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "e.g. daughter, spouse"
+                    },
+                    "authorizationText": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "How the surrogate is authorized, stated explicitly in-case (D-CONS-001)"
+                    }
+                  },
+                  "required": [
+                    "displayName",
+                    "relationship",
+                    "authorizationText"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Authorized surrogate decision-maker / primary informant"
+                }
+              },
+              "required": [
+                "status",
+                "assessmentText",
+                "surrogate"
+              ],
+              "additionalProperties": false
+            }
+          ],
+          "description": "Decision-making capacity at admission (D-CONS-001)"
+        }
+      },
+      "required": [
+        "displayName",
+        "age",
+        "preferredLanguage",
+        "interpreterNeeded",
+        "chartId",
+        "admissionContextText",
+        "capacity"
+      ],
+      "additionalProperties": false,
+      "description": "Patient header (evidence layer)"
+    },
+    "T0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+      "description": "Admission anchor; all relative SimTimes resolve against it (D-MED-002)"
+    },
+    "sources": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^src-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Evidence source id"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "patient-interview",
+              "caregiver-informant",
+              "physical-artifacts",
+              "imported-ehr-list",
+              "prior-discharge-summary",
+              "pharmacy-dispensing-history",
+              "outpatient-note"
+            ],
+            "description": "One of the seven D-WF-001 source types"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Chart-tab / channel label the learner sees"
+          },
+          "descriptionText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What this source is, in the source voice (EP-22 renders)"
+          },
+          "institutionId": {
+            "description": "Fictional-universe institution (I-9)",
+            "type": "string",
+            "pattern": "^inst-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "immediate",
+              "on-request",
+              "time-gated"
+            ],
+            "description": "immediate = open at T0; on-request = costs a request; time-gated = availableFrom"
+          },
+          "availableFrom": {
+            "description": "Required when availability is time-gated",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+              }
+            ]
+          },
+          "accessCostMinutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Simulated minutes the clock advances when the source is opened (D-WF-002)"
+          },
+          "reliabilityNoteText": {
+            "description": "Learner-visible caveat about the source (e.g. \"imported list last reconciled two years ago\")",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "label",
+          "descriptionText",
+          "availability",
+          "accessCostMinutes"
+        ],
+        "additionalProperties": false,
+        "description": "Evidence source"
+      }
+    },
+    "claims": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^clm-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Medication claim id"
+          },
+          "sourceId": {
+            "type": "string",
+            "pattern": "^src-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "The source making this claim"
+          },
+          "formularyId": {
+            "description": "Formulary entry id (preferred; D-DATA-004)",
+            "type": "string",
+            "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "unresolvedLabel": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The label or description as the source gives it"
+              },
+              "sanctioned": {
+                "type": "boolean",
+                "const": true,
+                "description": "Explicit escape flag (T-2); must be true"
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "patient-description-only",
+                  "illegible-or-partial-label",
+                  "non-formulary-product",
+                  "informant-cannot-name"
+                ],
+                "description": "Why no formulary id can be assigned"
+              }
+            },
+            "required": [
+              "text",
+              "sanctioned",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "description": "Sanctioned unresolved medication label (escape hatch from D-DATA-004)"
+          },
+          "claimStatus": {
+            "type": "string",
+            "enum": [
+              "prescribed",
+              "dispensed",
+              "taking-as-directed",
+              "taking-differently",
+              "held-by-clinician",
+              "self-discontinued",
+              "stopped-by-clinician",
+              "course-completed",
+              "restarted",
+              "never-started",
+              "unknown-to-source"
+            ],
+            "description": "D-MED-001 per-source status"
+          },
+          "howTakingDifferently": {
+            "description": "Required when claimStatus is taking-differently: how, in the source’s words",
+            "type": "string",
+            "minLength": 1
+          },
+          "dose": {
+            "description": "Dose as stated, e.g. \"5 mg\"",
+            "type": "string",
+            "minLength": 1
+          },
+          "route": {
+            "type": "string",
+            "enum": [
+              "oral",
+              "sublingual",
+              "buccal",
+              "topical",
+              "transdermal",
+              "inhaled",
+              "intranasal",
+              "ophthalmic",
+              "otic",
+              "subcutaneous",
+              "intramuscular",
+              "intravenous",
+              "rectal",
+              "vaginal",
+              "other"
+            ]
+          },
+          "frequency": {
+            "description": "Frequency as stated, e.g. \"once daily\"",
+            "type": "string",
+            "minLength": 1
+          },
+          "formulation": {
+            "description": "Formulation as stated, e.g. \"extended-release tablet\"",
+            "type": "string",
+            "minLength": 1
+          },
+          "eventTime": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+              }
+            ],
+            "description": "When the asserted state was true (D-MED-002)"
+          },
+          "documentationTime": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+              }
+            ],
+            "description": "When the source recorded it; never before eventTime"
+          },
+          "asStatedText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Verbatim wording the learner sees from this source"
+          },
+          "visibility": {
+            "default": "with-source",
+            "description": "with-source = visible when the source is opened; on-reveal = only when a dialogue node, artifact, or escalation reveals it",
+            "type": "string",
+            "enum": [
+              "with-source",
+              "on-reveal"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "sourceId",
+          "claimStatus",
+          "eventTime",
+          "documentationTime",
+          "asStatedText"
+        ],
+        "additionalProperties": false,
+        "description": "Medication claim (evidence layer)"
+      }
+    },
+    "allergyClaims": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "claimKind": {
+                "type": "string",
+                "const": "allergy"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^alg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Allergy claim id"
+              },
+              "sourceId": {
+                "type": "string",
+                "pattern": "^src-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Evidence source id"
+              },
+              "verificationStatus": {
+                "type": "string",
+                "enum": [
+                  "patient-reported",
+                  "caregiver-reported",
+                  "documented-unverified",
+                  "documented-verified",
+                  "unknown"
+                ]
+              },
+              "eventTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                    "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+                  }
+                ],
+                "description": "When the asserted state was true (D-MED-002)"
+              },
+              "documentationTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                    "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+                  }
+                ],
+                "description": "When the source recorded it; never before eventTime"
+              },
+              "asStatedText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Verbatim wording the learner sees from this source"
+              },
+              "agent": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "formulary"
+                      },
+                      "formularyId": {
+                        "type": "string",
+                        "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                        "description": "Formulary entry id (D-DATA-004)"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "formularyId"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "class-or-text"
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Drug class or non-formulary agent as stated, e.g. \"penicillins\""
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "The agent an allergy claim is about"
+              },
+              "reactionText": {
+                "description": "Reaction as stated",
+                "type": "string",
+                "minLength": 1
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "mild",
+                  "moderate",
+                  "severe",
+                  "anaphylaxis",
+                  "unknown"
+                ]
+              },
+              "onsetTimingText": {
+                "description": "When it happened, as stated",
+                "type": "string",
+                "minLength": 1
+              },
+              "priorToleranceText": {
+                "description": "Any stated later tolerance of the agent or class",
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "claimKind",
+              "id",
+              "sourceId",
+              "verificationStatus",
+              "eventTime",
+              "documentationTime",
+              "asStatedText",
+              "agent",
+              "severity"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "claimKind": {
+                "type": "string",
+                "const": "intolerance"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^alg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Allergy claim id"
+              },
+              "sourceId": {
+                "type": "string",
+                "pattern": "^src-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Evidence source id"
+              },
+              "verificationStatus": {
+                "type": "string",
+                "enum": [
+                  "patient-reported",
+                  "caregiver-reported",
+                  "documented-unverified",
+                  "documented-verified",
+                  "unknown"
+                ]
+              },
+              "eventTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                    "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+                  }
+                ],
+                "description": "When the asserted state was true (D-MED-002)"
+              },
+              "documentationTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                    "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+                  }
+                ],
+                "description": "When the source recorded it; never before eventTime"
+              },
+              "asStatedText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Verbatim wording the learner sees from this source"
+              },
+              "agent": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "formulary"
+                      },
+                      "formularyId": {
+                        "type": "string",
+                        "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                        "description": "Formulary entry id (D-DATA-004)"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "formularyId"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "class-or-text"
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Drug class or non-formulary agent as stated, e.g. \"penicillins\""
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "The agent an allergy claim is about"
+              },
+              "reactionText": {
+                "description": "Reaction as stated",
+                "type": "string",
+                "minLength": 1
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "mild",
+                  "moderate",
+                  "severe",
+                  "anaphylaxis",
+                  "unknown"
+                ]
+              },
+              "onsetTimingText": {
+                "description": "When it happened, as stated",
+                "type": "string",
+                "minLength": 1
+              },
+              "priorToleranceText": {
+                "description": "Any stated later tolerance of the agent or class",
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "claimKind",
+              "id",
+              "sourceId",
+              "verificationStatus",
+              "eventTime",
+              "documentationTime",
+              "asStatedText",
+              "agent",
+              "severity"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "claimKind": {
+                "type": "string",
+                "const": "tolerated-exposure"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^alg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Allergy claim id"
+              },
+              "sourceId": {
+                "type": "string",
+                "pattern": "^src-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Evidence source id"
+              },
+              "verificationStatus": {
+                "type": "string",
+                "enum": [
+                  "patient-reported",
+                  "caregiver-reported",
+                  "documented-unverified",
+                  "documented-verified",
+                  "unknown"
+                ]
+              },
+              "eventTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                    "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+                  }
+                ],
+                "description": "When the asserted state was true (D-MED-002)"
+              },
+              "documentationTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                    "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+                  }
+                ],
+                "description": "When the source recorded it; never before eventTime"
+              },
+              "asStatedText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Verbatim wording the learner sees from this source"
+              },
+              "agent": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "formulary"
+                      },
+                      "formularyId": {
+                        "type": "string",
+                        "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                        "description": "Formulary entry id (D-DATA-004)"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "formularyId"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "class-or-text"
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Drug class or non-formulary agent as stated, e.g. \"penicillins\""
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "The agent an allergy claim is about"
+              },
+              "exposureText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The exposure that was tolerated, as stated"
+              }
+            },
+            "required": [
+              "claimKind",
+              "id",
+              "sourceId",
+              "verificationStatus",
+              "eventTime",
+              "documentationTime",
+              "asStatedText",
+              "agent",
+              "exposureText"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "claimKind": {
+                "type": "string",
+                "const": "no-known-allergies"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^alg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Allergy claim id"
+              },
+              "sourceId": {
+                "type": "string",
+                "pattern": "^src-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Evidence source id"
+              },
+              "verificationStatus": {
+                "type": "string",
+                "enum": [
+                  "patient-reported",
+                  "caregiver-reported",
+                  "documented-unverified",
+                  "documented-verified",
+                  "unknown"
+                ]
+              },
+              "eventTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                    "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+                  }
+                ],
+                "description": "When the asserted state was true (D-MED-002)"
+              },
+              "documentationTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                    "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+                  }
+                ],
+                "description": "When the source recorded it; never before eventTime"
+              },
+              "asStatedText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Verbatim wording the learner sees from this source"
+              }
+            },
+            "required": [
+              "claimKind",
+              "id",
+              "sourceId",
+              "verificationStatus",
+              "eventTime",
+              "documentationTime",
+              "asStatedText"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "description": "Allergy claim (evidence layer; D-MED-003)"
+      }
+    },
+    "dialogueTrees": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^dlg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Dialogue tree id"
+          },
+          "sourceId": {
+            "type": "string",
+            "pattern": "^src-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Interview or informant source this tree belongs to"
+          },
+          "interlocutor": {
+            "type": "string",
+            "enum": [
+              "patient",
+              "caregiver",
+              "nurse",
+              "inpatient-pharmacist",
+              "senior-attending",
+              "interpreter",
+              "other"
+            ]
+          },
+          "baselineReliability": {
+            "type": "string",
+            "enum": [
+              "reliable",
+              "lower-reliability",
+              "unknown"
+            ]
+          },
+          "viaInterpreter": {
+            "default": "none",
+            "description": "Interpreter channel in use for this tree (D-CONS-002)",
+            "type": "string",
+            "enum": [
+              "none",
+              "professional",
+              "ad-hoc-family"
+            ]
+          },
+          "nodes": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^q-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                  "description": "Dialogue node (question) id"
+                },
+                "entry": {
+                  "default": false,
+                  "description": "Available from the start of the conversation",
+                  "type": "boolean"
+                },
+                "questionText": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Non-empty text"
+                },
+                "costMinutes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991,
+                  "description": "Clock cost of asking (D-WF-002)"
+                },
+                "responseText": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Authored response in the interlocutor’s voice"
+                },
+                "revealsClaimIds": {
+                  "default": [],
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^clm-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                    "description": "Medication claim id"
+                  }
+                },
+                "revealsAllergyClaimIds": {
+                  "default": [],
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^alg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                    "description": "Allergy claim id"
+                  }
+                },
+                "unlocks": {
+                  "default": [],
+                  "description": "Follow-up nodes made available",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^q-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                    "description": "Dialogue node (question) id"
+                  }
+                },
+                "reliabilityModifier": {
+                  "description": "Overrides the tree baseline for this response (e.g. ad-hoc interpretation)",
+                  "type": "string",
+                  "enum": [
+                    "reliable",
+                    "lower-reliability",
+                    "unknown"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "questionText",
+                "costMinutes",
+                "responseText"
+              ],
+              "additionalProperties": false,
+              "description": "Dialogue node: one question and its authored response"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "sourceId",
+          "interlocutor",
+          "baselineReliability",
+          "nodes"
+        ],
+        "additionalProperties": false,
+        "description": "Dialogue tree"
+      }
+    },
+    "artifacts": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^art-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Physical artifact id"
+          },
+          "sourceId": {
+            "type": "string",
+            "pattern": "^src-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "The physical-artifacts source (or the informant who brought it)"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "pill-bottle",
+              "pillbox",
+              "handwritten-list",
+              "printed-list",
+              "discharge-paper",
+              "pharmacy-receipt",
+              "photo",
+              "other"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "renderText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Complete textual rendering of the artifact including nonvisual cues (label wording, pill appearance in words, fill dates, count) — INV-A11Y-001"
+          },
+          "labelClaims": {
+            "default": [],
+            "description": "Claims the artifact label asserts",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^clm-[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "description": "Medication claim id"
+            }
+          },
+          "examineCostMinutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "sourceId",
+          "kind",
+          "title",
+          "renderText",
+          "examineCostMinutes"
+        ],
+        "additionalProperties": false,
+        "description": "Physical artifact (evidence layer)"
+      }
+    },
+    "escalationChannels": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^esc-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Escalation channel id"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "community-pharmacy",
+              "outpatient-prescriber-program-office",
+              "inpatient-pharmacist",
+              "senior-attending"
+            ],
+            "description": "One of the four scored channels"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Label the learner sees, e.g. the fictional pharmacy name"
+          },
+          "institutionId": {
+            "type": "string",
+            "pattern": "^inst-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Fictional-universe institution id (I-9)"
+          },
+          "availabilityWindow": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "always"
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "hours"
+                  },
+                  "opens": {
+                    "type": "string",
+                    "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+                    "description": "Wall-clock time HH:MM (24-hour) in the case locale"
+                  },
+                  "closes": {
+                    "type": "string",
+                    "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+                    "description": "Wall-clock time HH:MM (24-hour) in the case locale"
+                  },
+                  "days": {
+                    "description": "Omit for every day",
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "mon",
+                        "tue",
+                        "wed",
+                        "thu",
+                        "fri",
+                        "sat",
+                        "sun"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "kind",
+                  "opens",
+                  "closes"
+                ],
+                "additionalProperties": false
+              }
+            ],
+            "description": "When the channel answers"
+          },
+          "latencyMinutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Clock cost until a response arrives"
+          },
+          "responseContent": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Authored response, in the responder’s voice"
+              },
+              "revealsClaimIds": {
+                "default": [],
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^clm-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                  "description": "Medication claim id"
+                }
+              },
+              "revealsAllergyClaimIds": {
+                "default": [],
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^alg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                  "description": "Allergy claim id"
+                }
+              }
+            },
+            "required": [
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          "unansweredBehavior": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "voicemail-callback"
+                  },
+                  "callbackLatencyMinutes": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "kind",
+                  "callbackLatencyMinutes"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "retry-later"
+                  },
+                  "retryAfterMinutes": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "kind",
+                  "retryAfterMinutes"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "closed-until-window"
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "additionalProperties": false
+              }
+            ],
+            "description": "What happens when the channel is called outside its window or is busy"
+          }
+        },
+        "required": [
+          "id",
+          "channel",
+          "label",
+          "availabilityWindow",
+          "latencyMinutes",
+          "responseContent",
+          "unansweredBehavior"
+        ],
+        "additionalProperties": false,
+        "description": "Escalation channel (evidence layer)"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "caseId",
+    "patient",
+    "T0",
+    "sources",
+    "claims"
+  ],
+  "additionalProperties": false,
+  "description": "evidence.yaml — learner-observable evidence layer"
+}

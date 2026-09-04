@@ -1,0 +1,1280 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://medrecsim.invalid/schema/0.1/reference.schema.json",
+  "title": "medrecsim reference (content schema 0.1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Content-schema version stamp major.minor (must equal the schema package SCHEMA_VERSION)"
+    },
+    "caseId": {
+      "type": "string",
+      "pattern": "^c\\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Case bundle id: c + two digits + kebab slug, e.g. c01-three-lists"
+    },
+    "referenceRegimen": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^reg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Reference regimen entry id"
+          },
+          "formularyId": {
+            "description": "Formulary entry id (preferred; D-DATA-004)",
+            "type": "string",
+            "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "unresolvedLabel": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The label or description as the source gives it"
+              },
+              "sanctioned": {
+                "type": "boolean",
+                "const": true,
+                "description": "Explicit escape flag (T-2); must be true"
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "patient-description-only",
+                  "illegible-or-partial-label",
+                  "non-formulary-product",
+                  "informant-cannot-name"
+                ],
+                "description": "Why no formulary id can be assigned"
+              }
+            },
+            "required": [
+              "text",
+              "sanctioned",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "description": "Sanctioned unresolved medication label (escape hatch from D-DATA-004)"
+          },
+          "dose": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "route": {
+            "type": "string",
+            "enum": [
+              "oral",
+              "sublingual",
+              "buccal",
+              "topical",
+              "transdermal",
+              "inhaled",
+              "intranasal",
+              "ophthalmic",
+              "otic",
+              "subcutaneous",
+              "intramuscular",
+              "intravenous",
+              "rectal",
+              "vaginal",
+              "other"
+            ]
+          },
+          "frequencyText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "formulationText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "indicationText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "prescriberText": {
+            "description": "Fictional prescriber / office, as the author intends it",
+            "type": "string",
+            "minLength": 1
+          },
+          "notesText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          }
+        },
+        "required": [
+          "id",
+          "dose",
+          "route",
+          "frequencyText"
+        ],
+        "additionalProperties": false,
+        "description": "Reference regimen entry: the intended pre-admission regimen"
+      }
+    },
+    "actualUseState": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^use-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Actual-use state entry id"
+          },
+          "formularyId": {
+            "description": "Formulary entry id (preferred; D-DATA-004)",
+            "type": "string",
+            "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "unresolvedLabel": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The label or description as the source gives it"
+              },
+              "sanctioned": {
+                "type": "boolean",
+                "const": true,
+                "description": "Explicit escape flag (T-2); must be true"
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "patient-description-only",
+                  "illegible-or-partial-label",
+                  "non-formulary-product",
+                  "informant-cannot-name"
+                ],
+                "description": "Why no formulary id can be assigned"
+              }
+            },
+            "required": [
+              "text",
+              "sanctioned",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "description": "Sanctioned unresolved medication label (escape hatch from D-DATA-004)"
+          },
+          "regimenId": {
+            "description": "The regimen entry this fact is about, if any",
+            "type": "string",
+            "pattern": "^reg-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "prescribed",
+              "dispensed",
+              "taking-as-directed",
+              "taking-differently",
+              "held-by-clinician",
+              "self-discontinued",
+              "stopped-by-clinician",
+              "course-completed",
+              "restarted",
+              "never-started"
+            ],
+            "description": "What the patient was actually doing"
+          },
+          "detailText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The authored truth, in plain words"
+          },
+          "knowability": {
+            "type": "object",
+            "properties": {
+              "mark": {
+                "type": "string",
+                "enum": [
+                  "initially-known",
+                  "conditionally-discoverable",
+                  "inferable",
+                  "irreducibly-uncertain"
+                ],
+                "description": "D-MED-005 knowability mark"
+              },
+              "knowableVia": {
+                "description": "Evidence units through which the fact becomes knowable (omit for irreducibly-uncertain)",
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(source|claim|allergy-claim|dialogue-node|artifact|escalation-channel):([a-z][a-z0-9]*(?:-[a-z0-9]+)*)$",
+                  "description": "Reference to an evidence unit as kind:id, e.g. source:src-pharmacy, claim:clm-amlo-1, dialogue-node:q-otc, artifact:art-bottle-1, escalation-channel:esc-pcp"
+                }
+              }
+            },
+            "required": [
+              "mark"
+            ],
+            "additionalProperties": false,
+            "description": "How and whether a learner can come to know this fact"
+          },
+          "lastTakenTime": {
+            "description": "Last dose before T0, when known and relevant",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "detailText",
+          "knowability"
+        ],
+        "additionalProperties": false,
+        "description": "Actual-use state entry: what was really happening before admission"
+      }
+    },
+    "evidenceYield": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string",
+            "pattern": "^(source|claim|allergy-claim|dialogue-node|artifact|escalation-channel):([a-z][a-z0-9]*(?:-[a-z0-9]+)*)$",
+            "description": "Reference to an evidence unit as kind:id, e.g. source:src-pharmacy, claim:clm-amlo-1, dialogue-node:q-otc, artifact:art-bottle-1, escalation-channel:esc-pcp"
+          },
+          "yield": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "corroborating",
+              "low-yield"
+            ]
+          }
+        },
+        "required": [
+          "ref",
+          "yield"
+        ],
+        "additionalProperties": false,
+        "description": "Per-evidence-unit yield tag for subscore 1 (clinical-model §4.1)"
+      }
+    },
+    "discrepancies": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^disc-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Discrepancy id"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Short author-facing title; also the debrief reveal-card heading"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "omission",
+              "commission",
+              "wrong-dose",
+              "wrong-frequency-schedule",
+              "wrong-route",
+              "wrong-formulation",
+              "wrong-strength-concentration",
+              "therapeutic-duplication",
+              "brand-generic-duplication",
+              "wrong-drug-lasa",
+              "restart-gap",
+              "status-discrepancy",
+              "allergy-record-discrepancy"
+            ],
+            "description": "Axis 1 — exactly one"
+          },
+          "mechanism": {
+            "type": "string",
+            "enum": [
+              "stale-record-propagation",
+              "transcription-error",
+              "lasa-confusion",
+              "transition-communication-gap",
+              "data-fragmentation",
+              "auto-population-default-error",
+              "prescriber-change-undocumented",
+              "hold-not-documented",
+              "cost-access-barrier",
+              "supply-interruption",
+              "regimen-complexity-misunderstanding",
+              "informed-self-adjustment",
+              "language-access-barrier",
+              "informant-knowledge-limit"
+            ],
+            "description": "Axis 2 — the primary mechanism"
+          },
+          "secondaryMechanisms": {
+            "description": "Optional additional mechanisms",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "stale-record-propagation",
+                "transcription-error",
+                "lasa-confusion",
+                "transition-communication-gap",
+                "data-fragmentation",
+                "auto-population-default-error",
+                "prescriber-change-undocumented",
+                "hold-not-documented",
+                "cost-access-barrier",
+                "supply-interruption",
+                "regimen-complexity-misunderstanding",
+                "informed-self-adjustment",
+                "language-access-barrier",
+                "informant-knowledge-limit"
+              ]
+            }
+          },
+          "detectabilityPaths": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "detectability": {
+                  "type": "string",
+                  "enum": [
+                    "single-source-explicit",
+                    "cross-source-conflict",
+                    "interview-elicited",
+                    "artifact-dependent",
+                    "escalation-dependent",
+                    "longitudinal-inference",
+                    "irreducible"
+                  ],
+                  "description": "Taxonomy axis 3 token for this path"
+                },
+                "requires": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(source|claim|allergy-claim|dialogue-node|artifact|escalation-channel):([a-z][a-z0-9]*(?:-[a-z0-9]+)*)$",
+                    "description": "Reference to an evidence unit as kind:id, e.g. source:src-pharmacy, claim:clm-amlo-1, dialogue-node:q-otc, artifact:art-bottle-1, escalation-channel:esc-pcp"
+                  },
+                  "description": "Evidence units that must ALL be accessed for this path (AND); paths are OR-ed"
+                }
+              },
+              "required": [
+                "detectability",
+                "requires"
+              ],
+              "additionalProperties": false,
+              "description": "Detectability path (AND inside, OR across paths)"
+            },
+            "description": "Axis 3 — at least one path"
+          },
+          "urgency": {
+            "type": "string",
+            "enum": [
+              "U1",
+              "U2",
+              "U3",
+              "U4"
+            ],
+            "description": "Axis 4"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "S0",
+              "S1",
+              "S2",
+              "S3",
+              "S4"
+            ],
+            "description": "Axis 5a — potential worst-credible outcome (MERP adaptation)"
+          },
+          "reversibility": {
+            "type": "string",
+            "enum": [
+              "self-limiting",
+              "reversible-with-treatment",
+              "irreversible"
+            ],
+            "description": "Axis 5b"
+          },
+          "timeToHarm": {
+            "type": "string",
+            "enum": [
+              "immediate",
+              "hours-to-a-day",
+              "days",
+              "weeks-plus"
+            ],
+            "description": "Axis 5c (physiologic tempo; not urgency)"
+          },
+          "involves": {
+            "type": "object",
+            "properties": {
+              "formularyId": {
+                "description": "Formulary entry id (preferred; D-DATA-004)",
+                "type": "string",
+                "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "unresolvedLabel": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The label or description as the source gives it"
+                  },
+                  "sanctioned": {
+                    "type": "boolean",
+                    "const": true,
+                    "description": "Explicit escape flag (T-2); must be true"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "patient-description-only",
+                      "illegible-or-partial-label",
+                      "non-formulary-product",
+                      "informant-cannot-name"
+                    ],
+                    "description": "Why no formulary id can be assigned"
+                  }
+                },
+                "required": [
+                  "text",
+                  "sanctioned",
+                  "reason"
+                ],
+                "additionalProperties": false,
+                "description": "Sanctioned unresolved medication label (escape hatch from D-DATA-004)"
+              },
+              "claimIds": {
+                "description": "Evidence claims in disagreement",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^clm-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                  "description": "Medication claim id"
+                }
+              },
+              "allergyClaimIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^alg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                  "description": "Allergy claim id"
+                }
+              },
+              "regimenId": {
+                "type": "string",
+                "pattern": "^reg-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Reference regimen entry id"
+              },
+              "actualUseId": {
+                "type": "string",
+                "pattern": "^use-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Actual-use state entry id"
+              }
+            },
+            "additionalProperties": false,
+            "description": "What the discrepancy is between"
+          },
+          "resolutionExpectation": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "resolve-with-rationale",
+                  "escalate",
+                  "unable-to-verify",
+                  "defer-with-plan"
+                ]
+              },
+              "detailText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "What a correct resolution looks like at signature (D-WF-004)"
+              }
+            },
+            "required": [
+              "kind",
+              "detailText"
+            ],
+            "additionalProperties": false
+          },
+          "acceptedClassifications": {
+            "description": "Alternative type/mechanism pairs also accepted at scoring (D-MED-005 accepted sets)",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "omission",
+                    "commission",
+                    "wrong-dose",
+                    "wrong-frequency-schedule",
+                    "wrong-route",
+                    "wrong-formulation",
+                    "wrong-strength-concentration",
+                    "therapeutic-duplication",
+                    "brand-generic-duplication",
+                    "wrong-drug-lasa",
+                    "restart-gap",
+                    "status-discrepancy",
+                    "allergy-record-discrepancy"
+                  ]
+                },
+                "mechanism": {
+                  "type": "string",
+                  "enum": [
+                    "stale-record-propagation",
+                    "transcription-error",
+                    "lasa-confusion",
+                    "transition-communication-gap",
+                    "data-fragmentation",
+                    "auto-population-default-error",
+                    "prescriber-change-undocumented",
+                    "hold-not-documented",
+                    "cost-access-barrier",
+                    "supply-interruption",
+                    "regimen-complexity-misunderstanding",
+                    "informed-self-adjustment",
+                    "language-access-barrier",
+                    "informant-knowledge-limit"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "mechanism"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "scoring": {
+            "default": "scored",
+            "description": "D-RISK-004: discussion-item-not-scored while frozen",
+            "type": "string",
+            "enum": [
+              "scored",
+              "discussion-item-not-scored"
+            ]
+          },
+          "freezeNoteText": {
+            "description": "Required when scoring is discussion-item-not-scored",
+            "type": "string",
+            "minLength": 1
+          },
+          "citations": {
+            "description": "Ordinal anchors and drug-specific sources (policy §4)",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+              "description": "Citation record id: cit- + short source slug + year"
+            }
+          },
+          "teachingNoteId": {
+            "type": "string",
+            "pattern": "^tn-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Teaching-note reference id"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "type",
+          "mechanism",
+          "detectabilityPaths",
+          "urgency",
+          "severity",
+          "reversibility",
+          "timeToHarm",
+          "involves",
+          "resolutionExpectation"
+        ],
+        "additionalProperties": false,
+        "description": "Discrepancy (reference layer)"
+      }
+    },
+    "actionSets": {
+      "type": "object",
+      "properties": {
+        "defaultBandForUnlisted": {
+          "type": "string",
+          "enum": [
+            "accepted",
+            "partially-accepted",
+            "unsafe"
+          ],
+          "description": "Band for any learner action not matched by an entry, so the full action space is classified"
+        },
+        "rationaleMenu": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^rat-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Rationale-menu key"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Justification the learner can choose (no free text in v1, D-MED-004)"
+              },
+              "citations": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+                  "description": "Citation record id: cit- + short source slug + year"
+                },
+                "description": "Citation ids (must resolve in citations.yaml)"
+              }
+            },
+            "required": [
+              "key",
+              "text"
+            ],
+            "additionalProperties": false,
+            "description": "Rationale-menu item (per case, T-5)"
+          }
+        },
+        "accepted": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^act-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Action-set entry id"
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "formularyId": {
+                    "description": "Formulary entry id (preferred; D-DATA-004)",
+                    "type": "string",
+                    "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  },
+                  "unresolvedLabel": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "The label or description as the source gives it"
+                      },
+                      "sanctioned": {
+                        "type": "boolean",
+                        "const": true,
+                        "description": "Explicit escape flag (T-2); must be true"
+                      },
+                      "reason": {
+                        "type": "string",
+                        "enum": [
+                          "patient-description-only",
+                          "illegible-or-partial-label",
+                          "non-formulary-product",
+                          "informant-cannot-name"
+                        ],
+                        "description": "Why no formulary id can be assigned"
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "sanctioned",
+                      "reason"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Sanctioned unresolved medication label (escape hatch from D-DATA-004)"
+                  },
+                  "discrepancyId": {
+                    "type": "string",
+                    "pattern": "^disc-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                    "description": "Discrepancy id"
+                  }
+                },
+                "additionalProperties": false,
+                "description": "The medication and/or discrepancy the action is about"
+              },
+              "action": {
+                "type": "string",
+                "enum": [
+                  "continue",
+                  "hold",
+                  "needs-decision",
+                  "escalate",
+                  "propose-with-rationale",
+                  "unable-to-verify",
+                  "defer-with-plan"
+                ]
+              },
+              "rationaleKey": {
+                "description": "Key into rationaleMenu (preferred)",
+                "type": "string",
+                "pattern": "^rat-[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "rationaleText": {
+                "description": "Inline rationale when no menu item fits; still linted",
+                "type": "string",
+                "minLength": 1
+              },
+              "citations": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+                  "description": "Citation record id: cit- + short source slug + year"
+                },
+                "description": "Citation ids (must resolve in citations.yaml)"
+              },
+              "scoring": {
+                "default": "scored",
+                "type": "string",
+                "enum": [
+                  "scored",
+                  "discussion-item-not-scored"
+                ]
+              },
+              "freezeNoteText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Non-empty text"
+              }
+            },
+            "required": [
+              "id",
+              "target",
+              "action"
+            ],
+            "additionalProperties": false,
+            "description": "Accepted action"
+          }
+        },
+        "partiallyAccepted": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^act-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Action-set entry id"
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "formularyId": {
+                    "description": "Formulary entry id (preferred; D-DATA-004)",
+                    "type": "string",
+                    "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  },
+                  "unresolvedLabel": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "The label or description as the source gives it"
+                      },
+                      "sanctioned": {
+                        "type": "boolean",
+                        "const": true,
+                        "description": "Explicit escape flag (T-2); must be true"
+                      },
+                      "reason": {
+                        "type": "string",
+                        "enum": [
+                          "patient-description-only",
+                          "illegible-or-partial-label",
+                          "non-formulary-product",
+                          "informant-cannot-name"
+                        ],
+                        "description": "Why no formulary id can be assigned"
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "sanctioned",
+                      "reason"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Sanctioned unresolved medication label (escape hatch from D-DATA-004)"
+                  },
+                  "discrepancyId": {
+                    "type": "string",
+                    "pattern": "^disc-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                    "description": "Discrepancy id"
+                  }
+                },
+                "additionalProperties": false,
+                "description": "The medication and/or discrepancy the action is about"
+              },
+              "action": {
+                "type": "string",
+                "enum": [
+                  "continue",
+                  "hold",
+                  "needs-decision",
+                  "escalate",
+                  "propose-with-rationale",
+                  "unable-to-verify",
+                  "defer-with-plan"
+                ]
+              },
+              "rationaleKey": {
+                "description": "Key into rationaleMenu (preferred)",
+                "type": "string",
+                "pattern": "^rat-[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "rationaleText": {
+                "description": "Inline rationale when no menu item fits; still linted",
+                "type": "string",
+                "minLength": 1
+              },
+              "citations": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+                  "description": "Citation record id: cit- + short source slug + year"
+                },
+                "description": "Citation ids (must resolve in citations.yaml)"
+              },
+              "scoring": {
+                "default": "scored",
+                "type": "string",
+                "enum": [
+                  "scored",
+                  "discussion-item-not-scored"
+                ]
+              },
+              "freezeNoteText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Non-empty text"
+              },
+              "shortfallText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "What is missing for full credit"
+              }
+            },
+            "required": [
+              "id",
+              "target",
+              "action",
+              "shortfallText"
+            ],
+            "additionalProperties": false,
+            "description": "Partially accepted action"
+          }
+        },
+        "unsafe": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^act-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "description": "Action-set entry id"
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "formularyId": {
+                    "description": "Formulary entry id (preferred; D-DATA-004)",
+                    "type": "string",
+                    "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  },
+                  "unresolvedLabel": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "The label or description as the source gives it"
+                      },
+                      "sanctioned": {
+                        "type": "boolean",
+                        "const": true,
+                        "description": "Explicit escape flag (T-2); must be true"
+                      },
+                      "reason": {
+                        "type": "string",
+                        "enum": [
+                          "patient-description-only",
+                          "illegible-or-partial-label",
+                          "non-formulary-product",
+                          "informant-cannot-name"
+                        ],
+                        "description": "Why no formulary id can be assigned"
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "sanctioned",
+                      "reason"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Sanctioned unresolved medication label (escape hatch from D-DATA-004)"
+                  },
+                  "discrepancyId": {
+                    "type": "string",
+                    "pattern": "^disc-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                    "description": "Discrepancy id"
+                  }
+                },
+                "additionalProperties": false,
+                "description": "The medication and/or discrepancy the action is about"
+              },
+              "action": {
+                "type": "string",
+                "enum": [
+                  "continue",
+                  "hold",
+                  "needs-decision",
+                  "escalate",
+                  "propose-with-rationale",
+                  "unable-to-verify",
+                  "defer-with-plan"
+                ]
+              },
+              "rationaleKey": {
+                "description": "Key into rationaleMenu (preferred)",
+                "type": "string",
+                "pattern": "^rat-[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "rationaleText": {
+                "description": "Inline rationale when no menu item fits; still linted",
+                "type": "string",
+                "minLength": 1
+              },
+              "citations": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+                  "description": "Citation record id: cit- + short source slug + year"
+                },
+                "description": "Citation ids (must resolve in citations.yaml)"
+              },
+              "scoring": {
+                "default": "scored",
+                "type": "string",
+                "enum": [
+                  "scored",
+                  "discussion-item-not-scored"
+                ]
+              },
+              "freezeNoteText": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Non-empty text"
+              },
+              "mechanismOfHarm": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Plausible-consequence phrasing with ordinal severity; no probabilities (D-SCOR-003)"
+                  },
+                  "inevitabilityAuthored": {
+                    "default": false,
+                    "description": "Set true only when the author deliberately states an inevitable harm; the lint otherwise rejects \"will\"/\"always\" wording",
+                    "type": "boolean"
+                  },
+                  "citations": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+                      "description": "Citation record id: cit- + short source slug + year"
+                    },
+                    "description": "Citation ids (must resolve in citations.yaml)"
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "additionalProperties": false,
+                "description": "Mechanism of harm taught in the debrief"
+              }
+            },
+            "required": [
+              "id",
+              "target",
+              "action",
+              "mechanismOfHarm"
+            ],
+            "additionalProperties": false,
+            "description": "Unsafe action (never blocked in-sim; surfaced in the debrief)"
+          }
+        }
+      },
+      "required": [
+        "defaultBandForUnlisted",
+        "rationaleMenu",
+        "accepted"
+      ],
+      "additionalProperties": false,
+      "description": "Action sets (D-SCOR-002)"
+    },
+    "expectedEscalations": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^exp-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Expected escalation id"
+          },
+          "channelId": {
+            "type": "string",
+            "pattern": "^esc-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "The evidence-layer channel definition"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "true = scored as expected; false = accepted but not required"
+          },
+          "whyText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Why the escalation is expected (plausible-consequence phrasing)"
+          },
+          "byTime": {
+            "description": "Latest simulated time by which it should be initiated",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^T0(?:[+-]\\d+(?:mo|y|w|d|h|m))*$",
+                "description": "Time relative to admission T0, e.g. T0-2y, T0-3d-4h, T0+30m"
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                "description": "Absolute ISO-8601 date-time with UTC offset, e.g. 2026-01-15T14:30:00-05:00"
+              }
+            ]
+          },
+          "discrepancyIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^disc-[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "description": "Discrepancy id"
+            }
+          },
+          "citations": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+              "description": "Citation record id: cit- + short source slug + year"
+            },
+            "description": "Citation ids (must resolve in citations.yaml)"
+          }
+        },
+        "required": [
+          "id",
+          "channelId",
+          "required",
+          "whyText"
+        ],
+        "additionalProperties": false,
+        "description": "Expected escalation"
+      }
+    },
+    "hints": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^hint-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Hint id"
+          },
+          "targetDiscrepancyId": {
+            "type": "string",
+            "pattern": "^disc-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Discrepancy id"
+          },
+          "nudge": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Non-empty text"
+              }
+            },
+            "required": [
+              "text"
+            ],
+            "additionalProperties": false,
+            "description": "Grade 1: a gentle pointer"
+          },
+          "directed": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Non-empty text"
+              }
+            },
+            "required": [
+              "text"
+            ],
+            "additionalProperties": false,
+            "description": "Grade 2: names the kind of evidence to seek"
+          },
+          "revealSource": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Non-empty text"
+              },
+              "sourceRef": {
+                "type": "string",
+                "pattern": "^(source|claim|allergy-claim|dialogue-node|artifact|escalation-channel):([a-z][a-z0-9]*(?:-[a-z0-9]+)*)$",
+                "description": "The evidence unit the reveal points at"
+              }
+            },
+            "required": [
+              "text",
+              "sourceRef"
+            ],
+            "additionalProperties": false,
+            "description": "Grade 3: reveals where to look"
+          }
+        },
+        "required": [
+          "id",
+          "targetDiscrepancyId",
+          "nudge",
+          "directed",
+          "revealSource"
+        ],
+        "additionalProperties": false,
+        "description": "Graduated hint (nudge → directed → reveal-source; never score-subtracting)"
+      }
+    },
+    "teachingNoteRefs": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^tn-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Teaching-note reference id"
+          },
+          "anchor": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Heading slug in teaching-notes.md"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "summaryText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "One-paragraph summary rendered on the reveal card; linted"
+          },
+          "citations": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+              "description": "Citation record id: cit- + short source slug + year"
+            },
+            "description": "Every teaching note cites (policy §4)"
+          }
+        },
+        "required": [
+          "id",
+          "anchor",
+          "title",
+          "summaryText",
+          "citations"
+        ],
+        "additionalProperties": false,
+        "description": "Teaching-note reference"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "caseId",
+    "referenceRegimen",
+    "actualUseState",
+    "discrepancies",
+    "actionSets"
+  ],
+  "additionalProperties": false,
+  "description": "reference.yaml — author-only reference layer"
+}

@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: coverage declares a type no discrepancy carries. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: meta-001-coverage-mismatch
+expect: { invariant: INV-META-001 }
+mutations:
+  - {
+      file: case.yaml,
+      op: set,
+      path: 'coverage.types',
+      value: ['omission', 'commission', 'wrong-route'],
+    }

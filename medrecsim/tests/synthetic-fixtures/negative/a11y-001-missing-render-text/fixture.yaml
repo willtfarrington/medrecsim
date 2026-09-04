@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: an artifact without renderText (field-presence check; strict A11Y at EP-20). Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: a11y-001-missing-render-text
+expect: { invariant: INV-A11Y-001 }
+mutations:
+  - { file: evidence.yaml, op: delete, path: 'artifacts[0].renderText' }

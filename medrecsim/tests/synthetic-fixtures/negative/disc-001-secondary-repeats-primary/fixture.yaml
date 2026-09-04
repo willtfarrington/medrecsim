@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: the primary mechanism listed again as secondary. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: disc-001-secondary-repeats-primary
+expect: { invariant: INV-DISC-001 }
+mutations:
+  - {
+      file: reference.yaml,
+      op: set,
+      path: 'discrepancies[0].secondaryMechanisms',
+      value: ['stale-record-propagation'],
+    }

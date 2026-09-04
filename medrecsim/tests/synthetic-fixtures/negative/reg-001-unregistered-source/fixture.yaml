@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a source key with no registry / policy row. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: reg-001-unregistered-source
+expect: { invariant: INV-REG-001 }
+mutations:
+  - {
+      file: citations.yaml,
+      op: set,
+      path: 'citations[0].source',
+      value: 'NOT-A-REGISTERED-SOURCE-2026',
+    }

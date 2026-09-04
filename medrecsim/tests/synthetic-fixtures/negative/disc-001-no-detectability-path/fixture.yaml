@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a discrepancy with zero detectability paths. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: disc-001-no-detectability-path
+expect: { invariant: INV-DISC-001 }
+mutations:
+  - { file: reference.yaml, op: set, path: 'discrepancies[0].detectabilityPaths', value: [] }

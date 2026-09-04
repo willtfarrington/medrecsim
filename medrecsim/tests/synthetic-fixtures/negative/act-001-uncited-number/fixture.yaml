@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a number in teaching text with no citation on the entry. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: act-001-uncited-number
+expect: { invariant: INV-ACT-001 }
+mutations:
+  - {
+      file: reference.yaml,
+      op: set,
+      path: 'actionSets.rationaleMenu[0].text',
+      value: 'SYNTHETIC — hold for 48 hours before restarting',
+    }

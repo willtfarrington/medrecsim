@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a discrepancy without its urgency ordinal. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: disc-001-missing-urgency
+expect: { invariant: INV-DISC-001 }
+mutations:
+  - { file: reference.yaml, op: delete, path: 'discrepancies[0].urgency' }

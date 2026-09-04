@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: CC-BY-4.0
+# Citation records (CITATION-POLICY.md §1, ten keys each). PLACEHOLDER records: the
+# bibliographic fields are copied from the policy's §7 pointer list (which opened the sources on
+# 2026-09-02); the `claim` text is a placeholder that was NOT verified against the source. A real
+# bundle records the session that actually opened the document.
+schemaVersion: '0.1'
+bundleId: c00-exemplar-scaffold
+citations:
+  - id: cit-placeholder-tjc-npg-2026
+    claim: PLACEHOLDER — not reviewed. Reconciliation compares the medications the patient is taking with newly ordered medications.
+    source: TJC-NPG-HAP-2026
+    publisher: The Joint Commission
+    title: National Performance Goals, Effective January 2026 for the Hospital Program
+    version-or-date: Effective 2026-01-01 (chapter report generated 2025-09-26)
+    url: https://digitalassets.jointcommission.org/api/public/content/9ca80055182b4274842a5780a94f2c82
+    accessed: 2026-09-02
+    tier: A
+    notes: PLACEHOLDER record for the exemplar scaffold; bibliographic fields from CITATION-POLICY.md §7; claim not verified.
+  - id: cit-placeholder-ismp-high-alert-2024
+    claim: PLACEHOLDER — not reviewed. High-alert medications carry a heightened risk of harm when used in error.
+    source: ISMP-HIGH-ALERT-ACUTE-2024
+    publisher: Institute for Safe Medication Practices (ISMP), an affiliate of ECRI
+    title: ISMP List of High-Alert Medications in Acute Care Settings
+    version-or-date: 2024 (MS5760)
+    url: https://online.ecri.org/hubfs/ISMP/Resources/ISMP_HighAlert_AcuteCare_List.pdf
+    accessed: 2026-09-02
+    tier: A
+    notes: PLACEHOLDER record for the exemplar scaffold; bibliographic fields from CITATION-POLICY.md §7; claim not verified.

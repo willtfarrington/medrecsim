@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://medrecsim.invalid/schema/0.1/universe.schema.json",
+  "title": "medrecsim universe (content schema 0.1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Content-schema version stamp major.minor (must equal the schema package SCHEMA_VERSION)"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "description": "kebab-case token"
+    },
+    "universeVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Content version (semver)"
+    },
+    "institutions": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^inst-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Fictional-universe institution id (I-9)"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Original fictional name (trade-dress originality checklist, D-UX-001)"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hospital",
+              "clinic",
+              "community-pharmacy",
+              "opioid-treatment-program",
+              "urgent-care",
+              "specialty-office",
+              "community-mental-health",
+              "other"
+            ]
+          },
+          "descriptionText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "placeholder": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "descriptionText"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "people": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^person-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Fictional-universe person id (I-9)"
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "e.g. community pharmacist, PCP, OTP nurse"
+          },
+          "placeholder": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "role"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "universeVersion",
+    "institutions"
+  ],
+  "additionalProperties": false,
+  "description": "universe.yaml — fictional-universe registry (I-9)"
+}

@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: two claims with the same id. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: shape-001-duplicate-claim-id
+expect: { invariant: INV-SHAPE-001 }
+mutations:
+  - { file: evidence.yaml, op: set, path: 'claims[1].id', value: 'clm-ehr-alpha' }

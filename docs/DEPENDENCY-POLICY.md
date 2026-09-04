@@ -1,6 +1,8 @@
 # Dependency policy (D-SEC-002)
 
-**Status:** policy current as of 2026-09-04 (EP-8: §3 and §4 seeded from the toolchain
+**Status:** policy current as of 2026-09-04 (EP-9: `zod` and `yaml` added to §4 as dev/build
+dependencies of the private schema and content-tools packages; the §3 runtime allowlist is
+unchanged and ESLint now refuses `zod` and `yaml` imports from the app and engine. EP-8: §3 and §4 seeded from the toolchain
 bootstrap, §5 and §8 updated to pnpm/Corepack and Node 24.14.1, gitleaks decision recorded) ·
 **Owner:** repository owner · **Revisit trigger:** §9 and §11.
 
@@ -90,7 +92,9 @@ allow-list is empty (ADR-4). Dev tooling is not redistributed, so it has no THIR
 | `globals` | 17.12.0 | Browser / Node global declarations for ESLint | MIT | none run | — | EP-8 |
 | `prettier` | 3.9.6 | Formatter | MIT | none run | — | EP-8 |
 | `prettier-plugin-svelte` | 4.1.1 | Svelte support for Prettier | MIT | none run | — | EP-8 |
-| `@types/node` | 24.13.3 | Node type definitions (scripts, content-tools) | MIT | none run | — | EP-8 |
+| `@types/node` | 24.13.3 | Node type definitions (scripts, content-tools; schema tests only — the schema's evidence-layer project compiles with no Node types) | MIT | none run | — | EP-8; schema at EP-9 |
+| `zod` (schema) | 4.5.4 | Content-schema source of truth ([ADR-2](adr/ADR-2-validation-library.md)): typed schemas, inferred types, JSON Schema export. Declared as a `dependency` of the private `@medrecsim/schema` package because the package cannot function without it, but it is **not** on the §3 runtime allowlist: ESLint forbids importing it from `packages/app` and `packages/engine`, and `bundle-manifest.json` would expose it. Checklist §6: need — validation + type inference + editor schema from one definition, chosen by spike SP-5; owned-code alternative would be a hand-kept JSON Schema plus hand-kept types (drift); licence MIT; maintenance active (4.5.4 published 2026-08-29); no install scripts; zero new transitive packages; identity verified (`zod` by colinhacks); no network behaviour; no redistributed assets. | MIT | none run | — | EP-9 |
+| `yaml` (content-tools) | 2.9.0 | YAML parser for the content CLI only ([ADR-3](adr/ADR-3-build-time-content-compile.md): the runtime never parses YAML; ESLint forbids the import from `packages/app` and `packages/engine`). Chosen for its CST/line-position API (`LineCounter`, `Document.getIn`) that lets validator findings carry line numbers for GitHub annotations. Checklist §6: need — parse authored bundles at build time; owned-code alternative is no alternative (a YAML parser is not small); licence ISC; maintenance active (2.9.0 published 2026-05-11); no install scripts; zero new transitive packages; identity verified (`yaml` by eemeli); no network behaviour; no redistributed assets. | ISC | none run | — | EP-9 |
 
 **Licence notes on the transitive closure (2026-09-04):** 163 MIT, 19 Apache-2.0, 10 BSD-2-Clause,
 9 ISC, 3 BSD-3-Clause, 2 BlueOak-1.0.0, 2 MIT-0, 1 CC0-1.0, **2 MPL-2.0** (`lightningcss` and

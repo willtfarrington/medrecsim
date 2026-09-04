@@ -2,16 +2,24 @@
   "name": "@medrecsim/schema",
   "version": "0.0.0",
   "private": true,
-  "description": "medrecsim content schema: types, validators, invariants (filled at EP-9)",
+  "description": "medrecsim content schema: Zod 4 types + validators + core invariant suite (EP-9, D-DATA-003)",
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./evidence": "./src/evidence/index.ts",
+    "./vocab": "./src/vocab/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.evidence.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "4.5.4"
   },
   "devDependencies": {
-    "typescript": "6.0.3"
+    "@types/node": "24.13.3",
+    "typescript": "6.0.3",
+    "vitest": "4.1.11"
   }
 }

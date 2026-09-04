@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: reviewStatus reviewed with no record or badge. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: meta-001-reviewed-without-record
+expect: { invariant: INV-META-001 }
+mutations:
+  - { file: case.yaml, op: set, path: 'reviewStatus', value: 'reviewed' }

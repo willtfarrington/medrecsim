@@ -1,0 +1,19 @@
+{
+  "//": "Shared editor settings (EP-0 un-ignored this file; EP-9 filled it). VS Code reads settings.json, which stays private and gitignored: copy the keys you want from here. The yaml.schemas mapping binds the JSON Schemas exported from the Zod source (ADR-2; regenerate with `pnpm schema:export` inside medrecsim/) to the content files, giving autocomplete and diagnostics with the redhat.vscode-yaml extension.",
+  "yaml.schemas": {
+    "./medrecsim/packages/schema/json-schema/case.schema.json": ["medrecsim/content/cases/*/case.yaml"],
+    "./medrecsim/packages/schema/json-schema/evidence.schema.json": ["medrecsim/content/cases/*/evidence.yaml"],
+    "./medrecsim/packages/schema/json-schema/reference.schema.json": ["medrecsim/content/cases/*/reference.yaml"],
+    "./medrecsim/packages/schema/json-schema/citations.schema.json": [
+      "medrecsim/content/cases/*/citations.yaml",
+      "medrecsim/content/formulary/citations.yaml"
+    ],
+    "./medrecsim/packages/schema/json-schema/review-record.schema.json": ["medrecsim/content/cases/*/review-record.yaml"],
+    "./medrecsim/packages/schema/json-schema/formulary-manifest.schema.json": ["medrecsim/content/formulary/formulary.yaml"],
+    "./medrecsim/packages/schema/json-schema/formulary-entry.schema.json": ["medrecsim/content/formulary/entries/*.yaml"],
+    "./medrecsim/packages/schema/json-schema/universe.schema.json": ["medrecsim/content/universe/universe.yaml"]
+  },
+  "yaml.validate": true,
+  "yaml.completion": true,
+  "files.eol": "\n"
+}

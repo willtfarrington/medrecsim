@@ -36,5 +36,8 @@ depend on it. Mid-build ideas land in §3 via the parking rule — never in a ru
 |---|---|---|---|
 | P-001 | Authored end-trigger pressure variant ("you're paged to the next admission") | Discovery Q-WF-004(b) | **Adjudicated 2026-08-23 (OQ-4 ruling): deferred to v1.x** |
 | P-002 | Dismissible authored "pharmacy flag" interruption (alert-fatigue teaching) | Discovery Q-SCOR-002 | **Adjudicated 2026-08-23 (OQ-4 ruling): deferred to v1.x** — the alert-fatigue lesson is taught in debrief text at v1 |
+| P-003 | Claims-like feed and external-records-exchange evidence-source types (schema affordance noted as a comment beside the seven D-WF-001 tokens in `packages/schema/src/vocab/model.ts`; never implemented) | EP-9 schema, 2026-09-04 | parked; joins branch B-1 if it opens |
+| P-004 | Partial-field claim reveals (an optional `fields` list on reveal entries; tension T-3 chose the whole claim as the reveal atom, see ADR-7) | EP-9 schema, 2026-09-04 | parked; additive minor bump if a v1.x debrief feature needs it |
+| P-005 | Shared rationale-menu registry in the universe package (tension T-5 chose per-case menus, see ADR-7) | EP-9 schema, 2026-09-04 | parked; revisit if EP-26–32 show heavy duplication |
 
 Append new parked entries below with ID, one-line description, origin EP, and date.

@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://medrecsim.invalid/schema/0.1/formulary-entry.schema.json",
+  "title": "medrecsim formulary-entry (content schema 0.1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Content-schema version stamp major.minor (must equal the schema package SCHEMA_VERSION)"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Formulary entry id (D-DATA-004)"
+    },
+    "genericName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Real generic (INN/USAN) name; placeholders say so"
+    },
+    "class": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Pharmacologic class in the project’s own words"
+    },
+    "forms": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "form": {
+            "type": "string",
+            "enum": [
+              "tablet",
+              "capsule",
+              "oral-solution",
+              "oral-suspension",
+              "injection",
+              "pen",
+              "inhaler",
+              "patch",
+              "cream",
+              "ointment",
+              "drops",
+              "suppository",
+              "other"
+            ]
+          },
+          "strengths": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Non-empty text"
+            }
+          },
+          "concentrationNote": {
+            "description": "e.g. U-500 vs U-100 hazard note",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "form",
+          "strengths"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "combinationComponents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "formularyId": {
+            "type": "string",
+            "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Formulary entry id (D-DATA-004)"
+          },
+          "strengthText": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          }
+        },
+        "required": [
+          "formularyId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "lasaPartners": {
+      "default": [],
+      "description": "Look-alike/sound-alike partners (bidirectional; INV-REF-002 at EP-20)",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^rx-[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "description": "Formulary entry id (D-DATA-004)"
+      }
+    },
+    "tallManName": {
+      "description": "ISMP tall-man lettering, e.g. glipiZIDE",
+      "type": "string",
+      "minLength": 1
+    },
+    "highAlert": {
+      "type": "boolean"
+    },
+    "timeCritical": {
+      "type": "boolean"
+    },
+    "narrowTherapeuticIndex": {
+      "type": "boolean"
+    },
+    "monitoringNotes": {
+      "default": [],
+      "description": "Cited monitoring notes; linted by INV-ACT-001",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Non-empty text"
+          },
+          "citations": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+              "description": "Citation record id: cit- + short source slug + year"
+            },
+            "description": "Citation ids (must resolve in citations.yaml)"
+          }
+        },
+        "required": [
+          "text",
+          "citations"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "pillAppearanceText": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Nonvisual cue: shape, colour, imprint in words (D-UX-004; INV-A11Y-001)"
+    },
+    "brandNamesFictional": {
+      "default": [],
+      "description": "Original coinages only (INV-SCOPE-001 denylist)",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Non-empty text"
+      }
+    },
+    "citations": {
+      "description": "Required (warn at EP-9) when any flag is true",
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^cit-[a-z0-9]+(?:-[a-z0-9]+)*-\\d{4}$",
+        "description": "Citation record id: cit- + short source slug + year"
+      }
+    },
+    "placeholder": {
+      "description": "Scaffold entry — not reviewed, never shipped",
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "genericName",
+    "class",
+    "forms",
+    "highAlert",
+    "timeCritical",
+    "narrowTherapeuticIndex",
+    "pillAppearanceText"
+  ],
+  "additionalProperties": false,
+  "description": "Formulary entry (one file per entry)"
+}
