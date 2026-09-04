@@ -19,6 +19,10 @@
 *credentials*
 *secret*
 *token*
+# EP-10: design *tokens* (a stylesheet and its contrast test) are not credentials; un-ignore
+# exactly these two paths. Any other path containing "token" stays ignored.
+!medrecsim/packages/app/src/styles/tokens.css
+!medrecsim/packages/app/src/styles/tokens.test.ts
 id_rsa*
 id_ed25519*
 *.gpg
