@@ -20,6 +20,16 @@ updates:
       npm-dependencies:
         patterns:
           - "*"
+    ignore:
+      # TypeScript 7.x (the native port) is not yet supported by typescript-eslint or
+      # svelte-check; the toolchain pins 6.x (docs/DEPENDENCY-POLICY.md section 4). Remove this
+      # rule when both peers allow 7.x. Minor/patch updates still arrive.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # @types/node tracks the pinned Node LTS line (24.x in medrecsim/.nvmrc); its major moves
+      # only when the Node line does (docs/DEPENDENCY-POLICY.md section 8).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"

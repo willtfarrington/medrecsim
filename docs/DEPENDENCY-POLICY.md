@@ -198,6 +198,13 @@ workflow, and Actions cannot approve PRs (baseline row A9). Reviewing a Dependab
 4. Merge or close with a one-line reason. A closed update is revisited the following week; a
    security advisory is not closed without a written accepted-risk note.
 
+Where a major version is known to be unusable for a stated reason, `.github/dependabot.yml`
+carries an `ignore` rule for that major with the reason and the removal condition written
+beside it, so the weekly review is not spent re-closing the same PR. Current rules (EP-8,
+2026-09-04): `typescript` majors (7.x unsupported by typescript-eslint and svelte-check) and
+`@types/node` majors (tracks the pinned Node LTS line). Each rule is removed in the same change
+that lifts its reason.
+
 **Security advisories** (Dependabot alerts, baseline row A4) are triaged on a best-effort
 basis with no SLA (SUPPORT.md, SECURITY.md). Resolution options in order of preference: update,
 pin to a fixed version, remove the dependency, or record an accepted risk in

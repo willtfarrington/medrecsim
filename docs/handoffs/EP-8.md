@@ -1,10 +1,10 @@
 # EP-8 handoff — Toolchain bootstrap + ADRs
 
-**Status:** complete — all owner decisions ruled 2026-09-04 (see "Owner decisions"); one
-owner follow-up open (Dependabot PR #1 triage, below) · **Date:** 2026-09-04 · **Brief:**
-roadmap/EP-8-toolchain.md · **Commits:** `bee0acb` (workspace, ADRs, workflows, governance
-updates, hello-world, handoff draft) plus the done-hash follow-up commit (handoff completion,
-ruleset export, baseline rows, `ci.yml` trigger tweak, roadmap).
+**Status:** complete — all nine owner decisions ruled 2026-09-04 (see "Owner decisions"); no
+open follow-ups · **Date:** 2026-09-04 · **Brief:** roadmap/EP-8-toolchain.md · **Commits:**
+`bee0acb` (workspace, ADRs, workflows, governance updates, hello-world, handoff draft),
+`1a5aca8` (handoff completion, ruleset export, baseline rows, `ci.yml` trigger tweak, roadmap
+done-hash), plus the closing commit (Dependabot ignore rules, decision 9).
 
 ## Completed scope IDs
 
@@ -85,7 +85,8 @@ section).
 B2/B3/B4/B7; §7 trigger 5 marked done), `docs/RELEASE-CRITERIA.md` (grep path list, disclaimer
 note, item 5), `docs/rulesets/main-pr-gate.json` (live export with the new
 `required_status_checks` rule), `CHANGELOG.md` (Unreleased intro + one Added bullet),
-`.github/dependabot.yml` (npm directory `/medrecsim`), `.gitleaks.toml` (reverify note),
+`.github/dependabot.yml` (npm directory `/medrecsim`; ignore rules for `typescript` and
+`@types/node` majors, decision 9), `.gitleaks.toml` (reverify note),
 `medrecsim/README.md` (was empty), `roadmap/README.md` (Done column).
 
 Untouched by design: `DECISIONS.md`, `docs/CLAIMS.md` (row flips happen at the `v0.1.0` tag per
@@ -205,17 +206,17 @@ day → 10.9.1 · yaml-language-server 1.24.0 · Node 24.14.1 (LTS). Corepack: b
 8. **gitleaks**: stay on 8.30.1, reverify at EP-19. Options: stay (recommended); migrate now.
    **Owner ruling: stay.** Recorded in DEPENDENCY-POLICY §8 and `.gitleaks.toml`.
 
-### Open owner follow-up (not decided in-session)
-
-- **Dependabot PR #1** ("Bump the npm-dependencies group in /medrecsim with 2 updates":
-  `typescript` 6.0.3 → **7.0.2** and `@types/node` 24.13.3 → **26.4.1**). Both bumps are wrong
-  for this toolchain (TypeScript 7 is unsupported by typescript-eslint/svelte-check; Node 26
-  types do not match the pinned Node 24 LTS) and CI correctly fails the PR on both lanes.
-  Policy §9 says close with a one-line reason. Recommended follow-up, at the owner's
-  discretion: close PR #1, and add `ignore` rules to `.github/dependabot.yml` for major
-  versions of `typescript` and `@types/node` (a reversible config change an agent can make in
-  the next session if the owner rules so). The DCO and dependency-review checks passed on
-  that PR, which is a live confirmation of both jobs on a real pull request.
+9. **Dependabot PR #1** ("Bump the npm-dependencies group in /medrecsim with 2 updates":
+   `typescript` 6.0.3 → **7.0.2** and `@types/node` 24.13.3 → **26.4.1**). Both bumps are
+   wrong for this toolchain (TypeScript 7 is unsupported by typescript-eslint/svelte-check;
+   Node 26 types do not match the pinned Node 24 LTS) and CI correctly failed the PR on both
+   lanes; the DCO and dependency-review checks passed on it, a live confirmation of both jobs
+   on a real pull request. Options: close with a one-line reason (policy §9) and add
+   Dependabot `ignore` rules for the two majors (recommended); leave open. **Owner ruling
+   (2026-09-04, end of session): close and add the ignore rules.** Done: PR #1 closed with the
+   reason in its comment, branch deleted; `.github/dependabot.yml` now ignores
+   `version-update:semver-major` for `typescript` and `@types/node` (minor/patch updates still
+   arrive), with the removal condition written beside each rule.
 
 ## Decisions logged (reversible technical, D-EXEC-003)
 
@@ -277,8 +278,8 @@ day → 10.9.1 · yaml-language-server 1.24.0 · Node 24.14.1 (LTS). Corepack: b
 - **Windows lane** verified on the hosted runner (three green runs); `corepack enable` worked
   there without a custom install directory.
 - **`typescript` 6.0.3 is the last JS-based line**; when typescript-eslint and svelte-check
-  support 7.x, bump in one PR (faster typecheck). Until then, expect Dependabot to keep
-  proposing 7.x unless an ignore rule is added (owner follow-up above).
+  support 7.x, bump in one PR (faster typecheck) and remove the Dependabot ignore rule in the
+  same change (decision 9).
 - **Vitest under jsdom is slow to boot** (~30 s locally for one file) — acceptable now; EP-15
   may switch the app project to `happy-dom` if it grows.
 
