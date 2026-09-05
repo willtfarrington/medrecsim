@@ -1,6 +1,9 @@
 # Dependency policy (D-SEC-002)
 
-**Status:** policy current as of 2026-09-04 (EP-10: §3a added — two vendored OFL fonts, no
+**Status:** policy current as of 2026-09-04 (EP-11: no new package; `@medrecsim/schema` (types,
+vocab, version) and `@medrecsim/content-tools` (test fixtures only) linked into the engine as
+workspace devDependencies; ESLint refuses value imports of `zod`, `yaml`, `fast-check` and the
+content tools from engine sources. EP-10: §3a added — two vendored OFL fonts, no
 new package; `@medrecsim/schema` linked into the app as a workspace devDependency. EP-9: `zod` and `yaml` added to §4 as dev/build
 dependencies of the private schema and content-tools packages; the §3 runtime allowlist is
 unchanged and ESLint now refuses `zod` and `yaml` imports from the app and engine. EP-8: §3 and §4 seeded from the toolchain

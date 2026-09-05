@@ -1,0 +1,9 @@
+{
+  "//": "Whole package including tests. Node types are for the tests only (they compile the exemplar bundle through the content CLI); src/ is typechecked without them by tsconfig.json.",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": ["node"]
+  },
+  "include": ["src"]
+}

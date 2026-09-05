@@ -7,7 +7,10 @@ Layout per `roadmap/appendices/architecture.md` §1 and the ADRs in [`../docs/ad
 ```
 medrecsim/
 ├── packages/
-│   ├── engine/          @medrecsim/engine — pure, headless simulation engine (no DOM, no clock)
+│   ├── engine/          @medrecsim/engine — pure, headless simulation engine (no DOM, no clock):
+│   │                    src/core (state, reducer, clock, dialogue, escalation, workspace,
+│   │                    projection, persistence — evidence-only TS project), case-loader,
+│   │                    session seam (EP-11); scoring/signature/debrief at EP-12
 │   ├── schema/          @medrecsim/schema — Zod 4 content schema v0.1, types, invariant suite,
 │   │                    exported JSON Schema (EP-9)
 │   ├── content-tools/   dev-only CLI: validate · fixtures · compile · schema-export (EP-9);
@@ -45,6 +48,7 @@ medrecsim/
 | `pnpm typecheck`                      | `tsc` per package, `svelte-check` for the app                                                  |
 | `pnpm test`                           | Vitest (unit + property tests, component tests)                                                |
 | `pnpm checks`                         | Post-build checks: bundle budget, no-network, SPDX, asset hygiene, claims, action pins, layers |
+| `pnpm check:layers`                   | Layer separation: schema and engine evidence-only projects compile; the fixtures fail (TS6307) |
 | `pnpm content:ci`                     | Content stage: validate --all · negative fixtures · schema drift · compile                     |
 | `pnpm content:validate`               | Validate every bundle + formulary + universe (`--format pretty\|json\|github`)                 |
 | `pnpm content:fixtures`               | Run the negative-fixture suite (each invariant must reject by name)                            |

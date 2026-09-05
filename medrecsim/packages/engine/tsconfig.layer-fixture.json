@@ -1,0 +1,27 @@
+{
+  "//": "Compile-error fixture for the engine seam (EP-11). Same file list as tsconfig.evidence.json plus layer-fixtures/, where a view-side module imports a reference-layer type. This project MUST fail with TS6307 naming a src/reference/ file; scripts/check-layer-separation.mjs asserts that it does. Never part of `pnpm typecheck`.",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ES2023"],
+    "types": [],
+    "tsBuildInfoFile": "../../node_modules/.cache/engine-layer-fixture.tsbuildinfo",
+    "paths": {
+      "@medrecsim/schema": ["../schema/src/index.ts"],
+      "@medrecsim/schema/evidence": ["../schema/src/evidence/index.ts"],
+      "@medrecsim/schema/reference": ["../schema/src/reference/index.ts"],
+      "@medrecsim/schema/documents": ["../schema/src/documents/index.ts"],
+      "@medrecsim/schema/vocab": ["../schema/src/vocab/index.ts"],
+      "@medrecsim/schema/version": ["../schema/src/version.ts"]
+    }
+  },
+  "include": [
+    "src/core/**/*.ts",
+    "../schema/src/evidence/**/*.ts",
+    "../schema/src/common/**/*.ts",
+    "../schema/src/vocab/**/*.ts",
+    "../schema/src/version.ts",
+    "layer-fixtures/**/*.ts"
+  ],
+  "exclude": ["src/**/*.test.ts", "../schema/src/**/*.test.ts"]
+}

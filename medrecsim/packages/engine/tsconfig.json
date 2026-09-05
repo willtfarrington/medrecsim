@@ -1,8 +1,10 @@
 {
+  "//": "Engine sources only (tests are typechecked by tsconfig.test.json). No DOM lib, no platform types: the engine is headless by construction (D-ARCH-006).",
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ES2023"],
     "types": []
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/test-support/**"]
 }

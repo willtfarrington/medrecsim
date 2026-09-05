@@ -1,0 +1,26 @@
+{
+  "//": "Two-layer contract at the engine seam (D-MED-005, INV-TRUTH-001; EP-11). A *composite* project whose file list is the engine's learner-observable core (src/core/**: state, reducer, clock, dialogue, escalation, workspace, projection, persistence) plus the schema's evidence layer and its layer-neutral common/vocab/version modules. The `paths` entries resolve every @medrecsim/schema entry point to the schema *source* files (not through node_modules, which TypeScript would treat as external and skip), so any import that reaches src/reference/ or src/documents/ pulls a file outside the list and fails with TS6307. No Node or DOM types: the core is platform-free. scripts/check-layer-separation.mjs proves the mechanism bites with tsconfig.layer-fixture.json.",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ES2023"],
+    "types": [],
+    "tsBuildInfoFile": "../../node_modules/.cache/engine-evidence.tsbuildinfo",
+    "paths": {
+      "@medrecsim/schema": ["../schema/src/index.ts"],
+      "@medrecsim/schema/evidence": ["../schema/src/evidence/index.ts"],
+      "@medrecsim/schema/reference": ["../schema/src/reference/index.ts"],
+      "@medrecsim/schema/documents": ["../schema/src/documents/index.ts"],
+      "@medrecsim/schema/vocab": ["../schema/src/vocab/index.ts"],
+      "@medrecsim/schema/version": ["../schema/src/version.ts"]
+    }
+  },
+  "include": [
+    "src/core/**/*.ts",
+    "../schema/src/evidence/**/*.ts",
+    "../schema/src/common/**/*.ts",
+    "../schema/src/vocab/**/*.ts",
+    "../schema/src/version.ts"
+  ],
+  "exclude": ["src/**/*.test.ts", "../schema/src/**/*.test.ts"]
+}

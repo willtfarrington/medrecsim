@@ -20,7 +20,9 @@ Every release entry also records the outcome of the claim–evidence check
 Pre-release; under active construction; nothing here is validated. No tag exists yet. The
 repository holds the R0 foundation and governance pack and the R1 toolchain bootstrap (a
 hello-world application); the content schema (v0.1) and its validator exist; the visual
-identity is defined as tokens and fonts; no engine and no clinical content have been written.
+identity is defined as tokens and fonts; the simulation engine's core (case loading, clock,
+evidence projection, dialogue, escalation primitives, action log, persistence) exists without
+scoring or signature; no clinical content has been written.
 
 ### Added
 
@@ -82,6 +84,21 @@ identity is defined as tokens and fonts; no engine and no clinical content have 
   enforced by the validator; banner and review-badge component specs with a pure badge-text
   helper; an asset-hygiene check (EXIF, XMP, IPTC and SVG editor metadata) in CI and the
   pre-commit hook; an eighth architecture decision record.
+- Engine core (`@medrecsim/engine`): a pure, headless, event-sourced session — state is a
+  fold over an append-only log of learner actions (opening sources, examining artifacts,
+  asking authored questions, escalating and awaiting responses, the three workspace
+  artifacts) with typed rejections; a simulated clock in minutes since admission that parses
+  and formats instants without the platform clock and fires authored threshold events
+  deterministically on crossing; escalation availability windows evaluated on the case-local
+  clock (the compile step now records the case's UTC offset); an evidence projection that
+  shows only what the learner has earned and cannot name a reference-layer type (an
+  evidence-only TypeScript project with a compile-error fixture, proven in CI beside the
+  schema's); post-admission decisions structurally separated from the reconstructed
+  pre-admission history with a typed error and a property test; a persistence adapter that
+  stores the action log in a versioned envelope and discards it politely on any version or
+  content mismatch; the session seam with fail-closed signature and debrief stubs pending the
+  scoring work; the engine determinism lint rule made real; a 1000-log replay-equivalence
+  property test; a ninth architecture decision record.
 
 ### Content
 

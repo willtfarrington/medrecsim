@@ -8,7 +8,13 @@
  *   index.json           — manifest of compiled cases + package versions
  *   formulary.json       — manifest + entries (placeholders excluded unless --include-drafts)
  *   universe.json
- *   cases/<case-id>.json — { case, evidence, reference, citations, reviewRecord }
+ *   cases/<case-id>.json — { compiledFrom, caseLocalUtcOffsetMinutes, case, evidence, reference,
+ *                          citations, reviewRecord }
+ *
+ * `caseLocalUtcOffsetMinutes` is derived from the offset the author wrote on `T0` (schema
+ * AbsoluteTime always carries one). Every instant in the chunk is UTC; the engine needs the
+ * case-local offset to evaluate escalation availability windows (authored as local HH:MM and
+ * weekdays, D-CLIN-002) against the simulated clock (EP-11). One fixed offset per case.
  *
  * Draft bundles (directory name starting with `_`, or reviewStatus draft-unreviewed) are
  * excluded unless --include-drafts.
@@ -65,6 +71,14 @@ function resolveTimes(bundle: ParsedCaseBundle): ParsedCaseBundle {
   return out;
 }
 
+/** UTC offset in minutes carried by an ISO-8601 date-time (`Z` → 0, `-05:00` → -300). */
+export function utcOffsetMinutesOf(isoWithOffset: string): number {
+  const m = /(?:Z|([+-])(\d{2}):?(\d{2}))$/.exec(isoWithOffset);
+  if (!m || m[1] === undefined) return 0;
+  const sign = m[1] === '-' ? -1 : 1;
+  return sign * (Number(m[2]) * 60 + Number(m[3]));
+}
+
 function writeJson(path: string, value: unknown): void {
   writeFileSync(path, JSON.stringify(value, null, 2) + '\n', 'utf8');
 }
@@ -115,7 +129,11 @@ export function runCompile(paths: Paths, opts: CompileOptions): { output: string
     }
     const resolved = resolveTimes(bundle);
     const file = `cases/${bundle.case.id}.json`;
-    writeJson(join(outDir, file), { compiledFrom: dir, ...resolved });
+    writeJson(join(outDir, file), {
+      compiledFrom: dir,
+      caseLocalUtcOffsetMinutes: utcOffsetMinutesOf(bundle.evidence.T0),
+      ...resolved,
+    });
     index.push({
       id: bundle.case.id,
       slug: bundle.case.slug,

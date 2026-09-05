@@ -125,6 +125,38 @@ reason}` with `reason` one of `patient-description-only`, `illegible-or-partial-
   `unansweredBehavior` `{kind: voicemail-callback, callbackLatencyMinutes}` ·
   `{kind: retry-later, retryAfterMinutes}` · `{kind: closed-until-window}`.
 
+### 4a. How the engine reads these fields (EP-11)
+
+The simulation engine (`@medrecsim/engine`) folds learner actions over the compiled bundle.
+What it does with the evidence layer, so authored numbers mean what you expect:
+
+- **Clock.** Every action spends its authored cost (`accessCostMinutes`, `costMinutes`,
+  `examineCostMinutes`); nothing else moves time. A `time-gated` source cannot be opened
+  before `availableFrom`; the crossing appears on the learner's timeline. `T0` and every
+  compiled instant are UTC; the **offset you write on `T0`** (e.g. `-05:00`) is recorded at
+  compile time as the case's local offset and is what escalation windows are evaluated
+  against — write `T0` in the case's local time with its real offset.
+- **Sources and reveals.** Opening a source makes its `with-source` claims visible; an
+  `on-reveal` claim becomes visible only when a dialogue node, an artifact (`labelClaims`) or
+  an escalation response names it. A claim revealed by an escalation response is visible even
+  if its source has not been opened. The first reveal wins and is what the debrief reports as
+  "knowable when". Allergy claims have no `visibility` field at schema 0.1: one named by any
+  `revealsAllergyClaimIds` is treated as on-reveal, every other one as with-source.
+- **Dialogue.** The tree's source must be open; `entry: true` nodes are askable at once; a
+  node is askable once, and its `unlocks` become askable after its answer. Locked follow-ups
+  are not shown to the learner.
+- **Escalations.** Initiating a call costs no time. Inside the `availabilityWindow` the
+  response arrives `latencyMinutes` later as a threshold event (the learner can wait for it
+  explicitly). Outside the window `unansweredBehavior` decides: `voicemail-callback` answers
+  after `callbackLatencyMinutes`; `retry-later` reports busy and marks when a retry is
+  sensible; `closed-until-window` logs the attempt and when the channel next opens. Windows
+  use `days` (default every day) and `HH:MM` on the case-local clock; overnight windows
+  (`closes` before `opens`) are supported.
+- **No free text.** The learner's history, discrepancy log and action list name medications
+  by key (a formulary id or a sanctioned unresolved label the evidence already carries),
+  claims by visible id, and justifications by `actionSets.rationaleMenu` key — so a menu must
+  offer every justification a learner could legitimately give, not only the "right" ones.
+
 ## 5. `reference.yaml` — the author-only layer
 
 - `referenceRegimen[]`: what was intended before admission — medication, `dose`, `route`,
