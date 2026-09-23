@@ -14,15 +14,15 @@
   },
   "dependencies": {
     "@medrecsim/engine": "workspace:*",
-    "svelte": "5.57.0"
+    "svelte": "5.57.1"
   },
   "devDependencies": {
     "@medrecsim/schema": "workspace:*",
     "@sveltejs/vite-plugin-svelte": "7.3.0",
-    "jsdom": "30.0.1",
+    "jsdom": "30.1.0",
     "svelte-check": "4.7.6",
     "typescript": "6.0.3",
-    "vite": "8.2.2",
-    "vitest": "4.1.11"
+    "vite": "8.3.0",
+    "vitest": "5.0.1"
   }
 }
