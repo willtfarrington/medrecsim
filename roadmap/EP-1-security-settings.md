@@ -73,3 +73,7 @@ ruleset placeholder note for EP-8's required checks; confirmation of the push-pr
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-08-23).** Complete; commit `5ba112f`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-1.md`, which holds the
+> verification results and owner decisions.

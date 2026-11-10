@@ -71,3 +71,7 @@ name; risk R-15 status update (name/trademark collision surfacing late).
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-09-02).** Complete; commit `9ece0a1`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-3.md`, which holds the
+> verification results and owner decisions.

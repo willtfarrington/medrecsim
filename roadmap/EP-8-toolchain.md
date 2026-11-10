@@ -98,3 +98,7 @@ slots reserved for later EPs; reverified version facts.
 ## Parked → final-roadmap.md
 
 none expected; any tooling wishlist items (orchestrators, extra linters) go to the parked list.
+
+> **Completion note (2026-09-04).** Complete; commit `bee0acb`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-8.md`, which holds the
+> verification results and owner decisions.

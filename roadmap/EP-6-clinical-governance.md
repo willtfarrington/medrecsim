@@ -91,3 +91,7 @@ moved or went login-only (risk R-6), with the pointer/archive treatment applied.
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-09-02).** Complete; commit `cb6a3dc`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-6.md`, which holds the
+> verification results and owner decisions.

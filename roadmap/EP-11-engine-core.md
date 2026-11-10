@@ -82,3 +82,7 @@ status of `canSign`/`sign`/`getDebrief` for EP-12.
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-09-04).** Complete; commit `40e37d8`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-11.md`, which holds the
+> verification results and owner decisions.

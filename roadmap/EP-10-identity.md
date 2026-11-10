@@ -83,3 +83,7 @@ confirmation nothing vendor-derived entered the tree (SP-9 attestation).
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-09-04).** Complete; commit `cc5c892`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-10.md`, which holds the
+> verification results and owner decisions.

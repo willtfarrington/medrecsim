@@ -109,3 +109,7 @@ restated.
 
 Schema affordances not needed for v1 (e.g., claims-feed source types for B-1) are noted as
 comments, never implemented (D-RISK-002).
+
+> **Completion note (2026-09-04).** Complete; commit `19a8471`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-9.md`, which holds the
+> verification results and owner decisions.

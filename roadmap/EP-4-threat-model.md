@@ -90,3 +90,7 @@ runbook was NOT executed (docs-only EP); pointers for EP-5's claims rows (C2, C7
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-09-02).** Complete; commit `0773abd`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-4.md`, which holds the
+> verification results and owner decisions.

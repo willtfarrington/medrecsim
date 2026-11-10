@@ -80,3 +80,7 @@ RELEASE-CRITERIA.md.
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-09-02).** Complete; commit `f3a1e28`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-5.md`, which holds the
+> verification results and owner decisions.

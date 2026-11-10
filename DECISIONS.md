@@ -317,6 +317,19 @@ ROAD planning process.
   defined read order.
 - **D-ROAD-002** — Private planning state lives in `.local/planning/` (gitignored, first line of
   `.gitignore`); nothing private is committed; public artifacts carry only sanitized content.
+- **D-ROAD-003** (2026-11-10) — Roadmap tables follow the house style read by Roadmap Wrangler:
+  phase tables `| # | Brief | Size | Depends on | Core | Done |`, a done cell `☑` and one
+  backticked commit hash, an open cell `☐`; the next brief is the first unchecked row in table
+  order. Migrated from the five-column form on 2026-11-10 (4 tables, 39 rows, all `core`, 12
+  done, none in progress, next EP-12; no file renamed, moved or deleted; old briefs' wording
+  kept). The twelve done briefs (EP-0…EP-11) each gained a closing `> **Completion note
+  (date).**` that names the commit and points to `docs/handoffs/EP-N.md`, which stays the record
+  of verification results and owner decisions. No `**Brief notes.**` label was added: the
+  pre-written briefs remain the single place for each open EP's detail. Left as they were: the
+  re-plan checkpoints (prose in the roadmap, not rows), `roadmap/_TEMPLATE.md`, and the 27 open
+  briefs. Extends D-ROAD-001 and D-EXEC-002 ("phase tables with size/depends/done-hash") without
+  superseding them; scope, sizes and dependencies unchanged. *(owner decisions of 2026-11-10:
+  table conversion, completion notes, brief notes, and this entry's form)*
 
 ## Roadmap-integration rulings (owner decisions, 2026-08-23)
 

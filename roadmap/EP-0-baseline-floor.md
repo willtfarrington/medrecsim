@@ -76,3 +76,7 @@ that EP-1, EP-2, EP-3 are now eligible.
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-08-23).** Complete; commit `e537b11`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-0.md`, which holds the
+> verification results and owner decisions.

@@ -89,3 +89,7 @@ template rendering quirks; note that EP-5 must complete the README→CLAIMS mapp
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-09-02).** Complete; commit `80710ef`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-2.md`, which holds the
+> verification results and owner decisions.

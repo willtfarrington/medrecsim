@@ -88,3 +88,7 @@ exact enum spellings EP-9 must import; any source-access failures (risk R-6) and
 ## Parked → final-roadmap.md
 
 none
+
+> **Completion note (2026-09-02).** Complete; commit `7fa5940`. Added by the house-style
+> migration of 2026-11-10 from the handoff record `docs/handoffs/EP-7.md`, which holds the
+> verification results and owner decisions.
