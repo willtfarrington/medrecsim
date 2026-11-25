@@ -350,6 +350,15 @@ ROAD planning process.
   roadmap: D-ROAD-003's choice stands for the pre-written briefs, and a row added without one
   keeps its detail there. Extends D-ROAD-001 and D-ROAD-003. *(owner decisions of 2026-11-25:
   state, rule block, sizes, manual, EP-19a's place)*
+- **D-ROAD-005** (2026-11-25) — A dependency refresh before EP-12. The sweep's push reported 39
+  open Dependabot alerts on `main`, 37 of them in development dependencies and 2 on `zod`, which
+  Dependabot labels runtime and DEPENDENCY-POLICY.md classes as dev/build (ESLint refuses its
+  imports from the app and engine); Dependabot PRs #9 (15 npm updates) and #7
+  (actions/setup-node) had waited since October. A new R1 row, **EP-11a** (M, depends on EP-8,
+  core), placed before EP-12, reviews the two PRs per DEPENDENCY-POLICY.md §9 and resolves the
+  alerts still open by update, pin, removal or an accepted risk written in SECURITY-BASELINE.md
+  (§9's order); merges are the owner's word. A scope addition under D-RISK-002, made by the
+  owner. *(owner decision of 2026-11-25, after the sweep's push)*
 
 ## Roadmap-integration rulings (owner decisions, 2026-08-23)
 

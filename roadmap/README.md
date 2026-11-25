@@ -18,6 +18,10 @@ manual is owed: [docs/manual.md](../docs/manual.md) is a stub until **EP-19a** w
 manual after v0.1, and meanwhile each brief that changes what a user sees or does adds its
 section to [docs/manual-changes.md](../docs/manual-changes.md).
 
+*(2026-11-25, after the sweep's push, the owner's choice; D-ROAD-005.)* **EP-11a**, a
+dependency refresh (Dependabot PRs #9 and #7 and the open alerts), now comes before EP-12, so
+that the engine work starts on current tools.
+
 **Repository audit at planning time (2026-08-23):** public skeleton only — a two-line README,
 empty subdirectory READMEs, two commits, no license/CI/code. Everything below builds from zero.
 The repo is public during construction by decision (D-RISK-001); EP-0 lands the hygiene floor
@@ -75,6 +79,7 @@ manual (EP-19a, D-ROAD-004).
 | EP-9 | [Content schema v0 + validator core](EP-9-schema.md) | L | EP-8, EP-7 | core | ☑ `19a8471` |
 | EP-10 | [Visual identity & originality pack](EP-10-identity.md) | S | EP-3, EP-8 | core | ☑ `cc5c892` |
 | EP-11 | [Engine core](EP-11-engine-core.md) | M | EP-9 | core | ☑ `40e37d8` |
+| EP-11a | Dependency refresh: Dependabot PRs #9 and #7 and the open alerts (D-ROAD-005) | M | EP-8 | core | ☐ |
 | EP-12 | [Engine scoring, signature, debrief data + golden harness](EP-12-engine-scoring.md) | M | EP-11 | core | ☐ |
 | EP-13 | [Formulary wave 1](EP-13-formulary-1.md) | M | EP-9, EP-6, EP-7 | core | ☐ |
 | EP-14 | [Case C01 exemplar + review](EP-14-case-c01.md) | M | EP-12, EP-13 | core | ☐ |
@@ -87,6 +92,16 @@ manual (EP-19a, D-ROAD-004).
 
 **Brief notes.**
 
+- **EP-11a.** (Added 2026-11-25 after the sweep's push, the owner's choice; D-ROAD-005.) Bring
+  the toolchain current before EP-12: review Dependabot PRs #9 (15 npm updates) and #7
+  (actions/setup-node) as [docs/DEPENDENCY-POLICY.md](../docs/DEPENDENCY-POLICY.md) §9 asks
+  (changelogs, the lockfile diff, CI green on both operating systems with the bundle budget),
+  merging only on the owner's word; then resolve each Dependabot alert still open by update,
+  pin, removal or an accepted risk with a re-check date in SECURITY-BASELINE.md, in §9's order.
+  Check against the built bundle that `zod` stays out of the app (Dependabot labels its two
+  alerts runtime; the policy classes it dev/build). On 2026-11-25 the alerts numbered 39, 37 of
+  them in development dependencies; if the two PRs' review alone fills an M, split the row at
+  pickup.
 - **EP-19a.** (Added 2026-11-25 at the sweep, the owner's choice; D-ROAD-004.) Replace the stub
   [docs/manual.md](../docs/manual.md) with the first manual, describing v0.1 in the outline the
   stub holds: what it does; install and start; a chapter per surface v0.1 ships (by this table:
