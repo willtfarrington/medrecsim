@@ -10,6 +10,14 @@ From 2026-11-10 the phase tables follow the house style (D-ROAD-003): the header
 `| # | Brief | Size | Depends on | Core | Done |`, a done cell `☑` and its backticked commit
 hash, an open cell `☐`; the next brief is the first unchecked row in table order.
 
+*(2026-11-25, the sweep, IN-1; the owner's choices, D-ROAD-004.)* The project is **active**,
+EP-12 next. The rule block at the end of [../CLAUDE.md](../CLAUDE.md) is the current one
+(`crw formalise`, the text around it kept). A brief is S (about 30 minutes of active work) or M
+(about 45): an open L row is split at its pickup, as is any row that proves larger there. A
+manual is owed: [docs/manual.md](../docs/manual.md) is a stub until **EP-19a** writes the first
+manual after v0.1, and meanwhile each brief that changes what a user sees or does adds its
+section to [docs/manual-changes.md](../docs/manual-changes.md).
+
 **Repository audit at planning time (2026-08-23):** public skeleton only — a two-line README,
 empty subdirectory READMEs, two commits, no license/CI/code. Everything below builds from zero.
 The repo is public during construction by decision (D-RISK-001); EP-0 lands the hygiene floor
@@ -22,9 +30,10 @@ Each `EP-N-*.md` brief is **self-contained**: a session that has read `../CLAUDE
 other brief. Hand one brief to one session. Execute respecting the dependency column, verify the
 acceptance criteria, commit, then record the commit hash in the Done column here. Implementation
 EPs leave `main` runnable and CI green; content EPs are not done until the owner's signed public
-review record exists (D-EXEC-003). Sizes are S/M/L; there are **no calendar dates by design**
-(D-RISK-006). New ideas discovered mid-EP go to [final-roadmap.md](final-roadmap.md), never into
-a running EP (D-RISK-002).
+review record exists (D-EXEC-003). Sizes are S (about 30 minutes of active work) or M (about
+45); an L row, planned before 2026-11-25, is split at its pickup (D-ROAD-004). There are **no
+calendar dates by design** (D-RISK-006). New ideas discovered mid-EP go to
+[final-roadmap.md](final-roadmap.md), never into a running EP (D-RISK-002).
 
 Case reference states, scoring semantics, outward claims, licensing/naming, and anything listed
 in D-EXEC-003 are **owner-only**; briefs mark these checkpoints explicitly. The twelve
@@ -57,7 +66,8 @@ content work depends on. Ends with the repo presentable and every gate instrumen
 ## R1 — Vertical slice → v0.1
 
 Toolchain, schema, engine, minimal accessible UI, and **one complete introductory case**
-(C01 "Three Lists") playable end-to-end on GitHub Pages. Ends with tag `v0.1.0`.
+(C01 "Three Lists") playable end-to-end on GitHub Pages. Ends with tag `v0.1.0` and the first
+manual (EP-19a, D-ROAD-004).
 
 | # | Brief | Size | Depends on | Core | Done |
 |---|-------|------|-----------|------|------|
@@ -73,6 +83,22 @@ Toolchain, schema, engine, minimal accessible UI, and **one complete introductor
 | EP-17 | [Interview v1](EP-17-interview.md) | M | EP-15, EP-11 | core | ☐ |
 | EP-18 | [Workspace, signature & score views](EP-18-workspace.md) | L | EP-16, EP-17, EP-12 | core | ☐ |
 | EP-19 | [Picker, pre-brief, about + v0.1 release](EP-19-v01-release.md) | M | EP-18, EP-14 | core | ☐ |
+| EP-19a | First manual: v0.1's surfaces and the walkthrough (D-ROAD-004) | M | EP-19 | core | ☐ |
+
+**Brief notes.**
+
+- **EP-19a.** (Added 2026-11-25 at the sweep, the owner's choice; D-ROAD-004.) Replace the stub
+  [docs/manual.md](../docs/manual.md) with the first manual, describing v0.1 in the outline the
+  stub holds: what it does; install and start; a chapter per surface v0.1 ships (by this table:
+  the app shell, chart surfaces, interview, workspace with signature and score views, picker,
+  pre-brief and about); when something goes wrong; and a walkthrough of the routes no real use
+  has met, for the owner's first real use. Fold in the sections earlier briefs added to
+  [docs/manual-changes.md](../docs/manual-changes.md), then empty that file to its header with a
+  new `Since` line. `crw manual` builds the PDF to read it through; the PDF is never tracked.
+  The manual is outward copy ([docs/CLAIMS.md](../docs/CLAIMS.md)): no claim without a row.
+  Pictures beside it in `docs/` show synthetic data only, carry no metadata (D-UX-006) and are
+  screened for paths, usernames and emails; the manual quotes no clinical teaching content
+  beyond the reviewed case text the app shows (D-EXEC-003).
 
 ## R2 — Depth & breadth
 

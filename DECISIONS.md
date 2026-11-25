@@ -330,6 +330,26 @@ ROAD planning process.
   briefs. Extends D-ROAD-001 and D-EXEC-002 ("phase tables with size/depends/done-hash") without
   superseding them; scope, sizes and dependencies unchanged. *(owner decisions of 2026-11-10:
   table conversion, completion notes, brief notes, and this entry's form)*
+- **D-ROAD-004** (2026-11-25) — The sweep's outcomes (inbox IN-1), each the owner's answer in
+  that session. **State:** active, EP-12 next; the registry state is the owner's to set in
+  Roadmap Wrangler. **House style:** the rule block at the end of `CLAUDE.md` replaced by
+  `crw formalise` with the current one, which adds a Sizes and a Manual bullet; the text around
+  it, `roadmap/owner-tasks.md`, `roadmap/inbox.md` and `roadmap/_TEMPLATE.md` kept. **Sizes:**
+  a brief is S (about 30 minutes of active work) or M (about 45), as that block's Sizes bullet
+  says, and no new row is L. An open L row (EP-18, EP-24, EP-29, EP-30, EP-32) keeps its size
+  until its pickup, where its session splits it into S or M rows (lettered ids, as `EP-18a`)
+  and runs the first; an S or M row that proves larger at pickup is split the same way, never
+  run long. This amends D-RISK-006's "S/M/L sizes"; its "no calendar dates" and "reverify at
+  execution" stand. **Manual:** owed now. `docs/manual.md` (a stub holding the outline) and
+  `docs/manual-changes.md` exist from this date, and each brief that changes what a user sees or
+  does adds a section to the changes file before its close (the block's Manual bullet). A new
+  row, **EP-19a** "First manual: v0.1's surfaces and the walkthrough" (M, after EP-19, core),
+  writes the first manual and folds the changes file into it; after it the re-plan checkpoints
+  fold that file. EP-19a is a scope addition under D-RISK-002, made by the owner here. Its
+  detail is a `**Brief notes.**` bullet under the R1 table, the first such label in this
+  roadmap: D-ROAD-003's choice stands for the pre-written briefs, and a row added without one
+  keeps its detail there. Extends D-ROAD-001 and D-ROAD-003. *(owner decisions of 2026-11-25:
+  state, rule block, sizes, manual, EP-19a's place)*
 
 ## Roadmap-integration rulings (owner decisions, 2026-08-23)
 
