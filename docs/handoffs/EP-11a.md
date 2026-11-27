@@ -3,9 +3,8 @@
 **Status:** complete — six owner decisions ruled 2026-11-26 (see "Owner decisions"); the push
 is the owner's · **Date:** 2026-11-26 · **Brief:** roadmap/EP-11a-dependency-refresh.md ·
 **Commits:** on GitHub, the owner-approved squash merges `54bcd13` (PR #10) and `925fbf7`
-(PR #11); locally, `9215dda` (token-trap fix), the EP-11a commit (lockfile, policy, notices,
-changelog, records) and the done-hash commit, whose hashes the roadmap row and the brief's
-completion note carry.
+(PR #11); locally, `9215dda` (token-trap fix), `05f782b` (the EP-11a commit: lockfile,
+policy, notices, changelog, records; the roadmap row's done hash) and the done-hash commit.
 
 ## Completed scope
 

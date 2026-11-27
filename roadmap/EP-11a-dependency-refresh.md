@@ -172,8 +172,9 @@ none expected (scope is frozen; anything found goes there or to the re-plan's re
 > and a dated note. (4) Outward text (DEPENDENCY-POLICY.md, THIRD-PARTY.md, the CHANGELOG
 > "Security" line): **keep all three**. (5) The two hidden fixtures, outside this brief:
 > **fix now, in its own commit** → `9215dda`. (6) DESIGN-TOKENS.md, the same trap: **commit
-> it with the fixtures** → `9215dda`. Commits ran under the autopilot (crw D-22); the push is
-> the owner's.
+> it with the fixtures** → `9215dda`. Commits ran under the autopilot (crw D-22): `9215dda`,
+> then the EP-11a commit `05f782b` (the roadmap row's done hash), then the done-hash commit;
+> the push is the owner's.
 >
 > **Residual risk** (for the post-EP-19 re-plan; EP-11b reads the first item back at its
 > start): the EP-11a commit's hosted CI, now with 35 fixtures, and the closing of the six

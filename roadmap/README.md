@@ -83,7 +83,7 @@ manual (EP-19a, D-ROAD-004).
 | EP-9 | [Content schema v0 + validator core](EP-9-schema.md) | L | EP-8, EP-7 | core | ☑ `19a8471` |
 | EP-10 | [Visual identity & originality pack](EP-10-identity.md) | S | EP-3, EP-8 | core | ☑ `cc5c892` |
 | EP-11 | [Engine core](EP-11-engine-core.md) | M | EP-9 | core | ☑ `40e37d8` |
-| EP-11a | [Dependency refresh: Dependabot PRs #9 and #7 and the open alerts (D-ROAD-005)](EP-11a-dependency-refresh.md) | M | EP-8 | core | ☐ |
+| EP-11a | [Dependency refresh: Dependabot PRs #9 and #7 and the open alerts (D-ROAD-005)](EP-11a-dependency-refresh.md) | M | EP-8 | core | ☑ `05f782b` |
 | EP-11b | Node 26 LTS: the pin, engines and pnpm without Corepack (D-ROAD-006) | M | EP-11a | core | ☐ |
 | EP-12 | [Engine scoring, signature, debrief data + golden harness](EP-12-engine-scoring.md) | M | EP-11 | core | ☐ |
 | EP-13 | [Formulary wave 1](EP-13-formulary-1.md) | M | EP-9, EP-6, EP-7 | core | ☐ |
