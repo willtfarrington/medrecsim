@@ -1,0 +1,12 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a probability token in mechanism-of-harm text. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: act-001-probability-token
+expect: { invariant: INV-ACT-001 }
+mutations:
+  - {
+      file: reference.yaml,
+      op: set,
+      path: 'actionSets.unsafe[0].mechanismOfHarm.text',
+      value: 'SYNTHETIC — there is a 30% chance of harm',
+    }

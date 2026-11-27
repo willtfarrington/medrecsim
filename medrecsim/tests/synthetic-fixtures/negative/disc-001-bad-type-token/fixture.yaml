@@ -1,0 +1,7 @@
+# SYNTHETIC
+# SPDX-License-Identifier: MIT
+# Negative fixture: a type token that is not in TAXONOMY.md §8. Applied to a copy of content/cases/_exemplar; must be rejected by name.
+name: disc-001-bad-type-token
+expect: { invariant: INV-DISC-001 }
+mutations:
+  - { file: reference.yaml, op: set, path: 'discrepancies[0].type', value: 'wrong-drug' }

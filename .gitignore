@@ -23,6 +23,11 @@
 # exactly these two paths. Any other path containing "token" stays ignored.
 !medrecsim/packages/app/src/styles/tokens.css
 !medrecsim/packages/app/src/styles/tokens.test.ts
+# EP-11a: three more paths the rule above had hidden since EP-9/EP-10 (Windows git matches
+# case-insensitively, so it also caught "TOKENS"); un-ignore exactly these.
+!medrecsim/tests/synthetic-fixtures/negative/act-001-probability-token/
+!medrecsim/tests/synthetic-fixtures/negative/disc-001-bad-type-token/
+!docs/design/DESIGN-TOKENS.md
 id_rsa*
 id_ed25519*
 *.gpg
