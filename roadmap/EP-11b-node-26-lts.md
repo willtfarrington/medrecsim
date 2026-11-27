@@ -4,7 +4,7 @@ title: "Node 26 LTS: the pin, engines and pnpm without Corepack (D-ROAD-006)"
 size: M
 model: claude-opus-5-5
 effort: max
-status: in progress
+status: done
 ---
 
 # EP-11b — Node 26 LTS: the pin, engines and pnpm without Corepack
@@ -187,8 +187,10 @@ unknown argument, another `pnpm` earlier on PATH, plus npm's `EEXIST` on stale C
 - No current document names Corepack or Node 24 as the project's toolchain (historical records
   excepted); the leak screen is clean.
 
-**Residual risk.** `--beside-node` on the POSIX layout (npm under `../lib/node_modules`) is
-exercised only by the hosted ubuntu lane, read back on the scratch branch. The clean-machine
+**Residual risk.** `--beside-node` on the POSIX layout (npm under `../lib/node_modules`) was
+exercised by the hosted ubuntu lane only (green on the scratch branch; no macOS run). The
+owner's push of `main` runs Pages on the same tree, expected green as on the scratch branch.
+The clean-machine
 quickstart was not run on a machine without prior Node history (RELEASE-CRITERIA G9 runs it
 at a tag); on Linux or macOS with a root-owned Node, `npm install --global` needs a
 user-writable prefix, as with nvm, and npm's `EACCES` would surface. `engineStrict` now
@@ -210,7 +212,8 @@ the owner decisions, the changed files, and what the owner's push must still sho
 none.
 
 > **Completion note (2026-11-27; claude-opus-5-5/max, as launched — the VS Code panel's own
-> setting is not readable from inside the session; duration recorded with the done hash).**
+> setting is not readable from inside the session; about 40 minutes of working time, 02:50 to
+> the done-hash commit at 03:29 EST, the owner's answers and the hosted run included).**
 >
 > **What was done.** Judged at pickup to fit one M, so not split. EP-11a's residual read back
 > clean (its push green on both lanes with 35 fixtures; 0 open alerts). The survey found pnpm
@@ -224,7 +227,9 @@ none.
 > the owner's machine got it in `%APPDATA%\npm` after six dead Corepack shims were removed.
 > `@types/node` is 26.6.11 (with `undici-types` 8.9.0); the policy (status, §4, §5, §8, §9,
 > §11), SECURITY-BASELINE rows C2 and C3, ADR-4 (addendum), both READMEs and the CHANGELOG are
-> current. `pnpm verify` passes under Node 26.13.1. Full record:
+> current. `pnpm verify` passes under Node 26.13.1, and hosted CI on the scratch branch (run
+> 45965690050 at `54e632e`) is green on both lanes: Node 26.13.1 from `.nvmrc`, pnpm 11.25.0
+> hash-checked and first on PATH, 217 tests, 35 fixtures, 15,281 B gz. Full record:
 > [docs/handoffs/EP-11b.md](../docs/handoffs/EP-11b.md).
 >
 > **Owner decisions.**
@@ -234,11 +239,11 @@ none.
 > | 1 | How pnpm is provisioned without Corepack | Hash-checked download (recommended; not standalone Corepack, not a plain `npm install -g`) | `scripts/provision-pnpm.mjs`, the CI step, `pmOnFail: error` |
 > | 2 | The three `.npmrc` settings pnpm 11 ignores | Restore all three in `pnpm-workspace.yaml` (recommended) | `engineStrict`, `ignoreScripts`, `saveExact`; `.npmrc` kept for npm |
 > | 3 | The owner's PC | Replace the dead `pnpm`/`pnpx` shims (recommended) | pnpm 11.25.0 in `%APPDATA%\npm`; `yarn` shims left; devenv told |
-> | 4 | Hosted CI before the owner's push | Push the EP-11b commit to a scratch branch (recommended) | recorded with the done hash |
+> | 4 | Hosted CI before the owner's push | Push the EP-11b commit to a scratch branch (recommended) | run 45965690050 at `54e632e`: `build-test` ubuntu and windows green (25 steps each); the branch deleted |
 > | 5 | A CHANGELOG line (wording shown) | Under a new "Changed" heading (recommended) | added |
 >
-> Commits run under the autopilot (crw D-22): the EP-11b commit (the roadmap row's done hash),
-> then the done-hash commit; the push of `main` is the owner's.
+> Commits run under the autopilot (crw D-22): the EP-11b commit `54e632e` (the roadmap row's
+> done hash), then the done-hash commit; the push of `main` is the owner's.
 >
 > **Routine choices** (logged in the handoff): the exact pin 26.13.1 with a `<27` range; npm as
 > the installer of the verified tarball; `--beside-node` for CI; §5's new item 7 appended, not

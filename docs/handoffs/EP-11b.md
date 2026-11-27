@@ -2,8 +2,8 @@
 
 **Status:** complete — five owner decisions ruled 2026-11-27 (see "Owner decisions"); the push
 of `main` is the owner's · **Date:** 2026-11-27 · **Brief:** roadmap/EP-11b-node-26-lts.md ·
-**Commits:** the EP-11b commit (the roadmap row's done hash) and the done-hash commit, which
-records the hosted run below.
+**Commits:** `54e632e` (the EP-11b commit; the roadmap row's done hash) and the done-hash
+commit, which records the hosted run below.
 
 ## Completed scope
 
@@ -125,7 +125,7 @@ runtime package moved: the bundle is unchanged at 15,281 B gz and THIRD-PARTY.md
 | `node scripts/gen-third-party.mjs --check` | current ✔ |
 | Engine enforcement with the new settings | tests 3 and 5 above ✔ |
 | Provisioning refusals | P4–P8 above ✔ |
-| Hosted CI, scratch branch `scratch/ep-11b-node26` at the EP-11b commit | recorded by the done-hash commit |
+| Hosted CI, scratch branch `scratch/ep-11b-node26` at `54e632e` (run 45965690050) | `build-test` ubuntu and windows green (25 steps each): `.nvmrc` resolved as 26.13.1; "SHA-512 matches packageManager"; "installed and first on PATH"; frozen install with pnpm v11.25.0; 217 tests, 35 fixtures, 15,281 B gz, SPDX 170 and 7 action pins on both lanes. `dco` and `dependency-review` skipped by design on push; the branch deleted after ✔ |
 | Leak screen over new and modified files | 0 hits (paths, usernames, e-mail) ✔ |
 
 ## Owner decisions (presented interactively 2026-11-27; outcomes recorded)
@@ -140,8 +140,8 @@ runtime package moved: the bundle is unchanged at 15,281 B gz and THIRD-PARTY.md
    those and the `yarn` ones; leave the PC as it is. **Ruling: replace the `pnpm` shims** →
    done; the `yarn` shims left, devenv told.
 4. **Hosted CI before the owner's push.** Options: push the EP-11b commit to a scratch branch
-   (recommended); no push. **Ruling: push a scratch branch** → result recorded by the
-   done-hash commit.
+   (recommended); no push. **Ruling: push a scratch branch** → run 45965690050 green on both
+   lanes; the branch deleted.
 5. **A CHANGELOG line** (wording shown in the question). Options: under a new "Changed"
    heading (recommended); under "Security"; none. **Ruling: under a new "Changed" heading.**
 
@@ -196,10 +196,11 @@ THIRD-PARTY.md (no runtime change).
 
 ## Risks / notes for the next session
 
-- **Hosted CI** on the scratch branch is recorded by the done-hash commit; the owner's push of
-  `main` then runs Pages on the same tree (expected green on both lanes).
-- **`--beside-node` on the POSIX layout** (npm under `../lib/node_modules`) is exercised only
-  by the hosted ubuntu lane.
+- **The owner's push of `main`** runs Pages on `54e632e` and the done-hash commit (records
+  only): expected green on both lanes, as on the scratch branch, then a deploy of the unchanged
+  bundle.
+- **`--beside-node` on the POSIX layout** (npm under `../lib/node_modules`) was exercised by the
+  hosted ubuntu lane only (green); there is no macOS run.
 - **Clean-machine quickstart:** not run on a machine without prior Node history; RELEASE-CRITERIA
   G9 runs it at a tag. On Linux or macOS with a root-owned Node, `npm install --global` needs a
   user-writable prefix (as with nvm); npm's `EACCES` would surface.
