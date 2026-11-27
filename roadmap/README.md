@@ -26,6 +26,13 @@ that the engine work starts on current tools.
 LTS line with pnpm provisioned without Corepack, follows EP-11a and comes before EP-12: the
 owner's machine moved to Node 26 on 2026-11-10, and the Node 24 pin no longer runs there.
 
+*(2026-11-27, EP-12 split at pickup, the owner's choice; D-ROAD-004.)* EP-12 proved two to three
+sessions of work and became three M rows: **EP-12a**, the signature gate, hint recording and
+the owner's rulings on the scoring spec's open points (D-WF-005, D-SCOR-004); **EP-12b**, the
+five subscores; **EP-12c**, the debrief data contract and the golden harness. Their brief
+notes under the R1 table carry the original brief's items. EP-14, EP-18 and EP-24 now depend
+on EP-12c.
+
 **Repository audit at planning time (2026-08-23):** public skeleton only — a two-line README,
 empty subdirectory READMEs, two commits, no license/CI/code. Everything below builds from zero.
 The repo is public during construction by decision (D-RISK-001); EP-0 lands the hygiene floor
@@ -85,18 +92,81 @@ manual (EP-19a, D-ROAD-004).
 | EP-11 | [Engine core](EP-11-engine-core.md) | M | EP-9 | core | ☑ `40e37d8` |
 | EP-11a | [Dependency refresh: Dependabot PRs #9 and #7 and the open alerts (D-ROAD-005)](EP-11a-dependency-refresh.md) | M | EP-8 | core | ☑ `05f782b` |
 | EP-11b | [Node 26 LTS: the pin, engines and pnpm without Corepack (D-ROAD-006)](EP-11b-node-26-lts.md) | M | EP-11a | core | ☑ `54e632e` |
-| EP-12 | [Engine scoring, signature, debrief data + golden harness](EP-12-engine-scoring.md) | M | EP-11 | core | ☐ |
+| EP-12a | [Signature gate, hint recording and the scoring rulings (D-WF-005, D-SCOR-004)](EP-12a-signature-gate-hints.md) | M | EP-11 | core | ☐ |
+| EP-12b | The five subscores, per D-SCOR-004 (D-SCOR-001…004, D-PED-001) | M | EP-12a | core | ☐ |
+| EP-12c | Debrief data contract + golden harness (D-PED-002, D-QA-001, OQ-8) | M | EP-12b | core | ☐ |
 | EP-13 | [Formulary wave 1](EP-13-formulary-1.md) | M | EP-9, EP-6, EP-7 | core | ☐ |
-| EP-14 | [Case C01 exemplar + review](EP-14-case-c01.md) | M | EP-12, EP-13 | core | ☐ |
+| EP-14 | [Case C01 exemplar + review](EP-14-case-c01.md) | M | EP-12c, EP-13 | core | ☐ |
 | EP-15 | [App shell & accessibility skeleton](EP-15-app-shell.md) | M | EP-8, EP-10 | core | ☐ |
 | EP-16 | [Chart surfaces v1: chips & citing](EP-16-chart-surfaces.md) | M | EP-15, EP-9 | core | ☐ |
 | EP-17 | [Interview v1](EP-17-interview.md) | M | EP-15, EP-11 | core | ☐ |
-| EP-18 | [Workspace, signature & score views](EP-18-workspace.md) | L | EP-16, EP-17, EP-12 | core | ☐ |
+| EP-18 | [Workspace, signature & score views](EP-18-workspace.md) | L | EP-16, EP-17, EP-12c | core | ☐ |
 | EP-19 | [Picker, pre-brief, about + v0.1 release](EP-19-v01-release.md) | M | EP-18, EP-14 | core | ☐ |
 | EP-19a | First manual: v0.1's surfaces and the walkthrough (D-ROAD-004) | M | EP-19 | core | ☐ |
 
 **Brief notes.**
 
+- **EP-12b.** (Split from EP-12 at its pickup, 2026-11-27, the owner's choice; D-ROAD-004.) The
+  five subscores inside the headless engine, computed behind the seam from the folded state and
+  the reference layer, following [appendices/clinical-model.md](appendices/clinical-model.md) §4
+  as the owner's rulings **D-SCOR-004** read it (scoring semantics are owner-only, D-EXEC-003:
+  any further implementation-forced deviation pauses for an owner ruling). From the original
+  EP-12 brief, verbatim: "Five subscores as transparent per-item tallies (met/partial/not-met,
+  x-of-y + per-item rationale, ordinal display tiers — **no composite number anywhere, no
+  cross-tier arithmetic**): a. Information seeking & prioritization: yield tags
+  (critical/corroborating/low-yield), per-case sufficiency sets, coverage = critical units
+  accessed pre-signature; prioritization = U3/U4-critical evidence before low-yield in sim-time
+  order; **thoroughness never penalized**. b. Discrepancy detection: accepted-classification set
+  per discrepancy; (urgency, severity) → standard/elevated/critical display-tier lookup; full =
+  logged + accepted class pre-signature; partial = misclassified or post-reveal-hint; miss =
+  absent. c. Action safety: pattern-match vs accepted/partiallyAccepted/unsafe sets; **unsafe
+  never blocked in-sim** (D-SCOR-002), surfaced in debrief data with mechanism-of-harm; authored
+  default band for unlisted actions. d. Uncertainty & escalation: required escalations met;
+  **unnecessary escalation never penalized**; scored failures = false certainty on an
+  irreducible item, or an unresolved discrepancy with neither escalation nor rationale;
+  deferred-with-plan on a resolvable item = partial + pointer. e. Documentation quality:
+  required-field completeness + rationale-menu match." and "reveal-tier finds score 'partially
+  met — found with support'; hint use is **never score-subtracting** (D-PED-001)". Acceptance,
+  verbatim: "Property tests: adding an unnecessary escalation never lowers any subscore; using
+  hints never lowers any subscore; extra evidence access never lowers the info-seeking score.
+  Unit tests per subscore band (met/partial/not-met) … No composite score derivable from the
+  public API (test asserts absence). `main` runnable, CI green on both OSes." — with the hint and
+  extra-evidence properties scoped as D-SCOR-004 (2) and (3) say. Out: the score UI (EP-18), the
+  debrief data and the golden harness (EP-12c). **From EP-12a:** the subscores surface through
+  `getDebrief()` after signature (the seam's only post-signature accessor; EP-12c adds the event
+  log beside them). `state.hints` records (hint id, grade, minute, `seq`), `seq` being the
+  `request-hint` action's log index, which orders a reveal-source hint against the first
+  `discrepancy/set` for that medication in the same minute; the reference maps a hint id to its
+  target discrepancy. The signature gate leaves no open log entry at signature (D-WF-005). An
+  escalation unit counts as accessed when an attempt's response arrived before signature
+  (`answeredAtMinutes`). Matching a log entry to an authored discrepancy (by medication, one entry
+  per discrepancy, accepted classifications first) is the session's technical call, to log in
+  its brief. A learner cannot yet log an allergy-record discrepancy (a log entry needs a
+  medication key): no exemplar discrepancy is one; record it for the post-EP-19 re-plan.
+- **EP-12c.** (Split from EP-12 at its pickup, 2026-11-27, the owner's choice; D-ROAD-004.) The
+  debrief data contract and the golden harness ([appendices/clinical-model.md](appendices/clinical-model.md)
+  §4 "Debrief data contract"; [appendices/architecture.md](appendices/architecture.md) §6). From
+  the original EP-12 brief, verbatim: "Debrief data contract (engine-derived event log,
+  golden-locked): evidence-access events, dialogue (incl. channel), escalations
+  (initiated/latency/received), artifact edits (before/after), clock events + fired triggers,
+  hints, terminal signature + frozen artifact snapshots; knowable-when derivation — the
+  (earliest-knowable, accessed, logged) triple per discrepancy that becomes the EP-24 overlay
+  spine." and "Golden harness: ≥3 authored action scripts against the exemplar scaffold
+  (full-credit, hint-using, unsafe-path) → stable-serialized snapshots {artifacts, five
+  subscores, debrief data, log hash} in `tests/golden/`; `--update` flag wired into the PR
+  template as an owner-review item (OQ-8); demonstrate a snapshot break on a branch (change a
+  scoring rule, CI fails, revert)." Acceptance, verbatim: "Golden CI stage green; snapshot-break
+  demo recorded in the handoff." Handoff extras, verbatim: "exact snapshot format + serializer
+  notes; the PR-template golden-flag wording as landed; OQ-6/OQ-8 assumptions restated;
+  readiness note for EP-14 (what a case bundle must author for scoring to run)." The debrief
+  data carries everything EP-24's dual-view timeline needs, so EP-24 never reaches around the
+  seam (D-UX-004), and only ordinal labels and authored rationale text (D-SCOR-003). Out: the
+  score and debrief UI (EP-18, EP-24), replay (OQ-7, EP-24), real C01 scripts (EP-14).
+  **From EP-12a:** the frozen artifacts are `state.workspace` at `signedAtMinutes` (the reducer
+  refuses every action after it); hint events come from `state.hints`; the pull-request template
+  already carries a "Golden snapshots" checkbox (EP-2) for the `--update` wording; CI stage 6 is
+  a commented slot in `ci.yml`; the snapshot-break demo needs a scratch-branch push, the owner's
+  word.
 - **EP-19a.** (Added 2026-11-25 at the sweep, the owner's choice; D-ROAD-004.) Replace the stub
   [docs/manual.md](../docs/manual.md) with the first manual, describing v0.1 in the outline the
   stub holds: what it does; install and start; a chapter per surface v0.1 ships (by this table:
@@ -121,7 +191,7 @@ complete reviewed case roster (11 cases per the OQ-2 ruling) with the coverage m
 | EP-21 | [Phone channel & escalations](EP-21-phone-escalations.md) | M | EP-18 | core | ☐ |
 | EP-22 | [Artifact viewer & source voices](EP-22-artifacts.md) | M | EP-16 | core | ☐ |
 | EP-23 | [Interview modes](EP-23-interview-modes.md) | M | EP-17, EP-21 | core | ☐ |
-| EP-24 | [Evidence-timeline debrief](EP-24-debrief.md) | L | EP-18, EP-12 | core | ☐ |
+| EP-24 | [Evidence-timeline debrief](EP-24-debrief.md) | L | EP-18, EP-12c | core | ☐ |
 | EP-25 | [Hints UI](EP-25-hints.md) | S | EP-18 | core | ☐ |
 | EP-26 | [Cases C02 + C06](EP-26-cases-c02-c06.md) | M | EP-14, EP-21 | core | ☐ |
 | EP-27 | [Cases C03 + C05](EP-27-cases-c03-c05.md) | M | EP-14, EP-21 | core | ☐ |
@@ -142,9 +212,24 @@ complete reviewed case roster (11 cases per the OQ-2 ruling) with the coverage m
 | EP-37 | [Usability evaluation & remediation](EP-37-usability.md) | S | EP-36 | core | ☐ |
 | EP-38 | [v1.0 release audit & sign-off](EP-38-v1-release.md) | M | everything | core | ☐ |
 
+**Brief notes.**
+
+- **EP-38.** **From IN-2 (2026-11-27, from the owner via prime; parked here at EP-12a, the
+  owner's choice):** once v1.0 is released, make two screenshots for the owner's site on
+  hupsim's precedent: landscape PNG, 2698x1429 px or larger at that ratio (1.888:1, so prime's
+  1280x678 thumbnails pair), two distinct views a reader would want, each with a few-word
+  caption and a one-sentence alt text. Show the real app where nothing on screen has a
+  provenance, licence or privacy issue, otherwise a mock or smoke build on synthetic data —
+  never patient, credentialed or personal records or a private project's name; medrecsim's own
+  rules add synthetic content only, a screen for paths, usernames and e-mail addresses, and no
+  image metadata (D-UX-006). Keep the files on this machine only, untracked in a folder the
+  session names, never pushed; hand on to prime with their paths, captions and alt text (the
+  owner decides there whether they go on the site). The real-or-mock call is put to the owner
+  in that session.
+
 ## Critical path & parallelism
 
-Critical path: EP-0 → EP-1 → EP-8 → EP-9 (fed by EP-6 → EP-7) → EP-11 → EP-12 → EP-18 → EP-19
+Critical path: EP-0 → EP-1 → EP-8 → EP-9 (fed by EP-6 → EP-7) → EP-11 → EP-12a–c → EP-18 → EP-19
 (which also requires EP-13 → EP-14, the reviewed exemplar case), then
 EP-21/23/24 and the case wave → EP-35 → EP-36 → EP-38. Genuinely parallel lanes after EP-14:
 UI EPs (21–25), case EPs (26–32, mutually independent), and formulary/tooling (33–34). The

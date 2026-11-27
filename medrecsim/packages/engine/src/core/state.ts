@@ -6,13 +6,25 @@
  *
  * The state holds learner-side facts only: which sources were opened, which questions were
  * asked, which claims became visible and when, escalation attempts, the fired clock events,
- * and the three workspace artifacts. It never holds the case content itself and never holds
- * anything from the reference layer.
+ * the three workspace artifacts, and the hint grades asked for. It never holds the case content
+ * itself; from the reference layer it holds only the opaque keys a learner action names
+ * (rationale-menu keys, hint ids), never authored text or answers.
  */
-import type { AdmissionActionEntry, DiscrepancyEntry, HistoryEntry } from './actions.ts';
-import type { EvidenceIndex } from './evidence-index.ts';
+import {
+  medKeyOf,
+  type AdmissionActionEntry,
+  type DiscrepancyEntry,
+  type HintTier,
+  type HistoryEntry,
+  type MedKey,
+} from './actions.ts';
+import type { EvidenceIndex, MedicationRef } from './evidence-index.ts';
 
-export const ENGINE_STATE_VERSION = 1;
+/**
+ * Bumped whenever the action vocabulary or the state shape changes (ADR-9): a stored session of
+ * another version is discarded politely (I-4). 2 = EP-12a (`request-hint`, `hints`, the gate).
+ */
+export const ENGINE_STATE_VERSION = 2;
 
 export interface SourceRecord {
   readonly sourceId: string;
@@ -115,6 +127,19 @@ export interface FiredEvent {
   readonly firedAtMinutes: number;
 }
 
+/**
+ * One hint grade the learner asked for (D-PED-001): which authored hint (its id names the target
+ * discrepancy in the reference layer), which grade, the simulated minute, and the log sequence —
+ * the 0-based index of the `request-hint` action in the log, which orders hints against finds
+ * that happen in the same simulated minute. Recorded only; never subtracted from any score.
+ */
+export interface HintRecord {
+  readonly hintId: string;
+  readonly tier: HintTier;
+  readonly atMinutes: number;
+  readonly seq: number;
+}
+
 export interface Workspace {
   readonly history: readonly HistoryEntry[];
   readonly discrepancyLog: readonly DiscrepancyEntry[];
@@ -137,6 +162,7 @@ export interface SessionState {
   readonly timeline: readonly FiredEvent[];
   readonly nextSeq: number;
   readonly workspace: Workspace;
+  readonly hints: readonly HintRecord[];
   readonly signedAtMinutes: number | null;
   /** Number of actions folded so far (equals the log length). */
   readonly appliedActions: number;
@@ -167,6 +193,7 @@ export function initialState(index: EvidenceIndex): SessionState {
     timeline: [],
     nextSeq: seq,
     workspace: { history: [], discrepancyLog: [], actionList: [] },
+    hints: [],
     signedAtMinutes: null,
     appliedActions: 0,
   };
@@ -182,6 +209,23 @@ export function isClaimVisible(state: SessionState, claimId: string): boolean {
 
 export function isAllergyClaimVisible(state: SessionState, allergyClaimId: string): boolean {
   return state.allergyReveals.some((r) => r.claimId === allergyClaimId);
+}
+
+/**
+ * Medications the learner has seen: those named by at least one revealed claim, in the evidence
+ * layer's first-appearance order. The universe of D-WF-004's "every medication carries a status"
+ * and of the workspace view's medication list.
+ */
+export function visibleMedications(index: EvidenceIndex, state: SessionState): MedicationRef[] {
+  const visible = new Set<MedKey>();
+  for (const r of state.reveals) {
+    const claim = index.claims.get(r.claimId);
+    const key = claim === undefined ? null : medKeyOf(claim);
+    if (key !== null) visible.add(key);
+  }
+  const out: MedicationRef[] = [];
+  for (const [key, ref] of index.medications) if (visible.has(key)) out.push(ref);
+  return out;
 }
 
 export function nodeKey(treeId: string, nodeId: string): string {

@@ -87,7 +87,7 @@ jobs:
       - name: Content compile (YAML → JSON chunks, ADR-3)
         run: pnpm run content:compile
 
-      # ---- stage 6 (slot, EP-12): golden harness ----
+      # ---- stage 6 (slot, EP-12c): golden harness ----
       # ---- stage 7 (slot, EP-15): component tests (currently folded into stage 4) ----
 
       # ---- stage 8: build + bundle budget (≤ 300 KB gz initial JS, D-ARCH-007) + invariants ----

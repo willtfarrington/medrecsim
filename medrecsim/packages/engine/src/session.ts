@@ -7,31 +7,25 @@
  *
  * Two-layer contract at the seam (D-MED-005): the session holds the whole compiled case,
  * including the reference layer, but `getView()` is computed by a module that cannot name a
- * reference type. `canSign`, `sign` and `getDebrief` are the EP-12 hooks; at EP-11 they are
- * fail-closed stubs with the final signatures.
+ * reference type. `canSign` and `sign` apply the D-WF-004 gate (EP-12a, `core/signature.ts`);
+ * `getDebrief` stays a fail-closed stub until the subscores (EP-12b) and the debrief data
+ * (EP-12c) land.
  */
 import { SCHEMA_VERSION } from '@medrecsim/schema/version';
 import type { LearnerAction } from './core/actions.ts';
 import type { ReduceContext } from './core/context.ts';
-import { fail, type EngineError, type Result } from './core/errors.ts';
+import { fail, type Result } from './core/errors.ts';
 import { buildEvidenceIndex } from './core/evidence-index.ts';
 import { checkEnvelope, type EnvelopeMismatch, type SessionEnvelope } from './core/persistence.ts';
 import { reduce, replay } from './core/reduce.ts';
+import { ALREADY_SIGNED, checkSignature, type SignatureCheck } from './core/signature.ts';
 import { ENGINE_STATE_VERSION, initialState, type SessionState } from './core/state.ts';
 import { projectView, type LearnerMenus, type SessionView } from './core/view.ts';
 import type { CompiledCase } from './case-loader.ts';
 
-export interface SignatureBlock {
-  readonly code: string;
-  readonly message: string;
-}
+export type { SignatureBlock, SignatureBlockCode, SignatureCheck } from './core/signature.ts';
 
-export interface SignatureCheck {
-  readonly ready: boolean;
-  readonly blocking: readonly SignatureBlock[];
-}
-
-/** EP-12 replaces this with debrief data; until then the seam says why none is available. */
+/** EP-12b/EP-12c replace this with subscores and debrief data; until then it says why not. */
 export type DebriefResult = {
   readonly available: false;
   readonly reason: 'not-signed' | 'not-implemented';
@@ -60,16 +54,15 @@ export interface CreateSessionOptions {
   readonly log?: readonly LearnerAction[] | undefined;
 }
 
-const SIGNATURE_PENDING: SignatureBlock = {
-  code: 'signature-validation-not-implemented',
-  message: 'Signature validation (D-WF-004) lands at EP-12; the case cannot be signed yet.',
-};
-
 export function createSession(options: CreateSessionOptions): Session {
   const compiled = options.case;
   const index = buildEvidenceIndex(compiled.evidence, compiled.caseLocalUtcOffsetMinutes);
   const menu = compiled.reference.actionSets.rationaleMenu;
-  const ctx: ReduceContext = { index, rationaleKeys: new Set(menu.map((m) => m.key)) };
+  const ctx: ReduceContext = {
+    index,
+    rationaleKeys: new Set(menu.map((m) => m.key)),
+    hintIds: new Set(compiled.reference.hints.map((h) => h.id)),
+  };
   const menus: LearnerMenus = { rationaleMenu: menu.map((m) => ({ key: m.key, text: m.text })) };
 
   const log: LearnerAction[] = [];
@@ -91,11 +84,7 @@ export function createSession(options: CreateSessionOptions): Session {
     for (const l of listeners) l();
   };
 
-  const canSign = (): SignatureCheck => {
-    if (state.signedAtMinutes !== null)
-      return { ready: false, blocking: [{ code: 'already-signed', message: 'already signed' }] };
-    return { ready: false, blocking: [SIGNATURE_PENDING] };
-  };
+  const canSign = (): SignatureCheck => checkSignature(index, state);
 
   return {
     caseId: index.caseId,
@@ -117,15 +106,11 @@ export function createSession(options: CreateSessionOptions): Session {
     },
     canSign,
     sign() {
-      const check = canSign();
-      if (!check.ready) {
-        const first = check.blocking[0];
-        const code: EngineError['code'] =
-          first?.code === 'already-signed' ? 'session-signed' : 'not-implemented';
-        return fail(code, first?.message ?? 'cannot sign', {
-          blocking: check.blocking.map((b) => b.code).join(','),
+      if (state.signedAtMinutes !== null)
+        return fail('session-signed', ALREADY_SIGNED.message, {
+          signedAtMinutes: state.signedAtMinutes,
         });
-      }
+      // The reducer applies the same gate (checkSignature) to every sign, replays included.
       const r = reduce(ctx, state, { type: 'sign' }, { allowSign: true });
       if (!r.ok) return r;
       state = r.value;
@@ -139,7 +124,7 @@ export function createSession(options: CreateSessionOptions): Session {
       return {
         available: false,
         reason: 'not-implemented',
-        message: 'debrief data generation lands at EP-12',
+        message: 'the subscores land at EP-12b and the debrief data at EP-12c',
       };
     },
     serialize: () => ({

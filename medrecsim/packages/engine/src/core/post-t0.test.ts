@@ -97,6 +97,7 @@ describe('property: admission actions are invisible to the reconstruction', () =
     const vocab = vocabularyOf(
       index,
       compiled.reference.actionSets.rationaleMenu.map((m) => m.key),
+      compiled.reference.hints.map((h) => h.id),
     );
     let sawAdmission = 0;
     fc.assert(

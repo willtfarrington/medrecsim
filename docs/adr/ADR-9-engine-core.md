@@ -113,3 +113,29 @@ are recorded here.
 - The engine package links `@medrecsim/schema` (types, vocab, version) and
   `@medrecsim/content-tools` (test fixtures only) as workspace devDependencies; the production
   bundle still contains exactly one third-party package (`svelte`).
+
+## Addendum (2026-11-27, EP-12a): the signature gate, a hint action, `engineStateVersion` 2
+
+EP-12 was split at its pickup (D-ROAD-004); its first part changes the vocabulary and the state,
+which the Consequences above did not foresee ("without changing the log or the state shape"):
+hint recording needs a learner action. The decision text above stands; what changed:
+
+- **The gate (D-WF-004, the owner's reading D-WF-005)** lives in `core/signature.ts`, an
+  evidence-only module, and the reducer applies it to every `sign`, through the seam and in a
+  replay: a stored log signed before its workspace was complete no longer replays and is
+  discarded (decision 8). `canSign` returns the structured reasons
+  (`medication-without-status`, `discrepancy-unresolved`, `escalation-not-initiated`,
+  `already-signed`); `sign` refuses with the error code `signature-blocked`. The
+  `not-implemented` error code is gone; `getDebrief` keeps its own `not-implemented` reason
+  until EP-12b and EP-12c.
+- **Fourteen actions:** `request-hint {hintId, tier}` (D-PED-001) — graduated grades
+  nudge → directed → reveal-source, each once, no simulated time; recorded in `state.hints` as
+  (hint id, grade, minute, log sequence). Three error codes: `unknown-hint`,
+  `hint-tier-out-of-order`, `hint-already-shown`.
+- **A second opaque reference key in the log.** A hint is named by its authored id (`hint-…`),
+  as a justification is by its rationale key (`rat-…`, decision 6): the reducer receives the
+  case's hint ids as plain strings (`ReduceContext.hintIds`) and never a hint's text. The view
+  projects nothing about hints; how hint texts cross the seam for the learner is EP-25's to
+  decide (the rationale-menu crossing was the owner's ruling at EP-11).
+- **`ENGINE_STATE_VERSION` is 2**, per the Consequences rule above; stored version-1 sessions
+  are discarded politely (I-4). None exist outside tests: no released app consumes the seam yet.

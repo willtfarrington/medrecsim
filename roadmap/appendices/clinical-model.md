@@ -217,6 +217,12 @@ number**; all weights are ordinal-tier lookups, never arithmetic on numbers.
 5. **Documentation quality.** Computation: completeness (required fields present on all three
    artifacts) + rationale-menu match against authored rationales (D-MED-004; no free text).
 
+> **Addendum (2026-11-27, EP-12a).** The owner ruled on what this section leaves open: the
+> (urgency, severity) → display-tier table, the items of each subscore, the reveal-source hint's
+> partial credit against D-PED-001's "never score-subtracting", and the share of §4.4's failures
+> that the signature gate refuses before scoring. The rules are **D-SCOR-004** and **D-WF-005**
+> in [../../DECISIONS.md](../../DECISIONS.md); EP-12b implements them. The text above stands.
+
 ### Hint rendering (D-PED-001; EP-25)
 
 The engine records every hint event as (tier: nudge/directed/reveal-source, target, sim-time,

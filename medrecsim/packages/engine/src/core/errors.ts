@@ -9,7 +9,7 @@ export const ENGINE_ERROR_CODES = [
   // Session lifecycle
   'session-signed',
   'sign-via-seam',
-  'not-implemented',
+  'signature-blocked',
   'unknown-action',
   'malformed-action',
   // Sources and artifacts
@@ -27,6 +27,10 @@ export const ENGINE_ERROR_CODES = [
   'unknown-escalation-channel',
   'escalation-already-pending',
   'no-pending-escalation',
+  // Hints (D-PED-001)
+  'unknown-hint',
+  'hint-tier-out-of-order',
+  'hint-already-shown',
   // Workspace
   'unknown-medication',
   'claim-not-visible',

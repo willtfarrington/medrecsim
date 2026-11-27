@@ -70,6 +70,16 @@ ROAD planning process.
 - **D-WF-004** — Cases end by explicit learner signature. At signature every medication carries a
   status — including first-class "unable to verify" and "deferred, with follow-up plan" — and
   unresolved discrepancies need an escalation or documented rationale. No forced time-out.
+- **D-WF-005** (2026-11-27) — The signature gate's reasons (D-WF-004 made mechanical at EP-12a).
+  Signature is refused, with one structured reason each, while a medication the learner has
+  seen has no admission-action line (`unable-to-verify` and `defer-with-plan` count as
+  statuses), while a discrepancy-log entry is still open, and while an entry marked escalated
+  names a channel on which the learner initiated no escalation; any attempt counts — answered,
+  voicemail, busy or closed — since channel availability is authored world behaviour that EP-21
+  refines. These are the gate's only checks. The engine applies the gate to every signature,
+  replays included, so a stored log signed early is discarded. *Alternative put to the owner:*
+  trust an entry's "escalated" marking without checking for an attempt. Extends D-WF-004.
+  *(owner decision of 2026-11-27, EP-12a)*
 
 ## Consent & sensitive context
 
@@ -145,6 +155,52 @@ ROAD planning process.
 - **D-SCOR-003** — Harm-language rule: plausible-consequence phrasing with ordinal severity;
   inevitable-harm claims only where authored as such; no fabricated statistics; any numbers come
   from cited teaching notes.
+- **D-SCOR-004** (2026-11-27) — How scoring reads the clinical-model §4 spec where it leaves the
+  computation open (ruled at EP-12a's pickup; EP-12b implements). Every subscore stays a
+  per-item tally — met / partially met / not met, shown as x-of-y with each item's rationale —
+  with no composite number and no cross-tier arithmetic (D-SCOR-001); an item authored
+  `discussion-item-not-scored` is listed and not counted (D-RISK-004). **(1) Detection tier
+  (§4.2):** the higher of the two axes — `critical` if urgency U4 or severity S3–S4, `elevated`
+  if U3 or S2, otherwise `standard`; a tier labels an item. **(2) Reveal-source hints (§4.2,
+  D-PED-001):** a discrepancy first logged after a reveal-source hint for it is "partially met —
+  found with support"; every other hint use changes no item, which a property test proves; a
+  hint costs no simulated time. **(3) Information seeking (§4.1):** three tallies, never
+  summed — coverage, one item per critical-tagged evidence unit, met when accessed before
+  signature; sufficiency, one item per scored discrepancy, met when every unit of one of its
+  detectability paths was accessed, partially met when a path was begun but none completed, not
+  met otherwise; prioritization, one item per U3/U4 discrepancy, met when its critical units
+  were accessed before any low-yield unit, partially met when after, not met when never.
+  "Accessed" means a source opened, a claim revealed, a question asked, an artifact examined,
+  an escalation answered. The "extra evidence access never lowers the score" property test
+  appends the extra access before signature: a low-yield access placed before U3/U4 critical
+  evidence is the prioritization miss §4.1 defines. **(4) Action safety (§4.3):** one item per
+  admission-action line at signature, matched on (medication, action) — accepted = met,
+  partially accepted = partially met with its shortfall text, unsafe = not met with its
+  mechanism-of-harm card, unmatched = the case's default band; the rationale is scored under
+  documentation; a (medication, action) in two bands takes the more cautious band (for EP-20's
+  validator to forbid); a medication without a line was never seen and counts under detection
+  and information seeking. **(5) Uncertainty & escalation (§4.4):** required escalations, one
+  item per expected escalation marked required, met when initiated before signature and by its
+  `byTime` when authored, partially met when later, not met when never, any attempt counting;
+  optional and unlisted escalations are never items; false certainty, one item per medication
+  whose actual use is authored irreducibly uncertain, not met when the working history marks it
+  `verified`; resolvable discrepancies the learner logged, met, or partially met with a pointer
+  to the missed detectability path when the medication's admission action is `defer-with-plan`.
+  A discrepancy never logged counts under detection only, and §4.4's "unresolved at signature
+  without an escalation or a rationale" is refused by the signature gate (D-WF-005) before any
+  scoring. **(6) Documentation quality (§4.5):** completeness, one item per visible medication
+  (met: a working-history line citing at least one claim; partially met: a line citing none;
+  not met: no line) and one per discrepancy-log entry (met: classified and citing a claim;
+  partially met: one of the two missing; not met: both); rationale match, one item per action
+  line matched to an accepted or partially accepted entry carrying a rationale key (met when the
+  learner chose that key) and one per logged discrepancy resolved with a rationale (met when the
+  key is one the accepted entries naming that discrepancy carry). *Alternatives put to the
+  owner:* a stricter tier table (critical only for U4 or S4) or a per-case authored one; a find
+  after a reveal hint kept "met" with a support note; information seeking per discrepancy only,
+  or per critical unit only; action-safety items per authored target; unlogged discrepancies
+  counted again under uncertainty; "continue" on an irreducible item as false certainty;
+  rationale matched on action lines only. Extends D-SCOR-001/002/003 and D-PED-001 without
+  superseding them. *(owner decisions of 2026-11-27, EP-12a, each the recommended option)*
 
 ## UX & accessibility
 

@@ -28,6 +28,7 @@ import type { EvidenceIndex, MedicationRef } from './evidence-index.ts';
 import { isNodeAsked, isNodeAvailable } from './dialogue.ts';
 import {
   isSourceOpened,
+  visibleMedications,
   type EscalationRecord,
   type RevealVia,
   type ScheduledEventKind,
@@ -305,14 +306,7 @@ export function projectView(
     attempt: event.kind === 'source-available' ? null : event.attempt,
   }));
 
-  const visibleMedKeys = new Set<string>();
-  for (const c of claims) {
-    const key = c.formularyId !== undefined ? `rx:${c.formularyId}` : c.unresolvedLabel?.text;
-    if (c.formularyId !== undefined) visibleMedKeys.add(`rx:${c.formularyId}`);
-    else if (key !== undefined) visibleMedKeys.add(`label:${key}`);
-  }
-  const medications: MedicationRef[] = [];
-  for (const [key, ref] of index.medications) if (visibleMedKeys.has(key)) medications.push(ref);
+  const medications: MedicationRef[] = visibleMedications(index, state);
 
   return {
     caseId: index.caseId,

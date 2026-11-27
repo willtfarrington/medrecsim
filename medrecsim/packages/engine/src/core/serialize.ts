@@ -2,7 +2,7 @@
 /**
  * Stable JSON serialization: object keys sorted, arrays in order, `undefined` members
  * dropped (as JSON does). Two structurally equal states serialize to the same string on
- * every platform — the basis of the determinism property test and of EP-12's action-log hash.
+ * every platform — the basis of the determinism property test and of EP-12c's action-log hash.
  */
 export function stableStringify(value: unknown): string {
   if (value === null) return 'null';

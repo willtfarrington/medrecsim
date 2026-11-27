@@ -6,8 +6,9 @@
  * throws a typed `CaseLoadError` on anything it cannot accept (D-DATA-002: the app supports
  * exactly one schema major).
  *
- * This is the one engine module that holds the reference layer (for EP-12's scoring,
- * signature and debrief). The session keeps it behind the seam; the projection never sees it.
+ * This is the one engine module that holds the reference layer (for the scoring of EP-12b and
+ * the debrief of EP-12c; the EP-12a signature gate needs only the evidence side). The session
+ * keeps it behind the seam; the projection never sees it.
  */
 import type {
   CaseDocument,

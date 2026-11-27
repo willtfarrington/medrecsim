@@ -383,7 +383,7 @@ describe('lifecycle guards', () => {
   it('refuses a direct sign, accepts it through replay, and freezes afterwards', () => {
     const compiled = exemplarCase();
     const index = buildEvidenceIndex(compiled.evidence, compiled.caseLocalUtcOffsetMinutes);
-    const ctx = { index, rationaleKeys: new Set<string>() };
+    const ctx = { index, rationaleKeys: new Set<string>(), hintIds: new Set<string>() };
     const s0 = initialState(index);
     expect(codeOf(reduce(ctx, s0, { type: 'sign' }))).toBe('sign-via-seam');
     const signed = must(reduce(ctx, s0, { type: 'sign' }, { allowSign: true }));

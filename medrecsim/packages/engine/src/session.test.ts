@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
-/** The API seam as landed (architecture §2), including the fail-closed EP-12 stubs. */
+/**
+ * The API seam (architecture §2): the D-WF-004 gate behind canSign / sign (EP-12a; the gate's
+ * own cases are in core/signature.test.ts) and the getDebrief stub that waits for EP-12b/12c.
+ */
 import { describe, expect, it } from 'vitest';
 import { createSession } from './session.ts';
 import { exemplarCase } from './test-support/exemplar.ts';
@@ -24,27 +27,25 @@ describe('createSession seam', () => {
     expect(s.caseId).toBe('c00-exemplar-scaffold');
   });
 
-  it('canSign / sign / getDebrief are fail-closed stubs until EP-12', () => {
+  it('signs through the seam once the gate passes; getDebrief waits for EP-12b/12c', () => {
     const s = newSession();
-    expect(s.canSign()).toEqual({
-      ready: false,
-      blocking: [
-        {
-          code: 'signature-validation-not-implemented',
-          message: 'Signature validation (D-WF-004) lands at EP-12; the case cannot be signed yet.',
-        },
-      ],
-    });
-    const r = s.sign();
-    expect(codeOf(r)).toBe('not-implemented');
-    expect(s.getState().signedAtMinutes).toBeNull();
-    expect(s.getLog()).toEqual([]);
     expect(s.getDebrief()).toEqual({
       available: false,
       reason: 'not-signed',
       message: 'the case is not signed',
     });
     expect(codeOf(s.dispatch({ type: 'sign' }))).toBe('sign-via-seam');
+    // Nothing seen and nothing logged: D-WF-004 has nothing to refuse (no forced time-out,
+    // no minimum work — the subscores and the debrief show what was left unexamined).
+    expect(s.canSign()).toEqual({ ready: true, blocking: [] });
+    expect(codeOf(s.sign())).toBe('ok');
+    expect(s.getState().signedAtMinutes).toBe(0);
+    expect(s.getLog()).toEqual([{ type: 'sign' }]);
+    expect(s.getDebrief()).toEqual({
+      available: false,
+      reason: 'not-implemented',
+      message: 'the subscores land at EP-12b and the debrief data at EP-12c',
+    });
   });
 
   it('a signed log (replayed) freezes the session and reports the debrief as pending', () => {

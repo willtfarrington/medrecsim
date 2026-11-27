@@ -12,6 +12,8 @@ import type { HandlerContext, ReduceContext } from './context.ts';
 import { ask } from './dialogue.ts';
 import { fail, ok, type EngineError, type Result } from './errors.ts';
 import { applyEscalationResponse, awaitEscalation, escalate } from './escalation.ts';
+import { requestHint } from './hints.ts';
+import { checkSignature } from './signature.ts';
 import { examineArtifact, openSource } from './sources.ts';
 import type { SessionState } from './state.ts';
 import {
@@ -26,8 +28,9 @@ import {
 
 export interface ReduceOptions {
   /**
-   * `sign` is applied only through the session seam (after `canSign`) and during replay of a
-   * stored log; a direct `dispatch({type:'sign'})` is refused with `sign-via-seam`.
+   * `sign` is applied only through the session seam (`session.sign()`) and during replay of a
+   * stored log; a direct `dispatch({type:'sign'})` is refused with `sign-via-seam`. Either way
+   * the D-WF-004 gate (`checkSignature`) must pass, or the result is `signature-blocked`.
    */
   readonly allowSign?: boolean | undefined;
 }
@@ -96,12 +99,28 @@ export function reduce(
     case 'action-list/remove':
       r = removeAdmissionAction(state, action.medKey);
       break;
-    case 'sign':
-      r =
-        options.allowSign === true
-          ? ok({ ...state, signedAtMinutes: state.clock.minutesSinceT0 })
-          : fail('sign-via-seam', 'signature goes through session.sign() (D-WF-004)', {});
+    case 'request-hint':
+      r = requestHint(h, state, action.hintId, action.tier);
       break;
+    case 'sign': {
+      if (options.allowSign !== true) {
+        r = fail('sign-via-seam', 'signature goes through session.sign() (D-WF-004)', {});
+        break;
+      }
+      const check = checkSignature(ctx.index, state);
+      const codes = check.blocking.map((b) => b.code);
+      r = check.ready
+        ? ok({ ...state, signedAtMinutes: state.clock.minutesSinceT0 })
+        : fail(
+            'signature-blocked',
+            `the case cannot be signed yet (D-WF-004): ${codes.join(', ')}`,
+            {
+              blocking: codes.join(','),
+              count: codes.length,
+            },
+          );
+      break;
+    }
     default: {
       const t = (action as { type?: unknown }).type;
       r = fail('unknown-action', `unknown action type ${String(t)}`, { type: String(t) });

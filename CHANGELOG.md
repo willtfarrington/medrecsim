@@ -21,8 +21,9 @@ Pre-release; under active construction; nothing here is validated. No tag exists
 repository holds the R0 foundation and governance pack and the R1 toolchain bootstrap (a
 hello-world application); the content schema (v0.1) and its validator exist; the visual
 identity is defined as tokens and fonts; the simulation engine's core (case loading, clock,
-evidence projection, dialogue, escalation primitives, action log, persistence) exists without
-scoring or signature; no clinical content has been written.
+evidence projection, dialogue, escalation primitives, action log, persistence) exists, with its
+signature gate and hint recording but without scoring or debrief data; no clinical content has
+been written.
 
 ### Added
 
@@ -99,6 +100,14 @@ scoring or signature; no clinical content has been written.
   content mismatch; the session seam with fail-closed signature and debrief stubs pending the
   scoring work; the engine determinism lint rule made real; a 1000-log replay-equivalence
   property test; a ninth architecture decision record.
+- Engine signature gate and hint recording: a case can be signed only when every medication the
+  learner has seen carries an admission status (unable to verify and defer with plan count), no
+  discrepancy-log entry is left open, and every entry marked escalated names a channel the
+  learner actually tried; each blocking reason is returned on its own, and a stored session
+  signed too early is discarded. Hints are asked for one grade at a time (nudge, directed, then
+  where to look), cost no simulated time, and are recorded for the debrief, never subtracted
+  from a score. How the five subscores will count is recorded as decisions D-SCOR-004 and
+  D-WF-005.
 
 ### Changed
 

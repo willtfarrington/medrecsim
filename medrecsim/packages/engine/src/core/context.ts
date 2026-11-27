@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
-/** Shared handler context: the evidence index, the sanctioned rationale keys, and the clock. */
+/**
+ * Shared handler context: the evidence index, the sanctioned rationale keys and hint ids, and
+ * the clock.
+ */
 import type { EvidenceIndex } from './evidence-index.ts';
 import type { RevealRecord, RevealVia, SessionState } from './state.ts';
 
@@ -10,6 +13,11 @@ export interface ReduceContext {
    * extracts them from the authored rationale menu; the reducer sees opaque strings only.
    */
   readonly rationaleKeys: ReadonlySet<string>;
+  /**
+   * Ids of the case's authored hints (D-PED-001; the hints live in the reference layer, I-6).
+   * The session extracts them; the reducer sees opaque strings only, never hint text.
+   */
+  readonly hintIds: ReadonlySet<string>;
 }
 
 export interface HandlerContext extends ReduceContext {

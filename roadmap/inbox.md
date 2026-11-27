@@ -23,3 +23,18 @@ message's line and tick its box. One message per line,
   at its pickup (amends D-RISK-006). (4) A manual is owed now: `docs/manual.md` (stub) and
   `docs/manual-changes.md` created; EP-19a (M, after EP-19) writes the first. Recorded as
   D-ROAD-004 and a dated note in roadmap/README.md.
+- [x] IN-2 (from the owner, 2026-11-27) Screenshots for the site, from prime (2026-11-27): when the
+  row that completes your v1, or your roadmap's equivalent (the phase or milestone it names as the
+  first complete version), is done, make two screenshots on hupsim's precedent: n=2, landscape PNG,
+  2698x1429 px or larger at that ratio (1.888:1, so prime's 1280x678 thumbnails pair like hupsim's),
+  two distinct views a reader would want, each with a few-word caption and a one-sentence alt text.
+  Show the real thing where nothing on screen has a provenance, licence or privacy issue; otherwise
+  a mock or smoke build on synthetic data, never patient, credentialed or personal records or a
+  private project's name. Keep the files on this machine only, untracked in a folder you name, never
+  pushed, and hand on to prime with paths, captions and alt text: the owner decides there whether
+  they go on the site (for now only projects with a public card). Park this in your v1-closing row's
+  brief notes; the real-or-mock call goes to the owner then. **Disposition (2026-11-27, EP-12a):**
+  delivered mid-session; parked in the brief notes of **EP-38** (v1.0 release audit & sign-off,
+  the roadmap's first complete version) under the R3 table, the owner's choice, with medrecsim's
+  own screening rules (synthetic only, leak screen, no image metadata — D-UX-006) added; the
+  real-or-mock call goes to the owner at EP-38.

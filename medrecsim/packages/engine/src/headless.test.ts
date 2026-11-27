@@ -24,8 +24,12 @@ describe('headless', () => {
     const adapter = engine.createPersistenceAdapter(null);
     expect(adapter.save(session.serialize())).toEqual({ kind: 'unavailable' });
     expect(engine.ENGINE_PACKAGE).toBe('@medrecsim/engine');
-    expect(engine.ENGINE_STATE_VERSION).toBe(1);
+    expect(engine.ENGINE_STATE_VERSION).toBe(2);
     expect(engine.LEARNER_ACTION_TYPES).toContain('sign');
+    expect(engine.LEARNER_ACTION_TYPES).toContain('request-hint');
     expect(engine.ENGINE_ERROR_CODES).toContain('post-t0-mutation');
+    expect(engine.ENGINE_ERROR_CODES).toContain('signature-blocked');
+    expect(engine.SIGNATURE_BLOCK_CODES).toHaveLength(4);
+    expect(session.canSign()).toEqual({ ready: true, blocking: [] });
   });
 });

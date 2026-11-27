@@ -10,7 +10,8 @@ medrecsim/
 │   ├── engine/          @medrecsim/engine — pure, headless simulation engine (no DOM, no clock):
 │   │                    src/core (state, reducer, clock, dialogue, escalation, workspace,
 │   │                    projection, persistence — evidence-only TS project), case-loader,
-│   │                    session seam (EP-11); scoring/signature/debrief at EP-12
+│   │                    session seam (EP-11); signature gate + hints (EP-12a);
+│   │                    subscores at EP-12b, debrief data at EP-12c
 │   ├── schema/          @medrecsim/schema — Zod 4 content schema v0.1, types, invariant suite,
 │   │                    exported JSON Schema (EP-9)
 │   ├── content-tools/   dev-only CLI: validate · fixtures · compile · schema-export (EP-9);
@@ -24,7 +25,7 @@ medrecsim/
 │   └── cases/           hand-authored YAML case bundles (_exemplar scaffold; C01 at EP-14)
 ├── tests/
 │   ├── synthetic-fixtures/  negative fixtures for the content validator (EP-9)
-│   ├── golden/          golden-case regression snapshots (EP-12)
+│   ├── golden/          golden-case regression snapshots (EP-12c)
 │   └── e2e/             Playwright keyboard-only smoke + axe (EP-15/EP-18)
 └── scripts/             CI checks: bundle budget, no-network, SPDX, asset hygiene, claims, action
                          pins, layer separation, DCO, third-party notices

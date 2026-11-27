@@ -18,7 +18,7 @@ const DAY = 24 * HOUR;
 function fixture() {
   const compiled = exemplarCase();
   const index = buildEvidenceIndex(compiled.evidence, compiled.caseLocalUtcOffsetMinutes);
-  const ctx = { index, rationaleKeys: new Set<string>() };
+  const ctx = { index, rationaleKeys: new Set<string>(), hintIds: new Set<string>() };
   return { compiled, index, ctx };
 }
 
@@ -219,7 +219,7 @@ describe('unanswered behaviours outside the window', () => {
       closes: '09:00',
     };
     const index = buildEvidenceIndex(compiled.evidence, compiled.caseLocalUtcOffsetMinutes);
-    const ctx = { index, rationaleKeys: new Set<string>() };
+    const ctx = { index, rationaleKeys: new Set<string>(), hintIds: new Set<string>() };
     const s = must(
       reduce(ctx, initialState(index), { type: 'escalate', channelId: 'esc-inpatient-pharmacist' }),
     );

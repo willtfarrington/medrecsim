@@ -24,8 +24,9 @@ import { APP_VERSION, newSession } from './test-support/session.ts';
 const compiled = exemplarCase();
 const index = buildEvidenceIndex(compiled.evidence, compiled.caseLocalUtcOffsetMinutes);
 const rationaleKeys = compiled.reference.actionSets.rationaleMenu.map((m) => m.key);
-const vocab = vocabularyOf(index, rationaleKeys);
-const ctx = { index, rationaleKeys: new Set(rationaleKeys) };
+const hintIds = compiled.reference.hints.map((h) => h.id);
+const vocab = vocabularyOf(index, rationaleKeys, hintIds);
+const ctx = { index, rationaleKeys: new Set(rationaleKeys), hintIds: new Set(hintIds) };
 
 function deepFreeze<T>(value: T): T {
   if (typeof value === 'object' && value !== null && !Object.isFrozen(value)) {

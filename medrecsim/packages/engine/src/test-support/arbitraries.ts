@@ -12,7 +12,12 @@ import {
   DISCREPANCY_TYPES,
   MECHANISMS,
 } from '@medrecsim/schema/vocab';
-import { CONFIDENCE_LEVELS, type LearnerAction } from '../core/actions.ts';
+import {
+  CONFIDENCE_LEVELS,
+  HINT_TIERS,
+  type HintTier,
+  type LearnerAction,
+} from '../core/actions.ts';
 import type { EvidenceIndex } from '../core/evidence-index.ts';
 import type { Session } from '../session.ts';
 
@@ -24,10 +29,16 @@ export interface Vocabulary {
   readonly medKeys: readonly string[];
   readonly claimIds: readonly string[];
   readonly rationaleKeys: readonly string[];
+  readonly hintIds: readonly string[];
 }
 
-export function vocabularyOf(index: EvidenceIndex, rationaleKeys: readonly string[]): Vocabulary {
+export function vocabularyOf(
+  index: EvidenceIndex,
+  rationaleKeys: readonly string[],
+  hintIds: readonly string[] = [],
+): Vocabulary {
   return {
+    hintIds: [...hintIds, 'hint-bogus'],
     sources: [...index.sourceOrder, 'src-bogus'],
     nodes: [
       ...[...index.nodes.keys()].map((k) => {
@@ -146,6 +157,16 @@ export function arbAction(v: Vocabulary): fc.Arbitrary<LearnerAction> {
         type: 'action-list/remove',
         medKey,
       })),
+    },
+    {
+      weight: 2,
+      arbitrary: fc
+        .record({ hintId: c(v.hintIds), tier: c([...HINT_TIERS, 'bogus'] as const) })
+        .map(({ hintId, tier }): LearnerAction => ({
+          type: 'request-hint',
+          hintId,
+          tier: tier as HintTier,
+        })),
     },
   );
 }

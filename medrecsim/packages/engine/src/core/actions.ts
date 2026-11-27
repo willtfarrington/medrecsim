@@ -4,7 +4,7 @@
  * of these actions is the single source of truth; every other structure is a fold over it
  * (architecture §2). No action carries free text (D-MED-004, INV-SCOPE-001): medications are
  * named by key, justifications by authored rationale-menu key, classifications by taxonomy
- * token.
+ * token, hints by authored hint id and grade.
  *
  * Two families matter for D-MED-002:
  * - **reconstruction** actions write the working medication history — the learner's picture
@@ -76,6 +76,14 @@ export type HistoryEntryInput = Omit<HistoryEntry, 'asOfMinutes'> & {
 };
 export type AdmissionActionInput = Omit<AdmissionActionEntry, 'recordedAtMinutes'>;
 
+/**
+ * The three graduated hint grades (D-PED-001), in the order a learner receives them: a gentle
+ * nudge, a directed pointer to the kind of evidence, then the reveal of where to look. The
+ * authored texts live in the reference layer (I-6); the learner's log names a hint by its id.
+ */
+export const HINT_TIERS = ['nudge', 'directed', 'reveal-source'] as const;
+export type HintTier = (typeof HINT_TIERS)[number];
+
 export type LearnerAction =
   | { readonly type: 'open-source'; readonly sourceId: string }
   | { readonly type: 'examine-artifact'; readonly artifactId: string }
@@ -90,6 +98,8 @@ export type LearnerAction =
   | { readonly type: 'discrepancy/remove'; readonly entryId: string }
   | { readonly type: 'action-list/set'; readonly entry: AdmissionActionInput }
   | { readonly type: 'action-list/remove'; readonly medKey: MedKey }
+  /** D-PED-001: one grade of one authored hint; recorded, never score-subtracting, no clock cost. */
+  | { readonly type: 'request-hint'; readonly hintId: string; readonly tier: HintTier }
   | { readonly type: 'sign' };
 
 export type LearnerActionType = LearnerAction['type'];
@@ -107,6 +117,7 @@ export const LEARNER_ACTION_TYPES: readonly LearnerActionType[] = [
   'discrepancy/remove',
   'action-list/set',
   'action-list/remove',
+  'request-hint',
   'sign',
 ];
 
@@ -184,6 +195,8 @@ export function isLearnerAction(v: unknown): v is LearnerAction {
       const e = v['entry'];
       return isRecord(e) && isStr(e['medKey']) && isStr(e['action']) && isStr(e['rationaleKey']);
     }
+    case 'request-hint':
+      return isStr(v['hintId']) && isStr(v['tier']);
     case 'sign':
       return true;
     default:

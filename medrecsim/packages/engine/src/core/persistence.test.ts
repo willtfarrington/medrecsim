@@ -102,10 +102,16 @@ describe('envelope', () => {
         mismatch: { field, found: 'other' },
       });
     }
-    expect(checkEnvelope({ ...env, engineStateVersion: 2 }, expected)).toMatchObject({
+    expect(
+      checkEnvelope({ ...env, engineStateVersion: ENGINE_STATE_VERSION + 1 }, expected),
+    ).toMatchObject({
       ok: false,
       reason: 'mismatch',
-      mismatch: { field: 'engineStateVersion', expected: 1, found: 2 },
+      mismatch: {
+        field: 'engineStateVersion',
+        expected: ENGINE_STATE_VERSION,
+        found: ENGINE_STATE_VERSION + 1,
+      },
     });
     expect(checkEnvelope({ ...env, log: 'nope' }, expected)).toMatchObject({
       ok: false,
