@@ -3,8 +3,9 @@
 # Security posture: no secrets exist in this repository; the token is read-only; forked pull
 # requests are safe because nothing here needs write access and `pull_request_target` is never
 # used. Every third-party step is pinned to a full-length commit SHA (checked by
-# medrecsim/scripts/check-action-pins.mjs). pnpm is provisioned by Corepack from the hash-pinned
-# `packageManager` field; install scripts are disabled by medrecsim/.npmrc.
+# medrecsim/scripts/check-action-pins.mjs). pnpm comes from medrecsim/scripts/provision-pnpm.mjs,
+# which installs its registry tarball only if it matches the SHA-512 pinned in `packageManager`
+# (Node 26 ships no Corepack); install scripts are disabled by medrecsim/pnpm-workspace.yaml.
 #
 # Matrix policy (I-5): stages 1–8 run on ubuntu and windows for every pull request. `main` is
 # verified by pages.yml, which calls this workflow (workflow_call) and deploys only if it succeeds.
@@ -53,8 +54,9 @@ jobs:
         with:
           node-version-file: medrecsim/.nvmrc
 
-      - name: Enable Corepack (pnpm version + hash from package.json#packageManager)
-        run: corepack enable
+      # Beside node: the tool-cache folder setup-node puts first on PATH (DEPENDENCY-POLICY.md §8).
+      - name: Provision pnpm (version + SHA-512 from package.json#packageManager; no Corepack)
+        run: node scripts/provision-pnpm.mjs --beside-node
 
       # ---- stage 1: install (frozen lockfile; lifecycle scripts ignored) ----
       - name: Install

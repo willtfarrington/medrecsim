@@ -26,8 +26,8 @@ updates:
       # rule when both peers allow 7.x. Minor/patch updates still arrive.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
-      # @types/node tracks the pinned Node LTS line (24.x in medrecsim/.nvmrc); its major moves
-      # only when the Node line does (docs/DEPENDENCY-POLICY.md section 8).
+      # @types/node tracks the pinned Node LTS line (26.x in medrecsim/.nvmrc since EP-11b); its
+      # major moves only when the Node line does (docs/DEPENDENCY-POLICY.md section 8).
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
 

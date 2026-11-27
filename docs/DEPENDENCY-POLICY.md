@@ -1,6 +1,12 @@
 # Dependency policy (D-SEC-002)
 
-**Status:** policy current as of 2026-11-26 (EP-11a: Dependabot PRs #11 and #10, the
+**Status:** policy current as of 2026-11-27 (EP-11b: the project moved to Node 26.13.1, the
+active LTS, and pnpm 11.25.0 reaches CI and contributors without Corepack, through a
+hash-checked download, `medrecsim/scripts/provision-pnpm.mjs`, on the owner's choice (§5, §8);
+`engineStrict`, `ignoreScripts` and `saveExact` now sit in `pnpm-workspace.yaml`, because pnpm
+11 reads only auth and registry settings from `.npmrc` and had ignored the copies there since
+EP-8; `@types/node` moved to the 26 line with Dependabot's major-version rule (§4, §9); no
+package added or removed. EP-11a: Dependabot PRs #11 and #10, the
 successors of #9 and #7, reviewed under §9 and merged on the owner's word; the §3 and §4
 versions below updated, no package added to or removed from either table; `devalue` and
 `source-map-js` re-resolved in the lockfile inside their parents' ranges, so no open Dependabot
@@ -90,10 +96,10 @@ README beside it; rows in `source material/REGISTRY.md` and `THIRD-PARTY.md`.
 
 ## 4. Build and development dependency register
 
-*Seeded at EP-8 (2026-09-04); versions current at EP-11a (2026-11-26).* Direct development
+*Seeded at EP-8 (2026-09-04); versions current at EP-11b (2026-11-27).* Direct development
 dependencies only; the full closure (236 packages in `medrecsim/pnpm-lock.yaml` at EP-8; 238
-lockfile entries at EP-11a, 206 of them installed on Windows) is reviewed through the lockfile
-diff at each update.
+lockfile entries at EP-11a, 206 of them installed on Windows; the same counts at EP-11b) is
+reviewed through the lockfile diff at each update.
 "Install scripts" is *none run* for every row: pnpm blocks lifecycle scripts by default and the
 allow-list is empty (ADR-4). Dev tooling is not redistributed, so it has no THIRD-PARTY row
 (THIRD-PARTY.md says so in its "Development-time tooling" section). Manifest: `medrecsim/`
@@ -116,7 +122,7 @@ allow-list is empty (ADR-4). Dev tooling is not redistributed, so it has no THIR
 | `globals` | 17.14.0 | Browser / Node global declarations for ESLint | MIT | none run | — | EP-8; EP-11a |
 | `prettier` | 3.10.1 | Formatter | MIT | none run | — | EP-8; EP-11a |
 | `prettier-plugin-svelte` | 4.2.0 | Svelte support for Prettier | MIT | none run | — | EP-8; EP-11a |
-| `@types/node` | 24.19.2 | Node type definitions (scripts, content-tools; schema tests only — the schema's evidence-layer project compiles with no Node types) | MIT | none run | — | EP-8; schema at EP-9; EP-11a |
+| `@types/node` | 26.6.11 | Node type definitions on the pinned Node line (26.x since EP-11b; scripts, content-tools; schema tests only — the schema's evidence-layer project compiles with no Node types). DefinitelyTyped publishes no provenance (§5.6) | MIT | none run | — | EP-8; schema at EP-9; EP-11a; EP-11b |
 | `zod` (schema) | 4.6.7 | Content-schema source of truth ([ADR-2](adr/ADR-2-validation-library.md)): typed schemas, inferred types, JSON Schema export. Declared as a `dependency` of the private `@medrecsim/schema` package because the package cannot function without it, but it is **not** on the §3 runtime allowlist: ESLint forbids importing it from `packages/app` and `packages/engine`, and `bundle-manifest.json` would expose it (EP-11a: Dependabot labels its alerts runtime; the local build and the deployed site's `bundle-manifest.json` both list `svelte` alone, and the built JS carries no zod code). Checklist §6: need — validation + type inference + editor schema from one definition, chosen by spike SP-5; owned-code alternative would be a hand-kept JSON Schema plus hand-kept types (drift); licence MIT; maintenance active (4.5.4 published 2026-08-29); no install scripts; zero new transitive packages; identity verified (`zod` by colinhacks); no network behaviour; no redistributed assets. | MIT | none run | — | EP-9; EP-11a |
 | `yaml` (content-tools) | 2.9.1 | YAML parser for the content CLI only ([ADR-3](adr/ADR-3-build-time-content-compile.md): the runtime never parses YAML; ESLint forbids the import from `packages/app` and `packages/engine`). Chosen for its CST/line-position API (`LineCounter`, `Document.getIn`) that lets validator findings carry line numbers for GitHub annotations. Checklist §6: need — parse authored bundles at build time; owned-code alternative is no alternative (a YAML parser is not small); licence ISC; maintenance active (2.9.0 published 2026-05-11); no install scripts; zero new transitive packages; identity verified (`yaml` by eemeli); no network behaviour; no redistributed assets. | ISC | none run | — | EP-9; EP-11a |
 
@@ -137,27 +143,45 @@ stack. One licence new to the lockfile, 0BSD (`tslib`), belongs to rolldown's wa
 binding, which no CI lane and no local install fetches; 0BSD is on §6.2's list and the
 dependency-review allow-list.
 
+**EP-11b (2026-11-27):** `@types/node` 26.6.11 and its one dependency, `undici-types` 8.9.0
+(published 2026-07-24 with provenance), replace 24.19.2 and 7.24.6; the closure keeps its size
+and its licences (both MIT, no install scripts).
+
 ## 5. Installation and lockfile rules
 
 1. **The lockfile is committed and authoritative.** CI and every fresh clone install with the
    frozen-lockfile command: `pnpm install --frozen-lockfile` from `medrecsim/` (package
    manager decided in [ADR-4](adr/ADR-4-package-manager.md); the lockfile is
    `medrecsim/pnpm-lock.yaml`). A lockfile change is a reviewable diff, never a side effect.
-2. **Install scripts are disabled**: `medrecsim/.npmrc` carries `ignore-scripts=true`, and
-   `medrecsim/pnpm-workspace.yaml` keeps pnpm's lifecycle-script allow-list empty
-   (`allowBuilds: {}`). A package that genuinely needs a build step at install time is either
-   avoided or has that step approved by name there and reviewed, with the reason recorded in
-   its row. The same file sets `minimumReleaseAge: 1440`: a version published less than one
-   day ago cannot be installed, transitively included.
+   pnpm itself comes first, from `node scripts/provision-pnpm.mjs` (§8).
+2. **Install scripts are disabled**: `medrecsim/pnpm-workspace.yaml` sets `ignoreScripts: true`
+   and keeps pnpm's lifecycle-script allow-list empty (`allowBuilds: {}`); `medrecsim/.npmrc`
+   carries the npm equivalent, `ignore-scripts=true`, for any npm run in the workspace. pnpm 11
+   reads nothing but auth and registry settings from `.npmrc`, so until EP-11b, when this item
+   named only the `.npmrc` line, pnpm's own default and the empty allow-list did the blocking.
+   A package that genuinely needs a build step at install time is either avoided or has that
+   step approved by name there and reviewed, with the reason recorded in its row. The same file
+   sets `minimumReleaseAge: 1440`: a version published less than one day ago cannot be
+   installed, transitively included.
 3. **One registry.** Packages come from the default public npm registry. No git URLs, no
    tarball URLs, no private or mirror registries, no `file:` links to paths outside the
    workspace.
 4. **No unpinned execution.** CI never runs `npx <package>` or a `curl | sh` style installer
-   against an unpinned version. Tools run from the lockfile or from a SHA-pinned action.
+   against an unpinned version. Tools run from the lockfile or from a SHA-pinned action. pnpm
+   runs only at the version `package.json#packageManager` pins (`pmOnFail: error` in
+   `pnpm-workspace.yaml`): its own version switch would fetch another version without checking
+   the pinned hash.
 5. **Exact versions for direct dependencies** in the manifests where the package manager
-   allows it; ranges are the lockfile's job, not the manifest's.
+   allows it (`saveExact: true` in `pnpm-workspace.yaml`; `save-exact=true` in `.npmrc` for
+   npm); ranges are the lockfile's job, not the manifest's.
 6. **Provenance when offered.** Where the registry shows a build-provenance attestation for the
    chosen version, the reviewer notes it; its absence is not disqualifying but is recorded.
+7. **The Node line is enforced at install** (EP-11b). `engineStrict: true` in
+   `pnpm-workspace.yaml` fails an install whose Node does not satisfy `engines.node` in
+   `medrecsim/package.json` (`>=26.13.1 <27`), or a locked dependency's own `engines.node`,
+   frozen installs included; `.nvmrc` names the exact version CI installs. Before EP-11b the
+   setting sat only in `.npmrc`, so a wrong Node merely warned: jsdom 31, merged at EP-11a,
+   declares Node `^24.15.0` on the 24 line and was installed under 24.14.1.
 
 ## 6. New-dependency checklist
 
@@ -209,8 +233,8 @@ answered, not ticked.
 
 | Tool | Version in use | Source | Role | Reverify |
 |------|----------------|--------|------|----------|
-| Node.js | **24.14.1** (LTS "Krypton"; `medrecsim/.nvmrc` and `engines.node >=24.14.1 <25`, `engine-strict=true`) | nodejs.org / winget | Toolchain runtime; CI installs the same version from `.nvmrc` via `actions/setup-node` | Each R-phase boundary (next: EP-19). **EP-11a (2026-11-26):** the owner's machine moved to Node 26.13.1 on 2026-11-10 (winget's LTS channel), which ships no Corepack, so the pin no longer runs locally; CI is unaffected. Sessions run a checksum-verified portable 24.14.1 until **EP-11b** moves the project to Node 26 (owner decision, EP-11a) |
-| pnpm | **11.25.0**, SHA-512 of the tarball pinned in `medrecsim/package.json#packageManager` | Provisioned by **Corepack** (bundled with Node 24; `corepack enable` once per machine, or `corepack pnpm …`) — no global install, no third-party action | Package manager ([ADR-4](adr/ADR-4-package-manager.md)); a hash-pinned download is not "unpinned execution" under §5.4 | Each R-phase boundary; **when the Node LTS line moves past 24** (Node 25 dropped Corepack) provisioning switches to a lockfile-pinned `corepack` package or a hash-verified pnpm download in CI (trigger met on the owner's machine 2026-11-10; the switch is EP-11b) |
+| Node.js | **26.13.1** (LTS "Lithium"; `medrecsim/.nvmrc` and `engines.node >=26.13.1 <27`, enforced at install by `engineStrict: true` in `pnpm-workspace.yaml`, §5.7) | nodejs.org / winget | Toolchain runtime; CI installs the same version from `.nvmrc` via `actions/setup-node` | Each R-phase boundary (next: EP-19). **EP-11b (2026-11-27):** moved from 24.14.1 (LTS "Krypton"), which trailed its own line (24.22.3 by then) and no longer ran on the owner's machine: winget's LTS channel installed 26.13.1 there on 2026-11-10, and Node 25 and later ship no Corepack (owner decision at EP-11a, D-ROAD-006) |
+| pnpm | **11.25.0**, SHA-512 of the registry tarball pinned in `medrecsim/package.json#packageManager` | The npm registry tarball, installed by **`medrecsim/scripts/provision-pnpm.mjs`**: it downloads the pinned version, refuses it unless the SHA-512 matches, installs it with the npm bundled with Node (scripts ignored) and checks the `pnpm` first on PATH. CI runs it with `--beside-node` (setup-node's tool-cache folder, first on PATH); a contributor runs it once per machine and again when the pin moves (npm's global folder; on Windows `%APPDATA%\npm`). No Corepack, no third-party action | Package manager ([ADR-4](adr/ADR-4-package-manager.md)); a hash-checked download is not "unpinned execution" under §5.4, and `pmOnFail: error` stops pnpm fetching any other version itself | Each R-phase boundary (next: EP-19). **EP-11b (2026-11-27), owner decision:** of the two exits this row named at EP-8, the hash-checked download rather than a lockfile-pinned standalone `corepack` package (0.36.0): no new dependency, no second lockfile or Dependabot entry, one code path for CI and contributors, and the `packageManager` hash stays the single source of truth. pnpm's own switch (`pmOnFail: download`) was ruled out: in a test it fetched and ran another version under an all-zero pinned hash |
 | gitleaks | 8.30.1 (pinned in `.gitleaks.toml`) | winget `Gitleaks.Gitleaks` | Pre-commit secret scan (boundary B5) | **EP-8 decision (2026-09-04): stay on 8.30.1.** The binary works, the default ruleset still receives security patches upstream, and the successor project had not published a stable release with a verified-compatible ruleset format at the time of checking; migrating now would trade a working control for churn. Next reverification: **EP-19** (the `v0.1.0` tag), then each R-phase boundary. Migration trigger: a gitleaks advisory without a patch, or the successor reaching a stable release that reads `.gitleaks.toml` unchanged. |
 | GitHub CLI (`gh`) | 2.100.0 (2.98.0 at EP-1; updated by winget) | winget `GitHub.cli` | Baseline verification, ruleset export, incident runbook | Each R-phase boundary |
 | git | 2.55.0 | Git for Windows | Everything; `git-filter-repo` needs ≥ 2.36 | Each R-phase boundary |
@@ -237,8 +261,8 @@ Where a major version is known to be unusable for a stated reason, `.github/depe
 carries an `ignore` rule for that major with the reason and the removal condition written
 beside it, so the weekly review is not spent re-closing the same PR. Current rules (EP-8,
 2026-09-04): `typescript` majors (7.x unsupported by typescript-eslint and svelte-check) and
-`@types/node` majors (tracks the pinned Node LTS line). Each rule is removed in the same change
-that lifts its reason.
+`@types/node` majors (tracks the pinned Node LTS line; 26.x since EP-11b, the rule's comment
+moved with it). Each rule is removed in the same change that lifts its reason.
 
 **Security advisories** (Dependabot alerts, baseline row A4) are triaged on a best-effort
 basis with no SLA (SUPPORT.md, SECURITY.md). Resolution options in order of preference: update,
@@ -269,3 +293,6 @@ THIRD-PARTY.md regenerated; it needs no approval.
 - **Any Dependabot or CodeQL alert** that ends in an accepted risk.
 - **Every tagged release** and the EP-38 audit (gates 5 and 6).
 - **Any change to D-ARCH-007** (bundle budget) or to the framework/validation ADRs.
+- **A move of the Node LTS line** (EP-11b's checklist): `.nvmrc`, `engines.node`,
+  `@types/node` and its Dependabot rule's comment move together, with §8; after any change to
+  `packageManager`, `node scripts/provision-pnpm.mjs` runs again on each machine.

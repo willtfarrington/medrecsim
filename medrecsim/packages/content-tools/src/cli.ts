@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: MIT
 /**
- * medrecsim content CLI (D-DATA-005; architecture §5). Runs directly under Node 24's native
- * TypeScript type stripping (`erasableSyntaxOnly` is enforced), so no loader dependency.
+ * medrecsim content CLI (D-DATA-005; architecture §5). Runs directly under Node's native
+ * TypeScript type stripping (Node 26 since EP-11b; `erasableSyntaxOnly` is enforced), so no
+ * loader dependency.
  *
  * Commands and the EP that implements each:
  *   validate [--all] [<bundle-dir>...] [--format pretty|json|github]   EP-9

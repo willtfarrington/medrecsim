@@ -55,7 +55,7 @@ assets=$(printf '%s\n' "$staged" | grep -iE '\.(png|jpe?g|webp|svg)$' || true)
 if [ -n "$assets" ]; then
     node_bin=$(command -v node 2>/dev/null || true)
     if [ -z "$node_bin" ]; then
-        fail "node not found; the asset-hygiene check (medrecsim/scripts/strip-asset-metadata.mjs) needs Node 24."
+        fail "node not found; the asset-hygiene check (medrecsim/scripts/strip-asset-metadata.mjs) needs Node (the version in medrecsim/.nvmrc)."
     fi
     # shellcheck disable=SC2086
     (cd "$repo_root" && printf '%s\n' "$assets" | tr '\n' '\0' | \

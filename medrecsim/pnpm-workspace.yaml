@@ -1,5 +1,6 @@
-# pnpm workspace (ADR-4). Supply-chain settings live here (pnpm ≥ 10 reads them from this file;
-# `.npmrc` beside it carries the npm-compatible ones required by docs/DEPENDENCY-POLICY.md §5).
+# pnpm workspace (ADR-4). pnpm 11 reads every setting but auth and registry ones from this file
+# and none from `.npmrc` (EP-11b found the `.npmrc` copies inert since EP-8); `.npmrc` beside it
+# keeps the npm equivalents for any npm run here (docs/DEPENDENCY-POLICY.md §5).
 packages:
   - packages/*
 
@@ -11,3 +12,20 @@ minimumReleaseAge: 1440
 # an empty allow-list keeps that explicit. A package that genuinely needs a build step is
 # either avoided or approved here by name with the reason recorded in DEPENDENCY-POLICY.md §4.
 allowBuilds: {}
+
+# Belt and braces with the empty allow-list: no lifecycle script runs at install, the root
+# project's included. Scripts named on the command line (`pnpm run …`) still run.
+ignoreScripts: true
+
+# An install fails when the running Node does not satisfy package.json#engines.node, or a locked
+# dependency's own `engines.node`, so the Node pin (`.nvmrc`) is enforced at install, not only
+# by CI's setup-node.
+engineStrict: true
+
+# Direct dependencies are saved at exact versions (policy §5.5).
+saveExact: true
+
+# pnpm runs only at the version package.json#packageManager pins and refuses any other instead
+# of fetching it: its own version switch does not check the pinned SHA-512, so pnpm arrives only
+# through scripts/provision-pnpm.mjs, which does (policy §8).
+pmOnFail: error

@@ -1,6 +1,7 @@
 # ADR-4 — Package manager: pnpm workspaces, provisioned by Corepack
 
-**Status:** accepted · **Date:** 2026-09-04 (EP-8) · **Implements:** D-ARCH-002/003 (monorepo
+**Status:** accepted; provisioning and settings amended 2026-11-27 (EP-11b, addendum at the
+end) · **Date:** 2026-09-04 (EP-8) · **Implements:** D-ARCH-002/003 (monorepo
 workspace on a Windows-native Node LTS toolchain), D-SEC-001/002 and DEPENDENCY-POLICY.md §5
 (frozen lockfile, `ignore-scripts`, no unpinned execution) · **Reversibility:** moderate (a
 lockfile swap plus CI edits; no code changes).
@@ -66,3 +67,31 @@ Cold install from the committed lockfile on Windows 11 / Node 24.14.1: 236 packa
 lifecycle scripts run, `pnpm install --frozen-lockfile` re-run reports "Already up to date".
 The full pipeline (`pnpm verify`) passes locally; the CI matrix result is recorded in the EP-8
 handoff.
+
+## Addendum (2026-11-27, EP-11b): pnpm without Corepack; settings where pnpm 11 reads them
+
+The Corepack revisit trigger above was met when the project moved to Node 26 (D-ROAD-006):
+Node 25 and later ship no Corepack. pnpm itself stays (11.25.0, hash-pinned in
+`packageManager`); two parts of the decision change, on the owner's choice.
+
+- **Provisioning.** `medrecsim/scripts/provision-pnpm.mjs` downloads the pinned version's
+  registry tarball, refuses it unless its SHA-512 equals the hash in `packageManager`, installs
+  it with the npm bundled with Node (lifecycle scripts ignored) and checks the `pnpm` first on
+  PATH. CI runs it with `--beside-node` in place of `corepack enable`; a contributor runs it once
+  per machine and again when the pin moves. It was chosen over the other exit named above, the
+  standalone `corepack` package pinned in a lockfile of its own, which would add a dependency, a
+  second kind of lockfile and a Dependabot entry. `pmOnFail: error` makes pnpm refuse to run at
+  any other version: under the default, `download`, pnpm switches versions by itself without
+  checking the pinned hash (an all-zero hash was accepted in a test).
+- **Settings.** pnpm 11 reads only auth and registry settings from `.npmrc`, so
+  `engine-strict`, `ignore-scripts` and `save-exact` there had not reached pnpm since this ADR
+  (an install on the wrong Node only warned). They now sit in `pnpm-workspace.yaml` as
+  `engineStrict`, `ignoreScripts` and `saveExact`, next to `minimumReleaseAge`, `allowBuilds`
+  and `pmOnFail`; `.npmrc` keeps the npm equivalents for any npm run in the workspace.
+  `engines.node` is `>=26.13.1 <27` and `.nvmrc` is `26.13.1`.
+
+The settings list under "Decision" and the local setup note under "Consequences" describe the
+EP-8 state and are kept as written. Evidence (Windows 11, Node 26.13.1, 2026-11-27): the
+provisioning installs 11.25.0 and refuses a wrong hash, an unhashed pin and a shadowing `pnpm`
+on PATH; with the settings moved, an install against an `engines` range that excludes the
+running Node fails, and `pnpm verify` passes. Detail in `docs/handoffs/EP-11b.md`.

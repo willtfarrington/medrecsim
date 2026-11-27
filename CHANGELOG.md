@@ -100,6 +100,14 @@ scoring or signature; no clinical content has been written.
   scoring work; the engine determinism lint rule made real; a 1000-log replay-equivalence
   property test; a ninth architecture decision record.
 
+### Changed
+
+- Toolchain moved to the Node 26 LTS line (26.13.1, from 24.14.1) on 2026-11-27. Node 26 ships
+  no Corepack, so pnpm 11.25.0 now comes from a repository script that installs pnpm's registry
+  tarball only when it matches the SHA-512 pinned in `package.json`. The install guards that
+  pnpm 11 had been ignoring in `.npmrc` (`engine-strict`, `ignore-scripts`, `save-exact`) now
+  sit in `pnpm-workspace.yaml`, so an install on the wrong Node line fails.
+
 ### Security
 
 - Dependencies brought current (2026-11-26): Dependabot's grouped updates were reviewed under

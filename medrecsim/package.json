@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">=24.14.1 <25"
+    "node": ">=26.13.1 <27"
   },
   "scripts": {
     "dev": "pnpm --filter @medrecsim/app run dev",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/node": "24.19.2",
+    "@types/node": "26.6.11",
     "eslint": "10.15.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.24.1",

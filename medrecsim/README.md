@@ -32,10 +32,12 @@ medrecsim/
 
 ## Prerequisites
 
-- Node.js **24.14.1** (LTS; pinned in `.nvmrc` and `engines`). Windows-native; no WSL or
-  containers are needed.
-- pnpm, provisioned by Corepack from the hash-pinned `packageManager` field — no global
-  install: run `corepack enable` once, or prefix commands with `corepack pnpm`.
+- Node.js **26.13.1** (LTS; pinned in `.nvmrc` and `engines`; an install on another Node line
+  fails). Windows-native; no WSL or containers are needed.
+- pnpm **11.25.0**, pinned with its SHA-512 in `package.json#packageManager`. Node 26 ships no
+  Corepack, so run `node scripts/provision-pnpm.mjs` once, and again whenever the pin moves: it
+  downloads the pinned version, refuses it unless the hash matches, and installs it with the npm
+  that comes with Node. pnpm refuses to run at any other version.
 
 ## Commands (run inside `medrecsim/`)
 

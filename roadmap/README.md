@@ -84,7 +84,7 @@ manual (EP-19a, D-ROAD-004).
 | EP-10 | [Visual identity & originality pack](EP-10-identity.md) | S | EP-3, EP-8 | core | ☑ `cc5c892` |
 | EP-11 | [Engine core](EP-11-engine-core.md) | M | EP-9 | core | ☑ `40e37d8` |
 | EP-11a | [Dependency refresh: Dependabot PRs #9 and #7 and the open alerts (D-ROAD-005)](EP-11a-dependency-refresh.md) | M | EP-8 | core | ☑ `05f782b` |
-| EP-11b | Node 26 LTS: the pin, engines and pnpm without Corepack (D-ROAD-006) | M | EP-11a | core | ☐ |
+| EP-11b | [Node 26 LTS: the pin, engines and pnpm without Corepack (D-ROAD-006)](EP-11b-node-26-lts.md) | M | EP-11a | core | ☐ |
 | EP-12 | [Engine scoring, signature, debrief data + golden harness](EP-12-engine-scoring.md) | M | EP-11 | core | ☐ |
 | EP-13 | [Formulary wave 1](EP-13-formulary-1.md) | M | EP-9, EP-6, EP-7 | core | ☐ |
 | EP-14 | [Case C01 exemplar + review](EP-14-case-c01.md) | M | EP-12, EP-13 | core | ☐ |
@@ -97,20 +97,6 @@ manual (EP-19a, D-ROAD-004).
 
 **Brief notes.**
 
-- **EP-11b.** (Added 2026-11-26 at EP-11a, the owner's choice; D-ROAD-006.) Move the project
-  to the Node 26 LTS line before EP-12. On 2026-11-10 the owner's machine moved to Node 26.13.1
-  (winget's LTS channel), which ships no Corepack, so the Node 24.14.1 pin (`.nvmrc`, `engines`
-  `>=24.14.1 <25` with `engine-strict`) and the Corepack-provisioned pnpm no longer run
-  locally; CI, which installs 24.14.1, is unaffected until then. Scope: `.nvmrc` and `engines`
-  to the current Node 26 LTS; pnpm 11.25.0 provisioned without Corepack, locally and in CI, as
-  [docs/DEPENDENCY-POLICY.md](../docs/DEPENDENCY-POLICY.md) §8 foresees (a lockfile-pinned
-  `corepack` package or a hash-verified pnpm download: choose one and record why);
-  `@types/node` to 26 with `dependabot.yml`'s ignore rule moved to the new line; the policy's
-  §5 and §8 and SECURITY-BASELINE rows C2 and C3 updated; `pnpm verify` green locally under
-  Node 26 and hosted CI green on both operating systems. A pnpm major (12.x is out) stays out
-  unless the provisioning choice needs it. Read first [docs/handoffs/EP-11a.md](../docs/handoffs/EP-11a.md):
-  confirm that EP-11a's push left 0 open Dependabot alerts and a green Pages run, and reuse its
-  portable-Node pattern until the move lands.
 - **EP-19a.** (Added 2026-11-25 at the sweep, the owner's choice; D-ROAD-004.) Replace the stub
   [docs/manual.md](../docs/manual.md) with the first manual, describing v0.1 in the outline the
   stub holds: what it does; install and start; a chapter per surface v0.1 ships (by this table:

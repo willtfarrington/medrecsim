@@ -56,8 +56,8 @@ the same commands work on Linux and macOS):
 git clone https://github.com/willtfarrington/medrecsim.git
 cd medrecsim
 git config core.hooksPath githooks      # pre-commit secret scan + tripwire (see githooks/README.md)
-corepack enable                         # provisions the pinned pnpm; needs Node 24.14.1 (.nvmrc)
-cd medrecsim                            # the code workspace
+cd medrecsim                            # the code workspace; needs Node 26.13.1 (.nvmrc)
+node scripts/provision-pnpm.mjs         # installs the pinned pnpm once its SHA-512 checks out
 pnpm install --frozen-lockfile
 pnpm verify                             # lint, format, typecheck, test, build, checks — what CI runs
 pnpm dev                                # local development server
