@@ -359,6 +359,19 @@ ROAD planning process.
   alerts still open by update, pin, removal or an accepted risk written in SECURITY-BASELINE.md
   (§9's order); merges are the owner's word. A scope addition under D-RISK-002, made by the
   owner. *(owner decision of 2026-11-25, after the sweep's push)*
+- **D-ROAD-006** (2026-11-26) — The Node 26 move before EP-12. EP-11a's pickup found the
+  owner's machine on Node 26.13.1 since 2026-11-10 (winget's LTS channel; Node 26 is the active
+  LTS, Node 24 is in maintenance until April 2028). Node 26 ships no Corepack, so the project's
+  Node 24.14.1 pin (`engines` `<25` with `engine-strict`) and its Corepack-provisioned pnpm no
+  longer run locally, while CI, which installs 24.14.1 from `.nvmrc`, is unaffected.
+  DEPENDENCY-POLICY.md §8 had named this trigger. A new R1 row, **EP-11b** (M, depends on
+  EP-11a, core), placed after EP-11a and before EP-12, moves the project to the Node 26 LTS line
+  and provisions pnpm without Corepack, locally and in CI, as §8 says; until it lands, sessions
+  verify with a checksum-verified portable Node 24.14.1. *Alternatives put to the owner:* stay
+  on Node 24 until EP-19's R-phase reverification, each session downloading a portable Node 24;
+  or stay on Node 24 with a second install beside Node 26 on the machine. A scope addition under
+  D-RISK-002, made by the owner; D-ROAD-005 stands, EP-12 now following EP-11b. *(owner
+  decision of 2026-11-26, EP-11a)*
 
 ## Roadmap-integration rulings (owner decisions, 2026-08-23)
 

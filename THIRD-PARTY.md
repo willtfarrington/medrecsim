@@ -13,7 +13,7 @@ The runtime dependency allowlist is fixed in
 [docs/DEPENDENCY-POLICY.md](docs/DEPENDENCY-POLICY.md) §3; additions are owner-only.
 
 <!-- BEGIN GENERATED: runtime dependencies (scripts/gen-third-party.mjs) -->
-Generated 2026-09-04 from `medrecsim/pnpm-lock.yaml` — the production dependency closure of `@medrecsim/app` (20 packages). "Bundled" marks packages whose code is present in the built application (from the build's `bundle-manifest.json`); the others are compile-time dependencies of a runtime package and are listed for completeness.
+Generated 2026-11-27 from `medrecsim/pnpm-lock.yaml` — the production dependency closure of `@medrecsim/app` (20 packages). "Bundled" marks packages whose code is present in the built application (from the build's `bundle-manifest.json`); the others are compile-time dependencies of a runtime package and are listed for completeness.
 
 | Package | Version | Licence | Bundled | Source |
 |---|---|---|:---:|---|
@@ -24,18 +24,18 @@ Generated 2026-09-04 from `medrecsim/pnpm-lock.yaml` — the production dependen
 | @jridgewell/trace-mapping | 0.3.31 | MIT | no | https://github.com/jridgewell/sourcemaps/tree/main/packages/trace-mapping |
 | @sveltejs/acorn-typescript | 1.0.13 | MIT | no | https://github.com/sveltejs/acorn-typescript#readme |
 | @types/estree | 1.0.9 | MIT | no | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/estree |
-| @typescript-eslint/types | 8.69.0 | MIT | no | https://typescript-eslint.io |
+| @typescript-eslint/types | 8.73.0 | MIT | no | https://typescript-eslint.io |
 | acorn | 8.18.0 | MIT | no | https://github.com/acornjs/acorn |
 | aria-query | 5.3.1 | Apache-2.0 | no | https://github.com/A11yance/aria-query#readme |
 | axobject-query | 4.1.0 | Apache-2.0 | no | https://github.com/A11yance/axobject-query#readme |
 | clsx | 2.1.1 | MIT | no |  |
-| devalue | 5.9.2 | MIT | no |  |
+| devalue | 5.9.4 | MIT | no |  |
 | esm-env | 1.2.2 | MIT | no | https://github.com/benmccann/esm-env |
-| esrap | 2.3.6 | MIT | no | git+https://github.com/sveltejs/esrap.git |
+| esrap | 2.4.2 | MIT | no | git+https://github.com/sveltejs/esrap.git |
 | is-reference | 3.0.3 | MIT | no | https://github.com/Rich-Harris/is-reference#readme |
 | locate-character | 3.0.0 | MIT | no | https://gitlab.com/Rich-Harris/locate-character#README |
 | magic-string | 0.30.21 | MIT | no | git+https://github.com/Rich-Harris/magic-string.git |
-| svelte | 5.57.0 | MIT | yes | https://svelte.dev |
+| svelte | 5.59.1 | MIT | yes | https://svelte.dev |
 | zimmerframe | 1.1.5 | MIT | no | https://github.com/sveltejs/zimmerframe |
 
 ### Licence texts
@@ -213,7 +213,7 @@ MIT License
     SOFTWARE
 ```
 
-#### @typescript-eslint/types 8.69.0 (MIT)
+#### @typescript-eslint/types 8.73.0 (MIT)
 
 ```
 MIT License
@@ -691,7 +691,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-#### devalue 5.9.2 (MIT)
+#### devalue 5.9.4 (MIT)
 
 ```
 Copyright (c) 2018-19 [these people](https://github.com/rich-harris/devalue/graphs/contributors)
@@ -715,7 +715,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-#### esrap 2.3.6 (MIT)
+#### esrap 2.4.2 (MIT)
 
 ```
 Copyright (c) 2023-2025 [these people](https://github.com/sveltejs/esrap/graphs/contributors)
@@ -751,7 +751,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-#### svelte 5.57.0 (MIT)
+#### svelte 5.59.1 (MIT)
 
 ```
 Copyright (c) 2016-2025 [Svelte Contributors](https://github.com/sveltejs/svelte/graphs/contributors)

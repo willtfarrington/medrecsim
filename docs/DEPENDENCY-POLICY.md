@@ -1,6 +1,11 @@
 # Dependency policy (D-SEC-002)
 
-**Status:** policy current as of 2026-09-04 (EP-11: no new package; `@medrecsim/schema` (types,
+**Status:** policy current as of 2026-11-26 (EP-11a: Dependabot PRs #11 and #10, the
+successors of #9 and #7, reviewed under §9 and merged on the owner's word; the §3 and §4
+versions below updated, no package added to or removed from either table; `devalue` and
+`source-map-js` re-resolved in the lockfile inside their parents' ranges, so no open Dependabot
+alert matches a locked version; the machine's move to Node 26 recorded in §8, the project's own
+move is EP-11b. EP-11: no new package; `@medrecsim/schema` (types,
 vocab, version) and `@medrecsim/content-tools` (test fixtures only) linked into the engine as
 workspace devDependencies; ESLint refuses value imports of `zod`, `yaml`, `fast-check` and the
 content tools from engine sources. EP-10: §3a added — two vendored OFL fonts, no
@@ -57,7 +62,7 @@ dependencies.*
 
 | Package | Pinned version | Purpose and why owned code will not do | Licence | Install scripts | Gzipped contribution | Registry / THIRD-PARTY row | Approved (date) |
 |---------|---------------|----------------------------------------|---------|-----------------|----------------------|----------------------------|-----------------|
-| `svelte` | 5.57.0 | UI framework chosen by measurement in [ADR-1](adr/ADR-1-ui-framework.md) (SP-4). Reactive rendering, compile-time accessibility warnings, and the component model are not something a solo maintainer should hand-write to WCAG 2.2 AA. No network I/O. The compiler's own dependency closure (acorn, magic-string, …) is compile-time only and does not ship (the build's `bundle-manifest.json` lists exactly which packages are bundled). | MIT | none (blocked by `allowBuilds: {}`) | 10,780 B gz for the *entire* initial bundle at hello-world (app code included; whole-bundle figure re-measured by `check:budget` on every build) | THIRD-PARTY.md generated row | 2026-09-04 — owner confirmation recorded in the EP-8 handoff |
+| `svelte` | 5.59.1 | UI framework chosen by measurement in [ADR-1](adr/ADR-1-ui-framework.md) (SP-4). Reactive rendering, compile-time accessibility warnings, and the component model are not something a solo maintainer should hand-write to WCAG 2.2 AA. No network I/O. The compiler's own dependency closure (acorn, magic-string, …) is compile-time only and does not ship (the build's `bundle-manifest.json` lists exactly which packages are bundled). | MIT | none (blocked by `allowBuilds: {}`) | 15,281 B gz for the *entire* initial bundle at the hello-world shell with 5.59.1 (11,644 B with 5.57.0 at EP-11; 10,780 B at EP-8). The EP-11a growth is svelte's own runtime (5.59's custom-renderer API, 5.58's batching rework); `bundle-manifest.json` still lists `svelte` alone. App code included; whole-bundle figure re-measured by `check:budget` on every build | THIRD-PARTY.md generated row | 2026-09-04 — owner confirmation recorded in the EP-8 handoff; 5.59.1 merged on the owner's word 2026-11-26 (EP-11a) |
 
 Rules specific to this table:
 
@@ -85,8 +90,10 @@ README beside it; rows in `source material/REGISTRY.md` and `THIRD-PARTY.md`.
 
 ## 4. Build and development dependency register
 
-*Seeded at EP-8 (2026-09-04).* Direct development dependencies only; the full closure (236
-packages in `medrecsim/pnpm-lock.yaml`) is reviewed through the lockfile diff at each update.
+*Seeded at EP-8 (2026-09-04); versions current at EP-11a (2026-11-26).* Direct development
+dependencies only; the full closure (236 packages in `medrecsim/pnpm-lock.yaml` at EP-8; 238
+lockfile entries at EP-11a, 206 of them installed on Windows) is reviewed through the lockfile
+diff at each update.
 "Install scripts" is *none run* for every row: pnpm blocks lifecycle scripts by default and the
 allow-list is empty (ADR-4). Dev tooling is not redistributed, so it has no THIRD-PARTY row
 (THIRD-PARTY.md says so in its "Development-time tooling" section). Manifest: `medrecsim/`
@@ -95,23 +102,23 @@ allow-list is empty (ADR-4). Dev tooling is not redistributed, so it has no THIR
 | Package | Pinned version | Purpose | Licence | Install scripts | THIRD-PARTY row | Logged in |
 |---------|---------------|---------|---------|-----------------|-----------------|-----------|
 | `typescript` | 6.0.3 | Compiler / typechecker (6.x chosen over 7.0.2 because `typescript-eslint` and `svelte-check` do not yet support 7) | Apache-2.0 | none run | — | EP-8 |
-| `vite` | 8.2.2 | Bundler and dev server (ADR-1/ADR-3) | MIT | none run | — | EP-8 |
-| `vitest` | 4.1.11 | Test runner (4.x chosen over the day-old 5.0.0 major; `minimumReleaseAge`) | MIT | none run | — | EP-8 |
-| `@sveltejs/vite-plugin-svelte` (app) | 7.3.0 | Svelte compiler integration for Vite | MIT | none run | — | EP-8 |
-| `svelte-check` (app) | 4.7.6 | Typechecks `.svelte` files (`--fail-on-warnings` includes the compiler's a11y warnings) | MIT | none run | — | EP-8 |
-| `jsdom` (app) | 30.0.1 | DOM for component tests under Vitest | MIT | none run | — | EP-8 |
-| `fast-check` (engine) | 4.9.0 | Property-based tests ([ADR-6](adr/ADR-6-property-test-library.md)) | MIT | none run | — | EP-8 |
-| `eslint` | 10.9.1 | Linter (10.9.1 chosen over same-day 10.10.0; `minimumReleaseAge`) | MIT | none run | — | EP-8 |
+| `vite` | 8.3.8 | Bundler and dev server (ADR-1/ADR-3) | MIT | none run | — | EP-8; EP-11a |
+| `vitest` | 5.1.1 | Test runner (5.x since EP-11a; EP-8 chose 4.x over the day-old 5.0.0 major under `minimumReleaseAge`) | MIT | none run | — | EP-8; EP-11a |
+| `@sveltejs/vite-plugin-svelte` (app) | 7.3.1 | Svelte compiler integration for Vite | MIT | none run | — | EP-8; EP-11a |
+| `svelte-check` (app) | 4.7.8 | Typechecks `.svelte` files (`--fail-on-warnings` includes the compiler's a11y warnings) | MIT | none run | — | EP-8; EP-11a |
+| `jsdom` (app) | 31.0.1 | DOM for component tests under Vitest | MIT | none run | — | EP-8; EP-11a |
+| `fast-check` (engine) | 4.11.0 | Property-based tests ([ADR-6](adr/ADR-6-property-test-library.md)) | MIT | none run | — | EP-8; EP-11a |
+| `eslint` | 10.15.0 | Linter (10.15.0 since EP-11a; EP-8 chose 10.9.1 over the same-day 10.10.0 under `minimumReleaseAge`) | MIT | none run | — | EP-8; EP-11a |
 | `@eslint/js` | 10.0.1 | ESLint recommended rule set | MIT | none run | — | EP-8 |
-| `typescript-eslint` | 8.69.0 | TypeScript parser + rules for ESLint | MIT | none run | — | EP-8 |
-| `eslint-plugin-svelte` | 3.23.0 | Svelte rules for ESLint (incl. a11y) | MIT | none run | — | EP-8 |
+| `typescript-eslint` | 8.73.0 | TypeScript parser + rules for ESLint | MIT | none run | — | EP-8; EP-11a |
+| `eslint-plugin-svelte` | 3.24.1 | Svelte rules for ESLint (incl. a11y) | MIT | none run | — | EP-8; EP-11a |
 | `eslint-config-prettier` | 10.1.8 | Disables formatting rules that conflict with Prettier | MIT | none run | — | EP-8 |
-| `globals` | 17.12.0 | Browser / Node global declarations for ESLint | MIT | none run | — | EP-8 |
-| `prettier` | 3.9.6 | Formatter | MIT | none run | — | EP-8 |
-| `prettier-plugin-svelte` | 4.1.1 | Svelte support for Prettier | MIT | none run | — | EP-8 |
-| `@types/node` | 24.13.3 | Node type definitions (scripts, content-tools; schema tests only — the schema's evidence-layer project compiles with no Node types) | MIT | none run | — | EP-8; schema at EP-9 |
-| `zod` (schema) | 4.5.4 | Content-schema source of truth ([ADR-2](adr/ADR-2-validation-library.md)): typed schemas, inferred types, JSON Schema export. Declared as a `dependency` of the private `@medrecsim/schema` package because the package cannot function without it, but it is **not** on the §3 runtime allowlist: ESLint forbids importing it from `packages/app` and `packages/engine`, and `bundle-manifest.json` would expose it. Checklist §6: need — validation + type inference + editor schema from one definition, chosen by spike SP-5; owned-code alternative would be a hand-kept JSON Schema plus hand-kept types (drift); licence MIT; maintenance active (4.5.4 published 2026-08-29); no install scripts; zero new transitive packages; identity verified (`zod` by colinhacks); no network behaviour; no redistributed assets. | MIT | none run | — | EP-9 |
-| `yaml` (content-tools) | 2.9.0 | YAML parser for the content CLI only ([ADR-3](adr/ADR-3-build-time-content-compile.md): the runtime never parses YAML; ESLint forbids the import from `packages/app` and `packages/engine`). Chosen for its CST/line-position API (`LineCounter`, `Document.getIn`) that lets validator findings carry line numbers for GitHub annotations. Checklist §6: need — parse authored bundles at build time; owned-code alternative is no alternative (a YAML parser is not small); licence ISC; maintenance active (2.9.0 published 2026-05-11); no install scripts; zero new transitive packages; identity verified (`yaml` by eemeli); no network behaviour; no redistributed assets. | ISC | none run | — | EP-9 |
+| `globals` | 17.14.0 | Browser / Node global declarations for ESLint | MIT | none run | — | EP-8; EP-11a |
+| `prettier` | 3.10.1 | Formatter | MIT | none run | — | EP-8; EP-11a |
+| `prettier-plugin-svelte` | 4.2.0 | Svelte support for Prettier | MIT | none run | — | EP-8; EP-11a |
+| `@types/node` | 24.19.2 | Node type definitions (scripts, content-tools; schema tests only — the schema's evidence-layer project compiles with no Node types) | MIT | none run | — | EP-8; schema at EP-9; EP-11a |
+| `zod` (schema) | 4.6.7 | Content-schema source of truth ([ADR-2](adr/ADR-2-validation-library.md)): typed schemas, inferred types, JSON Schema export. Declared as a `dependency` of the private `@medrecsim/schema` package because the package cannot function without it, but it is **not** on the §3 runtime allowlist: ESLint forbids importing it from `packages/app` and `packages/engine`, and `bundle-manifest.json` would expose it (EP-11a: Dependabot labels its alerts runtime; the local build and the deployed site's `bundle-manifest.json` both list `svelte` alone, and the built JS carries no zod code). Checklist §6: need — validation + type inference + editor schema from one definition, chosen by spike SP-5; owned-code alternative would be a hand-kept JSON Schema plus hand-kept types (drift); licence MIT; maintenance active (4.5.4 published 2026-08-29); no install scripts; zero new transitive packages; identity verified (`zod` by colinhacks); no network behaviour; no redistributed assets. | MIT | none run | — | EP-9; EP-11a |
+| `yaml` (content-tools) | 2.9.1 | YAML parser for the content CLI only ([ADR-3](adr/ADR-3-build-time-content-compile.md): the runtime never parses YAML; ESLint forbids the import from `packages/app` and `packages/engine`). Chosen for its CST/line-position API (`LineCounter`, `Document.getIn`) that lets validator findings carry line numbers for GitHub annotations. Checklist §6: need — parse authored bundles at build time; owned-code alternative is no alternative (a YAML parser is not small); licence ISC; maintenance active (2.9.0 published 2026-05-11); no install scripts; zero new transitive packages; identity verified (`yaml` by eemeli); no network behaviour; no redistributed assets. | ISC | none run | — | EP-9; EP-11a |
 
 **Licence notes on the transitive closure (2026-09-04):** 163 MIT, 19 Apache-2.0, 10 BSD-2-Clause,
 9 ISC, 3 BSD-3-Clause, 2 BlueOak-1.0.0, 2 MIT-0, 1 CC0-1.0, **2 MPL-2.0** (`lightningcss` and
@@ -122,6 +129,13 @@ EP-8, see the handoff), and 25 platform-specific binary packages (`@rolldown/bin
 published under their parent package's licence (MIT / MPL-2.0 respectively). The
 `dependency-review-action` allow-list in `ci.yml` mirrors this: §6.2's permissive set plus
 `MPL-2.0` for that one build-time family.
+
+**EP-11a (2026-11-26):** the closure installed on Windows is 206 packages: 160 MIT, 19
+Apache-2.0, 10 BSD-2-Clause, 9 ISC, 3 BlueOak-1.0.0, 3 BSD-3-Clause and the same 2 MPL-2.0
+(`lightningcss` and its Windows binary). The MIT-0 and CC0-1.0 packages left with jsdom 30's CSS
+stack. One licence new to the lockfile, 0BSD (`tslib`), belongs to rolldown's wasm32 fallback
+binding, which no CI lane and no local install fetches; 0BSD is on §6.2's list and the
+dependency-review allow-list.
 
 ## 5. Installation and lockfile rules
 
@@ -195,8 +209,8 @@ answered, not ticked.
 
 | Tool | Version in use | Source | Role | Reverify |
 |------|----------------|--------|------|----------|
-| Node.js | **24.14.1** (LTS "Krypton"; `medrecsim/.nvmrc` and `engines.node >=24.14.1 <25`, `engine-strict=true`) | nodejs.org / winget | Toolchain runtime; CI installs the same version from `.nvmrc` via `actions/setup-node` | Each R-phase boundary (next: EP-19) |
-| pnpm | **11.25.0**, SHA-512 of the tarball pinned in `medrecsim/package.json#packageManager` | Provisioned by **Corepack** (bundled with Node 24; `corepack enable` once per machine, or `corepack pnpm …`) — no global install, no third-party action | Package manager ([ADR-4](adr/ADR-4-package-manager.md)); a hash-pinned download is not "unpinned execution" under §5.4 | Each R-phase boundary; **when the Node LTS line moves past 24** (Node 25 dropped Corepack) provisioning switches to a lockfile-pinned `corepack` package or a hash-verified pnpm download in CI |
+| Node.js | **24.14.1** (LTS "Krypton"; `medrecsim/.nvmrc` and `engines.node >=24.14.1 <25`, `engine-strict=true`) | nodejs.org / winget | Toolchain runtime; CI installs the same version from `.nvmrc` via `actions/setup-node` | Each R-phase boundary (next: EP-19). **EP-11a (2026-11-26):** the owner's machine moved to Node 26.13.1 on 2026-11-10 (winget's LTS channel), which ships no Corepack, so the pin no longer runs locally; CI is unaffected. Sessions run a checksum-verified portable 24.14.1 until **EP-11b** moves the project to Node 26 (owner decision, EP-11a) |
+| pnpm | **11.25.0**, SHA-512 of the tarball pinned in `medrecsim/package.json#packageManager` | Provisioned by **Corepack** (bundled with Node 24; `corepack enable` once per machine, or `corepack pnpm …`) — no global install, no third-party action | Package manager ([ADR-4](adr/ADR-4-package-manager.md)); a hash-pinned download is not "unpinned execution" under §5.4 | Each R-phase boundary; **when the Node LTS line moves past 24** (Node 25 dropped Corepack) provisioning switches to a lockfile-pinned `corepack` package or a hash-verified pnpm download in CI (trigger met on the owner's machine 2026-11-10; the switch is EP-11b) |
 | gitleaks | 8.30.1 (pinned in `.gitleaks.toml`) | winget `Gitleaks.Gitleaks` | Pre-commit secret scan (boundary B5) | **EP-8 decision (2026-09-04): stay on 8.30.1.** The binary works, the default ruleset still receives security patches upstream, and the successor project had not published a stable release with a verified-compatible ruleset format at the time of checking; migrating now would trade a working control for churn. Next reverification: **EP-19** (the `v0.1.0` tag), then each R-phase boundary. Migration trigger: a gitleaks advisory without a patch, or the successor reaching a stable release that reads `.gitleaks.toml` unchanged. |
 | GitHub CLI (`gh`) | 2.100.0 (2.98.0 at EP-1; updated by winget) | winget `GitHub.cli` | Baseline verification, ruleset export, incident runbook | Each R-phase boundary |
 | git | 2.55.0 | Git for Windows | Everything; `git-filter-repo` needs ≥ 2.36 | Each R-phase boundary |

@@ -100,6 +100,15 @@ scoring or signature; no clinical content has been written.
   scoring work; the engine determinism lint rule made real; a 1000-log replay-equivalence
   property test; a ninth architecture decision record.
 
+### Security
+
+- Dependencies brought current (2026-11-26): Dependabot's grouped updates were reviewed under
+  the dependency policy and merged. They bring Svelte 5.59 (the one runtime package), Vite 8.3,
+  Vitest 5, jsdom 31, Zod 4.6 and eleven more development tools, plus `actions/setup-node` 7.1
+  and `actions/dependency-review-action` 5.0.1. Two transitive packages (`devalue`,
+  `source-map-js`) were re-resolved in the lockfile, so no open Dependabot alert matches a
+  locked version.
+
 ### Content
 
 - None reviewed. The content schema is defined (v0.1); the only bundle is the placeholder
