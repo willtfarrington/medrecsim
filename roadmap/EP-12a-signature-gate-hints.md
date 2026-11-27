@@ -4,7 +4,7 @@ title: "Signature gate, hint recording and the scoring rulings (EP-12 split at p
 size: M
 model: claude-opus-5-5
 effort: max
-status: in progress
+status: done
 ---
 
 # EP-12a — Signature gate, hint recording and the scoring rulings
@@ -194,7 +194,8 @@ none.
 
 > **Completion note (2026-11-27; claude-opus-5-5/max, as launched — the VS Code panel's own
 > setting is not readable from inside the session; about 70 minutes of working time, 11:03 to
-> the done-hash commit, the owner's three rounds of answers and the hosted run included).**
+> the done-hash commit at about 12:14 EST, the owner's four rounds of answers and the hosted run
+> included).**
 >
 > **What was done.** EP-12 proved two to three sessions of work at pickup and was split into
 > EP-12a, EP-12b and EP-12c on the owner's word; this brief is the renamed EP-12 brief, re-scoped
@@ -207,8 +208,10 @@ none.
 > clinical-model §4's open points are D-SCOR-004 and D-WF-005, with a pointer addendum in §4 and
 > EP-12b's brief note; EP-12b and EP-12c carry the original brief's items verbatim. `pnpm verify`
 > passes under Node 26.13.1 (23 files, 239 tests — 22 new, two 300-log properties among them —
-> 35 negative fixtures, 15,281 B gz, all checks). IN-2, delivered mid-session, is parked under
-> EP-38. Full record: [docs/handoffs/EP-12a.md](../docs/handoffs/EP-12a.md).
+> 35 negative fixtures, 15,281 B gz, all checks), and hosted CI on the scratch branch (run
+> 46039675864 at `8314aef`) is green on both lanes: Node 26.13.1, pnpm 11.25.0 hash-checked, 239
+> tests, 35 fixtures, 15,281 B gz. IN-2, delivered mid-session, is parked under EP-38. Full
+> record: [docs/handoffs/EP-12a.md](../docs/handoffs/EP-12a.md).
 >
 > **Owner decisions.**
 >
@@ -223,11 +226,11 @@ none.
 > | 7 | Documentation-quality items | Completeness + both rationale kinds (recommended) | D-SCOR-004 (6) |
 > | 8 | "Escalated" entries without an attempt | Block signature (recommended) | D-WF-005, `escalation-not-initiated` |
 > | 9 | CHANGELOG wording (shown in full) | Intro clause + one Added bullet (recommended) | Added |
-> | 10 | Hosted CI before the owner's push | Push the commit to `scratch/ep-12a` (recommended) | See the handoff's "Hosted CI" |
+> | 10 | Hosted CI before the owner's push | Push the commit to `scratch/ep-12a` (recommended) | run 46039675864 at `8314aef`: `build-test` ubuntu and windows green (25 steps each); the branch deleted |
 > | 11 | Where IN-2 (site screenshots) is parked | EP-38's brief notes (recommended) | R3 brief note; IN-2 ticked |
 >
-> Commits run under the autopilot (crw D-22): the EP-12a commit (the roadmap row's done hash),
-> then the done-hash commit; the push of `main` is the owner's.
+> Commits run under the autopilot (crw D-22): the EP-12a commit `8314aef` (the roadmap row's
+> done hash), then the done-hash commit; the push of `main` is the owner's.
 >
 > **Routine choices** (logged in the handoff): the gate inside the reducer's `sign` path; "every
 > medication" = every medication with a revealed claim, so an empty session can be signed;

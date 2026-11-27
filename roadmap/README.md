@@ -92,7 +92,7 @@ manual (EP-19a, D-ROAD-004).
 | EP-11 | [Engine core](EP-11-engine-core.md) | M | EP-9 | core | ☑ `40e37d8` |
 | EP-11a | [Dependency refresh: Dependabot PRs #9 and #7 and the open alerts (D-ROAD-005)](EP-11a-dependency-refresh.md) | M | EP-8 | core | ☑ `05f782b` |
 | EP-11b | [Node 26 LTS: the pin, engines and pnpm without Corepack (D-ROAD-006)](EP-11b-node-26-lts.md) | M | EP-11a | core | ☑ `54e632e` |
-| EP-12a | [Signature gate, hint recording and the scoring rulings (D-WF-005, D-SCOR-004)](EP-12a-signature-gate-hints.md) | M | EP-11 | core | ☐ |
+| EP-12a | [Signature gate, hint recording and the scoring rulings (D-WF-005, D-SCOR-004)](EP-12a-signature-gate-hints.md) | M | EP-11 | core | ☑ `8314aef` |
 | EP-12b | The five subscores, per D-SCOR-004 (D-SCOR-001…004, D-PED-001) | M | EP-12a | core | ☐ |
 | EP-12c | Debrief data contract + golden harness (D-PED-002, D-QA-001, OQ-8) | M | EP-12b | core | ☐ |
 | EP-13 | [Formulary wave 1](EP-13-formulary-1.md) | M | EP-9, EP-6, EP-7 | core | ☐ |

@@ -2,8 +2,8 @@
 
 **Status:** complete — eleven owner decisions ruled 2026-11-27 (see "Owner decisions"); the push
 of `main` is the owner's · **Date:** 2026-11-27 · **Brief:** roadmap/EP-12a-signature-gate-hints.md
-(the EP-12 brief, renamed and re-scoped at the split) · **Commits:** the EP-12a commit (the
-roadmap row's done hash) and the done-hash commit, which records the hosted run below.
+(the EP-12 brief, renamed and re-scoped at the split) · **Commits:** `8314aef` (the EP-12a
+commit; the roadmap row's done hash) and the done-hash commit, which records the hosted run below.
 
 ## Completed scope
 
@@ -53,7 +53,7 @@ New exports: `checkSignature`, `SIGNATURE_BLOCK_CODES`, `SignatureBlockCode`, `H
 `unknown-hint`, `hint-tier-out-of-order`, `hint-already-shown` added; `not-implemented` removed
 (nothing returned it once `sign()` had a real gate). `ReduceContext` gained `hintIds`.
 
-## Owner decisions (presented interactively 2026-11-27 in three rounds; outcomes recorded)
+## Owner decisions (presented interactively 2026-11-27 in four rounds; outcomes recorded)
 
 | # | Decision | Owner's answer | Outcome |
 |---|---|---|---|
@@ -107,7 +107,18 @@ Commits run under the autopilot (crw D-22); the push of `main` is the owner's.
 
 ## Hosted CI
 
-Filled at close: the run on `scratch/ep-12a`, both lanes, and the branch's deletion.
+On the owner's word (decision 10), `8314aef` was pushed to `scratch/ep-12a` (CI runs on
+`scratch/**` pushes) and `main` was not pushed. Run **46039675864** at `8314aef`, conclusion
+success:
+
+| Job | Result |
+|---|---|
+| `build-test (ubuntu-latest)` | success, 25 steps: Node 26.13.1 from `.nvmrc`; pnpm 11.25.0 downloaded, SHA-512 matching `packageManager`, first on PATH; 23 files, 239 tests; 35 negative fixtures rejected by name; 15,281 B gz = 5.0 %; layer separation PASS |
+| `build-test (windows-latest)` | success, 25 steps: the same lines |
+| `dco`, `dependency-review` | skipped by design (pull-request events only) |
+
+The remote branch was deleted afterwards (`git ls-remote` shows no `scratch/ep-12a`). The
+owner's push of `main` runs Pages on the same tree, expected green as here.
 
 ## Changed files
 
